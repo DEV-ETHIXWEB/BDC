@@ -16,7 +16,7 @@ Every one of them needs an account, a decision or a fact that only the client or
 | 3 | **Booking, deposit, payment and waiver process.** The old site ran on a booking platform (Guidesly) that handled bookings, deposits, payments and a guest waiver (`Generic-Fishing-Waiver`). The new site is a request form only. | The deposit amount is not stated anywhere (the platform shows 0%). Decide what happens at DNS cutover: keep the platform booking link, or build a new flow including a waiver step. | Client + Dev |
 | 4 | **Crab trip regulations.** The client's crab page says trips run "along the Oregon Coast" from October to December. ODFW's shellfish summary (page updated Jan 5, 2024) says *Ocean waters are closed for crab Oct. 16 - Nov. 30*; bays, estuaries and jetties are open all year. | Advertising trips inside a closure is a legal and safety risk. The client must state where crab trips actually run. The site currently repeats the client's dates and does not name a location. | Client |
 | 5 | **Legal text review.** Terms are the client's own published booking terms (deposit, balance, cancellation, tipping). They contain no liability, waiver or insurance language. The privacy policy describes what this site actually does. | Have a lawyer review both before launch. | Client |
-| 6 | **Production deployment not yet done.** Domain, DNS, SSL, live headers and caching are untested on a real host. | Deploy, then run the smoke test in section 6 on the real URL. | Dev |
+| 6 | **Production deployment not yet done.** Domain, DNS, SSL and live behaviour are untested on a real host (the Vercel build itself is verified, section 6). | Deploy, then run the smoke test in section 6 on the real URL. | Dev |
 | 7 | **Client approvals** (section 2) | Final copy, photos and facts must be approved. | Client |
 
 ## 2. Facts and content that need the client's approval
@@ -77,8 +77,9 @@ Build pipeline: `prebuild` checks env vars and generates `vercel.json`, `public/
 | Name | Required | Purpose |
 | --- | --- | --- |
 | `PUBLIC_FORM_ENDPOINT` | **Yes for launch** | https URL of the form service. Embedded in the browser bundle by design: never put a secret in it. Use the service's allowed-domain list and spam filter |
-| `REQUIRE_FORM_ENDPOINT` | Set to `1` on production | Fails the build if the endpoint is missing or not https |
-| `PUBLIC_NOINDEX` | Set to `1` on staging | Adds noindex and a disallow-all robots.txt |
+| `REQUIRE_FORM_ENDPOINT` | Optional | Fails the build if the endpoint is missing or not https (automatic on Vercel Production) |
+| `ALLOW_MAILTO_FORM` | Optional | Set to `1` to deploy on Vercel Production without a form service on purpose |
+| `PUBLIC_NOINDEX` | Set to `1` on non-Vercel staging | Adds noindex and a disallow-all robots.txt (Vercel Preview does this automatically) |
 
 No API keys, database, auth or server code exist. CORS, CSRF, rate limiting, webhooks and multi-tenant access are not applicable; abuse limits belong to the form service.
 
@@ -90,14 +91,27 @@ Trip pages and articles keep the old site's URLs, so existing rankings carry ove
 
 `config/redirects.mjs` maps the remaining old URLs (16 gallery photo pages, `/profile/clinton-mcculloch`, `/article`) with real 301s for Vercel, Netlify and Cloudflare Pages and a static fallback in Astro. A redirect that differs only by letter case (`/Oregon-fishing-Charter-rates`) is deliberately omitted: it overwrites the real page on case-insensitive file systems.
 
-## 6. Deploy
+## 6. Deploy on Vercel
 
-1. Publish `dist/` on any static host: build command `npm run build`, output `dist`, Node 22.12+.
-2. Set the environment variables above in the host dashboard. Rotating `PUBLIC_FORM_ENDPOINT` needs a full rebuild (it is baked into the build).
-3. Vercel reads `vercel.json` (headers, redirects) and uses the CSP `<meta>` tag; Netlify and Cloudflare Pages read `dist/_headers` and `dist/_redirects`.
-4. Point the domain, confirm SSL, then smoke-test on the production URL: home, one trip page, the form (send a real test lead and confirm the email), a redirect, and the 404 page.
-5. Rollback: redeploy the previous build from the host's deploy history.
-6. Schedule a check 24-48 hours after launch: leads arriving, no errors, real traffic sane.
+Verified with Vercel's own CLI (`vercel build`, v59) on a clean export of the repo, and `vercel.json` validated against Vercel's published schema (0 errors). The compiled config has 18 permanent redirects (308), clean URLs for all 39 pages (including the page-plus-folder pairs), all security headers, immutable caching for `/_astro/*`, and a real 404 for unknown URLs. The lockfile carries Linux x64 binaries for every native dependency Vercel needs.
+
+1. Import the GitHub repo in Vercel. Framework **Astro**, build command `npm run build`, output directory `dist`, Node.js **22.x** (all set in `vercel.json` / `package.json`, no manual settings needed).
+2. Environment variables (Project Settings > Environment Variables):
+
+| Name | Production | Preview | Notes |
+| --- | --- | --- | --- |
+| `PUBLIC_FORM_ENDPOINT` | **required** | optional | https URL of the form service. The Production build **fails** without it |
+| `ALLOW_MAILTO_FORM` | leave unset | leave unset | Set to `1` only to deploy on purpose without a form service (not launch-ready) |
+| `REQUIRE_FORM_ENDPOINT` | optional | leave unset | Production is already required automatically |
+
+   Preview deployments are noindex automatically (`VERCEL_ENV=preview`). Changing `PUBLIC_FORM_ENDPOINT` needs a redeploy.
+3. Deploy a Preview first and smoke-test it: home, one trip page, `/oregon-fishing-charter-rates/` (should redirect), an old URL such as `/profile/clinton-mcculloch`, a nonexistent URL (404 page), the form.
+4. Add the domains `www.bdcguideservices.com` (primary) and `bdcguideservices.com` (redirects to www) and follow Vercel's DNS instructions. Confirm SSL.
+5. On Production, confirm the CSP is active (`<meta http-equiv="Content-Security-Policy">` in the page source; Vercel gets the policy from that tag, other hosts also get a header), then send a **real test lead** and confirm the email arrives.
+6. Rollback: Vercel > Deployments > previous deployment > Promote to Production.
+7. Schedule a check 24-48 hours after launch: leads arriving, no errors, real traffic sane.
+
+Other static hosts: Netlify and Cloudflare Pages read `dist/_headers` and `dist/_redirects` (generated by the build; removed automatically on Vercel).
 
 ## 7. Troubleshooting
 

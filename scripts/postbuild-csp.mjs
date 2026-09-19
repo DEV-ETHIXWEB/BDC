@@ -6,7 +6,7 @@
 // ClientRouter swaps pages without reloading, so scripts of the next page run under the first page's policy.
 // Styles allow 'unsafe-inline' (inline style="" attributes and a style injected at runtime by react-aria): the script policy
 // is what stops XSS. Nothing external is allowed, except the form endpoint origin when PUBLIC_FORM_ENDPOINT is set.
-import { readdirSync, readFileSync, writeFileSync, statSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, statSync, existsSync, unlinkSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 
@@ -51,6 +51,11 @@ const headersPath = join(DIST, '_headers');
 if (existsSync(headersPath)) {
   const cur = readFileSync(headersPath, 'utf8');
   writeFileSync(headersPath, cur.replace(/^\/\*\n/, `/*\n  Content-Security-Policy: ${headerPolicy}\n`));
+}
+
+// On Vercel, headers/redirects come from vercel.json; the Netlify-format files would only be served publicly at /_headers and /_redirects.
+if (process.env.VERCEL) {
+  for (const f of ['_headers', '_redirects']) { try { unlinkSync(join(DIST, f)); } catch { /* not present */ } }
 }
 
 // 2. meta tag in every page (first thing in <head>, before any script can run)

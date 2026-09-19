@@ -31,7 +31,7 @@ const {
 // build.format is 'file', so Astro.url.pathname ends in .html at build time: normalise to the public URL.
 const rawPath = Astro.props.path ?? Astro.url.pathname;
 // Staging/preview builds (PUBLIC_NOINDEX=1) are never indexable, regardless of page props.
-const noindex = noindexProp || import.meta.env.PUBLIC_NOINDEX === '1';
+const noindex = noindexProp || import.meta.env.PUBLIC_NOINDEX === '1' || process.env.VERCEL_ENV === 'preview';
 const path = rawPath.replace(/\/index\.html$/, '/').replace(/\.html$/, '').replace(/(.)\/$/, '$1') || '/';
 const is404 = path === '/404';
 const canonical = new URL(path, SITE.url).href;

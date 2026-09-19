@@ -18,7 +18,7 @@ interactive parts only. Design system: [docs/design-system.md](docs/design-syste
 
 ## Deploy (static, any host)
 Publish `dist/`: build command `npm run build`, output directory `dist`.
-`vercel.json`, `public/_headers` and `public/_redirects` are generated from `config/` on every build (headers, 301 redirects, immutable caching). A Content-Security-Policy is generated from the built pages after the build. Set the environment variables in `.env.example` on the host.
+`vercel.json`, `public/_headers` and `public/_redirects` are generated from `config/` on every build (headers, 301 redirects, immutable caching). A Content-Security-Policy is generated from the built pages after the build. Set the environment variables in `.env.example` on the host. Vercel steps (including the Production build guard) are in [docs/HANDOVER.md](docs/HANDOVER.md#6-deploy-on-vercel).
 The domain is set in `astro.config.mjs` (`site`) and `src/data/site.ts`; canonicals, sitemap and robots.txt follow it.
 URLs from the previous site are kept (trip pages under `/oregon-fishing-charter-rates/<slug>`, articles under `/article/<slug>`) and the rest are redirected, so search rankings carry over.
 

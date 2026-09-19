@@ -7,6 +7,10 @@ import { SECURITY_HEADERS, IMMUTABLE } from '../config/headers.mjs';
 const cell = (h) => Object.entries(h).map(([key, value]) => ({ key, value }));
 
 const vercel = {
+  framework: 'astro',
+  installCommand: 'npm install',
+  buildCommand: 'npm run build',
+  outputDirectory: 'dist',
   cleanUrls: true,
   trailingSlash: false,
   redirects: REDIRECTS.map(([source, destination]) => ({ source, destination, permanent: true })),
