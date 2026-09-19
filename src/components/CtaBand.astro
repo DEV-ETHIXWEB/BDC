@@ -3,10 +3,10 @@ import '../styles/gallery.css';
 import Icon from './Icon.astro';
 import Contours from './home/Contours.astro';
 import { SITE } from '../data/site';
-interface Props { title?: string; body?: string }
-const { title = 'Ready to get on the water?', body = 'Book your next adventure with BDC Guide Service, the trusted Oregon fishing guide for salmon, steelhead and family fishing charters.' } = Astro.props;
+interface Props { title?: string; body?: string; /** add space above the band when the section before it is dark */ spaced?: boolean }
+const { spaced = false, title = 'Ready to get on the water?', body = 'Book your next adventure with BDC Guide Service, the trusted Oregon fishing guide for salmon, steelhead and family fishing charters.' } = Astro.props;
 ---
-<section class="section gb-band-sec" style="padding-top:0">
+<section class="section gb-band-sec" style={spaced ? 'padding-top:clamp(40px, 6vw, 88px)' : 'padding-top:0'}>
   <div class="wrap" data-reveal="up">
     <div class="gb-band">
       <Contours class="gb-band__rings" rings={13} seed={2.1} />
