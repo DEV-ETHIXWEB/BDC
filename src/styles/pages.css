@@ -3,10 +3,12 @@
 /* ───────── Hero ───────── */
 .pg-hero {
   --edge: var(--bg);
+  box-shadow: 0 2px 0 0 var(--edge); /* covers the anti-aliased hairline of the dark hero's fractional bottom edge (Retina Safari) */
   position: relative; isolation: isolate; overflow: hidden; color: var(--on-deep);
   background: radial-gradient(110% 120% at 85% 0%, var(--navy-700) 0%, var(--navy-900) 55%, var(--navy-950) 100%);
   padding-block: clamp(28px, 5vw, 80px) clamp(88px, 11vw, 160px);
 }
+.pg-hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--edge); pointer-events: none; }
 .pg-hero--sand { --edge: var(--cream-200); }
 .pg-hero--deep { --edge: var(--navy-900); }
 .pg-hero--paper { --edge: var(--cream-50); }

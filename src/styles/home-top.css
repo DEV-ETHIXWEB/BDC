@@ -3,11 +3,13 @@
 /* ───────── Hero ───────── */
 .ht-hero {
   --ht-edge: clamp(24px, 3.4vw, 52px);
+  box-shadow: 0 2px 0 0 var(--bg); /* covers the anti-aliased hairline of the hero's fractional bottom edge */
   position: relative; isolation: isolate; overflow: hidden; color: var(--on-deep);
   min-height: min(calc(100svh - var(--header-h)), 1040px);
   display: flex; flex-direction: column;
   background: radial-gradient(120% 90% at 78% 8%, var(--navy-700) 0%, var(--navy-900) 52%, var(--navy-950) 100%);
 }
+.ht-hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--bg); pointer-events: none; }
 .ht-hero__bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 .ht-contours { position: absolute; left: 0; top: -6%; width: max(200%, 2600px); height: 112%; overflow: visible; will-change: transform; }
 .ht-contours g { fill: none; }

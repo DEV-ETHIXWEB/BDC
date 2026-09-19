@@ -14,10 +14,11 @@
 /* ───────── Hero (both page types) ───────── */
 .tp-hero {
   --contour: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='260' viewBox='0 0 520 260' fill='none' stroke='rgba(250,246,232,0.07)' stroke-width='1.2'%3E%3Cpath d='M0 30C130 0 390 60 520 30'/%3E%3Cpath d='M0 70C130 40 390 100 520 70'/%3E%3Cpath d='M0 110C130 80 390 140 520 110'/%3E%3Cpath d='M0 150C130 120 390 180 520 150'/%3E%3Cpath d='M0 190C130 160 390 220 520 190'/%3E%3Cpath d='M0 230C130 200 390 260 520 230'/%3E%3C/svg%3E");
-  position: relative; overflow: hidden; color: var(--on-deep);
+  position: relative; overflow: hidden; color: var(--on-deep); box-shadow: 0 2px 0 0 var(--bg);
   background: radial-gradient(110% 100% at 85% 0%, var(--navy-700) 0%, var(--navy-900) 50%, var(--navy-950) 100%);
   padding-block: clamp(28px, 5vw, 72px) clamp(88px, 11vw, 150px);
 }
+.tp-hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--bg); pointer-events: none; }
 .tp-hero::before { content: ''; position: absolute; inset: -20% 0 0; background: var(--contour) 0 0 / 520px 260px repeat; -webkit-mask: linear-gradient(90deg, transparent, #000 25%, #000); mask: linear-gradient(90deg, transparent, #000 25%, #000); pointer-events: none; }
 .tp-hero__grid { position: relative; display: grid; gap: clamp(28px, 5vw, 64px); align-items: center; }
 @media (min-width: 900px) { .tp-hero__grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); } }
