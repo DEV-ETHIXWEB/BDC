@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+export function getStaticPaths() { return import.meta.env.DEV ? [{ params: { guide: 'styleguide' } }, { params: { guide: 'transition-test' } }] : []; }
+const type = [['4xl', 'Display'], ['3xl', 'Hero headline'], ['2xl', 'Section headline'], ['xl', 'Subhead'], ['lg', 'Card title'], ['md', 'Lede paragraph text'], ['base', 'Body copy reads at a comfortable measure'], ['sm', 'Small print and captions'], ['xs', 'Fine print']];
+const colors = ['navy-950', 'navy-900', 'navy-800', 'navy-700', 'navy-600', 'pine-800', 'pine-700', 'pine-600', 'pine-500', 'pine-200', 'cream-50', 'cream-100', 'cream-200', 'cream-300', 'steel', 'brass'];
+---
+<Base title="Styleguide" path="/dev/styleguide" noindex>
+  <section class="section">
+    <div class="wrap stack stack--lg">
+      <h1 data-split>Living styleguide</h1>
+      <p class="lede" data-reveal="up">Dev only. Tokens, type, buttons, elevation and motion in one place.</p>
+
+      <h2 data-reveal="up">Type scale</h2>
+      <div class="stack">
+        {type.map(([k, t]) => (
+          <div data-reveal="up" style="display:flex;gap:16px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:8px">
+            <code style="min-width:52px">--fs-{k}</code>
+            <span style={`font:${['4xl','3xl','2xl','xl','lg'].includes(k) ? '800' : '500'} var(--fs-${k})/1.05 ${['4xl','3xl','2xl','xl','lg'].includes(k) ? 'var(--font-display)' : 'var(--font-body)'};overflow-wrap:anywhere`}>{t}</span>
+          </div>
+        ))}
+      </div>
+
+      <h2 data-reveal="up">Palette</h2>
+      <div class="auto-grid" style="--min:120px" data-stagger>
+        {colors.map((c) => (
+          <div data-reveal="up"><div style={`height:72px;border-radius:12px;background:var(--${c});border:1px solid var(--line)`}></div><small>--{c}</small></div>
+        ))}
+      </div>
+
+      <h2 data-reveal="up">Buttons</h2>
+      <div class="cluster" data-reveal="up">
+        <a class="btn btn--primary" href="#" data-magnetic>Primary</a>
+        <a class="btn btn--green" href="#">Green</a>
+        <a class="btn btn--ghost on-light" href="#">Ghost</a>
+        <a class="btn btn--link" href="#">Link button</a>
+        <a class="btn btn--primary btn--sm" href="#">Small</a>
+        <a class="btn btn--primary btn--lg" href="#">Large</a>
+        <button class="btn btn--primary" disabled>Disabled</button>
+      </div>
+      <div class="section--deep" style="padding:24px;border-radius:20px">
+        <div class="cluster">
+          <a class="btn btn--cream" href="#" data-magnetic>Cream</a>
+          <a class="btn btn--ghost" href="#">Ghost</a>
+          <a class="btn btn--link" href="#">Link</a>
+        </div>
+      </div>
+
+      <h2 data-reveal="up">Elevation</h2>
+      <div class="auto-grid" style="--min:140px" data-stagger>
+        {['e0', 'e1', 'e2', 'e3', 'e4'].map((e) => <div data-reveal="up" style={`box-shadow:var(--${e});background:#fff;border-radius:16px;padding:28px 16px;text-align:center`}>--{e}</div>)}
+      </div>
+
+      <h2 data-reveal="up">Motion</h2>
+      <div class="auto-grid" data-stagger="120">
+        <div class="feature" data-reveal="up">up</div>
+        <div class="feature" data-reveal="fade">fade</div>
+        <div class="feature" data-reveal="scale">scale</div>
+        <div class="feature" data-reveal="mask">mask</div>
+      </div>
+      <div data-reveal="line" style="height:3px;background:var(--navy-800)"></div>
+      <div class="cluster" style="gap:48px">
+        <div><strong style="font:800 var(--fs-3xl)/1 var(--font-display)" data-count="45" data-count-suffix="+">45+</strong><p>data-count</p></div>
+        <div><strong style="font:800 var(--fs-3xl)/1 var(--font-display)" data-count="1250">1,250</strong><p>data-count</p></div>
+        <div data-parallax="0.12" style="background:var(--navy-800);color:#fff;padding:32px;border-radius:16px">data-parallax 0.12</div>
+      </div>
+      <p><a href="#top-of-guide" class="btn btn--link">Anchor test</a></p>
+      <div class="stack"><form class="form"><div class="field"><label for="a">Name</label><input id="a" placeholder="Your name" /></div><div class="field"><label for="b">Trip</label><select id="b"><option>Half day</option></select></div></form></div>
+      <div id="top-of-guide" style="height:60vh"></div>
+    </div>
+  </section>
+</Base>

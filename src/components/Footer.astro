@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import logoMark from '../assets/photos/logo-mark.png';
+import { SITE, FOOTER_LINKS, LEGAL_LINKS, NAV } from '../data/site';
+import Icon from './Icon.astro';
+---
+<footer class="footer">
+  <div class="footer__topo" aria-hidden="true"></div>
+  <div class="wrap wrap--wide">
+    <div class="footer__grid">
+      <div class="footer__col footer__col--wide">
+        <p>Family-friendly salmon, steelhead and crabbing charters across Oregon with {SITE.captain}, 45+ years on the water.</p>
+        <ul class="footer__contact">
+          <li><Icon name="phone" size={20} /><a href={SITE.phoneHref}>{SITE.phone}</a></li>
+          <li><Icon name="mail" size={20} /><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
+          <li><Icon name="pin" size={20} /><address>Meet at {SITE.address.street}<br />{SITE.address.city}, {SITE.address.region} {SITE.address.postal}</address></li>
+        </ul>
+      </div>
+      <nav aria-labelledby="f-explore">
+        <h3 id="f-explore">Explore</h3>
+        <ul>{NAV.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
+      </nav>
+      <nav aria-labelledby="f-trips">
+        <h3 id="f-trips">Featured</h3>
+        <ul>{FOOTER_LINKS.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
+      </nav>
+    </div>
+  </div>
+  <div class="footer__markrow wrap wrap--wide" aria-hidden="true">
+    <span class="footer__mark">BDC</span>
+    <Image class="footer__crest" src={logoMark} alt="" width={150} height={195} loading="lazy" densities={[1, 2, 3]} />
+  </div>
+  <div class="footer__bottom">
+    <div class="wrap wrap--wide cluster cluster--between">
+      <span>&copy; {SITE.year} {SITE.name}. All rights reserved.</span>
+      <nav aria-label="Legal"><ul>{LEGAL_LINKS.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul></nav>
+      <button class="footer__top" type="button" data-to-top>Back to top <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+    </div>
+  </div>
+</footer>

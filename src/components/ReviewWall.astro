@@ -1,0 +1,27 @@
+---
+import '../styles/gallery.css';
+import Icon from './Icon.astro';
+export interface Review { name: string; trip: string; text: string; rating?: 1 | 2 | 3 | 4 | 5; date?: string; where?: string }
+interface Props { reviews: Review[] }
+const { reviews } = Astro.props;
+---
+<ul class="gb-wallr" data-stagger>
+  {reviews.map((r, i) => (
+    <li class="gb-rev" data-reveal="up" style={`--tilt:${[-0.5, 0.4, -0.3][i % 3]}deg`}>
+      <figure>
+        <span class="gb-rev__mark" aria-hidden="true">&ldquo;</span>
+        {r.rating && (
+          <p class="gb-rev__stars" role="img" aria-label={`${r.rating} out of 5 stars`}>
+            {Array.from({ length: 5 }, (_, k) => <Icon name="star" size={18} class={k < r.rating! ? 'is-on' : 'is-off'} />)}
+          </p>
+        )}
+        <blockquote>{r.text}</blockquote>
+        <figcaption>
+          <strong>{r.name}</strong>
+          <span class="gb-rev__tag">{r.trip}</span>
+          {(r.date || r.where) && <span class="gb-rev__meta">{[r.where, r.date].filter(Boolean).join(' · ')}</span>}
+        </figcaption>
+      </figure>
+    </li>
+  ))}
+</ul>

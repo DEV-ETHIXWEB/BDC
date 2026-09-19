@@ -1,0 +1,33 @@
+---
+import '../styles/pages.css';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import TocSpy from '../components/pg/TocSpy.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'Privacy Policy', path: '/privacy-policy' }];
+const toc = [['collect', 'What we collect'], ['use', 'How we use it'], ['cookies', 'Cookies and storage'], ['contact', 'Contact']];
+---
+<Base title="Privacy Policy" description="How BDC Guide Service collects and uses the personal information you send us when you contact us or request a fishing trip in Oregon." crumbs={crumbs}>
+  <PageHero title="Privacy policy" crumbs={crumbs} tag="Your information" seed={19} />
+  <div class="wrap pg-article pg-legal">
+    <aside class="pg-toc" aria-label="On this page">
+      <details class="pg-toc__d" open>
+        <summary>On this page</summary>
+        <nav data-pg-spy><ol>{toc.map(([id, t]) => <li><a href={`#${id}`}>{t}</a></li>)}</ol></nav>
+      </details>
+    </aside>
+    <article class="pg-prose">
+      <p class="pg-stamp"><Icon name="report" size={20} /><span><strong>Draft for review.</strong> Update this if you add analytics, a booking provider or a form service.</span></p>
+      <section id="collect"><h2>What we collect</h2>
+        <p>Only what you send us: your name, phone, email and trip preferences when you contact us or request a trip.</p></section>
+      <section id="use"><h2>How we use it</h2>
+        <p>To answer your questions and arrange your trip. We do not sell your information.</p></section>
+      <section id="cookies"><h2>Cookies and storage</h2>
+        <p>This site sets no tracking cookies. Your accessibility choices (text size, contrast) are saved in your own browser only.</p></section>
+      <section id="contact"><h2>Contact</h2>
+        <p>{SITE.name}, {SITE.address.street}, {SITE.address.city}, {SITE.address.region} {SITE.address.postal}. <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p></section>
+    </article>
+  </div>
+  <TocSpy />
+</Base>

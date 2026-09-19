@@ -1,0 +1,96 @@
+---
+import TripCard from '../TripCard.astro';
+import Icon from '../Icon.astro';
+import { TRIPS } from '../../data/trips';
+import { SITE } from '../../data/site';
+import '../../styles/home-top.css';
+
+const order = ['full-day-willy-predator', 'full-day-drift-boat', 'half-day-willy-predator', 'half-day-drift-boat', 'crabbing-charter-willy-predator', 'crabbing-charter-alumaweld'];
+const trips = order.map((s) => TRIPS.find((t) => t.slug === s)!);
+const count = (k: string) => trips.filter((t) => t.kind === k).length;
+const filters = [
+  { id: 'all', label: 'All trips', n: trips.length },
+  { id: 'river', label: 'River boat', n: count('river') },
+  { id: 'drift', label: 'Drift boat', n: count('drift') },
+  { id: 'crab', label: 'Crabbing', n: count('crab') },
+];
+---
+<section class="ht-trips" id="trips" aria-labelledby="ht-trips-h">
+  <div class="wrap">
+    <header class="ht-trips__head">
+      <div>
+        <h2 id="ht-trips-h" data-reveal="up">Pick your day on the water.</h2>
+        <p class="ht-trips__lede" data-reveal="up">Six guided trips on two boats. Gear, bait and Captain Clinton's river knowledge are included on every one.</p>
+      </div>
+      <div class="ht-filter" role="group" aria-label="Filter trips" data-reveal="up">
+        {filters.map((f, i) => (
+          <button type="button" class="ht-filter__btn" data-filter={f.id} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}<span class="ht-filter__n">{f.n}</span></button>
+        ))}
+      </div>
+    </header>
+
+    <p class="sr-only" role="status" aria-live="polite" id="ht-board-status"></p>
+    <div data-reveal="fade">
+      <ul class="ht-board" id="ht-board" data-n="6" aria-label="Trips">
+        {trips.map((t, i) => (
+          <li class="ht-board__item" data-kind={t.kind}><TripCard trip={t} variant={i === 0 ? 'feature' : 'tag'} eager={i === 0} /></li>
+        ))}
+      </ul>
+      <div class="ht-progress" aria-hidden="true"><span></span></div>
+    </div>
+    <div class="ht-note" data-reveal="up">
+      <Icon name="compass" size={28} />
+      <div>
+        <h3>Not sure which trip fits?</h3>
+        <p>Call Captain Clinton. He will match the boat, the length and the season to your group.</p>
+      </div>
+      <a class="btn btn--primary" href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
+    </div>
+    <p class="ht-trips__more" data-reveal="fade"><a href="/oregon-fishing-charter-rates">Compare every rate and boat</a></p>
+  </div>
+</section>
+
+<script>
+  function initBoard() {
+    const board = document.getElementById('ht-board');
+    if (!board || board.dataset.init) return;
+    board.dataset.init = '1';
+    const items = Array.from(board.querySelectorAll<HTMLElement>('.ht-board__item'));
+    const btns = Array.from(document.querySelectorAll<HTMLButtonElement>('.ht-filter__btn'));
+    const status = document.getElementById('ht-board-status');
+    const bar = document.querySelector<HTMLElement>('.ht-progress span');
+    const track = bar?.parentElement as HTMLElement | undefined;
+    const progress = () => {
+      if (!bar || !track || !track.offsetWidth) return;
+      const max = board.scrollWidth - board.clientWidth;
+      const ratio = board.clientWidth / board.scrollWidth;
+      const w = Math.max(ratio, 0.12) * track.offsetWidth;
+      const x = max > 0 ? (board.scrollLeft / max) * (track.offsetWidth - w) : 0;
+      bar.style.setProperty('--w', w + 'px');
+      bar.style.setProperty('--x', x + 'px');
+    };
+    let raf = 0;
+    board.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(progress); }, { passive: true });
+    window.addEventListener('resize', progress);
+    const apply = (id: string) => {
+      let first = true, shown = 0, last: HTMLElement | null = null;
+      items.forEach((li) => {
+        const on = id === 'all' || li.dataset.kind === id;
+        li.hidden = !on;
+        li.removeAttribute('data-wide');
+        const card = li.querySelector<HTMLElement>('.ht-trip');
+        if (on) { shown++; last = li; if (card) card.dataset.variant = first ? 'feature' : 'tag'; first = false; }
+      });
+      board.dataset.n = String(shown);
+      if (shown > 1 && (shown - 1) % 2 === 1 && last) (last as HTMLElement).setAttribute('data-wide', '');
+      board.scrollLeft = 0;
+      btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === id)));
+      if (status) status.textContent = `Showing ${shown} ${shown === 1 ? 'trip' : 'trips'}`;
+      progress();
+    };
+    btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter || 'all')));
+    apply('all');
+  }
+  initBoard();
+  document.addEventListener('astro:page-load', initBoard);
+</script>

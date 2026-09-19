@@ -1,0 +1,23 @@
+---
+import '../styles/gallery.css';
+import Icon from './Icon.astro';
+import Contours from './home/Contours.astro';
+import { SITE } from '../data/site';
+interface Props { title?: string; body?: string }
+const { title = 'Ready to get on the water?', body = 'Book your next adventure with BDC Guide Service, the trusted Oregon fishing guide for salmon, steelhead and family fishing charters.' } = Astro.props;
+---
+<section class="section gb-band-sec" style="padding-top:0">
+  <div class="wrap" data-reveal="up">
+    <div class="gb-band">
+      <Contours class="gb-band__rings" rings={13} seed={2.1} />
+      <div class="gb-band__copy">
+        <h2>{title}</h2>
+        <p>{body}</p>
+      </div>
+      <div class="gb-band__actions">
+        <a class="btn btn--cream" data-magnetic href="/oregon-fishing-charter-rates">Book your fishing trip<Icon name="arrowRight" size={18} /></a>
+        <a class="gb-band__phone" href={SITE.phoneHref}><Icon name="phone" size={20} />{SITE.phone}</a>
+      </div>
+    </div>
+  </div>
+</section>

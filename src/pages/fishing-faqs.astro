@@ -1,0 +1,41 @@
+---
+import '../styles/pages.css';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/react/Faq';
+import FaqNoJs from '../components/FaqNoJs.astro';
+import { FAQS } from '../data/content';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'FAQ', path: '/fishing-faqs' }];
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+}];
+---
+<Base title="Oregon Fishing Charter FAQ" description="Answers to common questions about BDC Guide Service trips: where we meet, fishing licenses, gear, tipping, start times and how many guests fit on each boat." crumbs={crumbs} schema={schema}>
+  <PageHero title="Fishing FAQs" lede="Everything you need to know before your trip." crumbs={crumbs} tag="Before you go" seed={5} />
+  <section class="pg-faq">
+    <div class="wrap pg-faq__grid">
+      <aside class="pg-faq__aside" data-reveal="up">
+        <p class="pg-faq__count"><span data-count={FAQS.length}>{FAQS.length}</span><small>answers, straight from the boat</small></p>
+        <div class="pg-faq__help">
+          <h2>Still curious?</h2>
+          <p>Call Captain Clinton or use the chat button for quick answers.</p>
+          <a class="btn btn--primary btn--sm" href={SITE.phoneHref}><Icon name="phone" size={16} />{SITE.phone}</a>
+          <a class="pg-faq__link" href="/contact-us">Send a message</a>
+        </div>
+      </aside>
+      <div class="pg-faq__list">
+        <h2 class="sr-only">Questions and answers</h2>
+        <FaqNoJs /><Faq client:load items={FAQS} />
+        <noscript>
+          <dl class="pg-faq__plain">{FAQS.map((f) => <><dt>{f.q}</dt><dd>{f.a}</dd></>)}</dl>
+        </noscript>
+      </div>
+    </div>
+  </section>
+  <CtaBand title="Ready when you are" body="Pick a trip, or call Captain Clinton and tell him what you want to catch." />
+</Base>

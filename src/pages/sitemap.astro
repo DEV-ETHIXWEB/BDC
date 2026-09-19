@@ -1,0 +1,27 @@
+---
+import '../styles/pages.css';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { NAV, LEGAL_LINKS } from '../data/site';
+import { TRIPS } from '../data/trips';
+const crumbs = [{ name: 'Sitemap', path: '/sitemap' }];
+const groups = [
+  { title: 'Main', links: [{ label: 'Home', href: '/' }, ...NAV] },
+  { title: 'Trips', links: TRIPS.map((t) => ({ label: t.name, href: `/trips/${t.slug}` })) },
+  { title: 'Guides', links: [{ label: 'Things To Do In Oregon', href: '/things-to-do-in-oregon' }, { label: 'Oregon Fishing License', href: '/oregon-fishing-license' }] },
+  { title: 'Info', links: [...LEGAL_LINKS] },
+];
+---
+<Base title="Sitemap" description="Every page on the BDC Guide Service website: trips and rates, target species, gallery, reviews, fishing guides, FAQ and contact details." crumbs={crumbs}>
+  <PageHero title="Sitemap" lede="Every page on the site, in one chart." crumbs={crumbs} tag="Site chart" seed={8} />
+  <section class="pg-map-index">
+    <div class="wrap pg-index" data-stagger>
+      {groups.map((g) => (
+        <div class="pg-index__grp" data-reveal="up">
+          <h2>{g.title}<span>{g.links.length}</span></h2>
+          <ul>{g.links.map((l) => <li><a href={l.href}><span class="pg-index__l">{l.label}</span><span class="pg-index__p">{l.href}</span></a></li>)}</ul>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,78 @@
+---
+import '../styles/pages.css';
+import '../styles/trips.css';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import MapCard from '../components/art/MapCard.astro';
+import BookingForm from '../components/react/BookingForm';
+import { TRIPS } from '../data/trips';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'Contact Us', path: '/contact-us' }];
+const a = SITE.address;
+const full = `${a.street}, ${a.city}, ${a.region} ${a.postal}`;
+const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(full)}`;
+---
+<Base title="Contact BDC Guide Service" description="Contact Captain Clinton McCulloch at BDC Guide Service in Happy Valley, Oregon: call (503) 826-7294, email, or send a trip request." crumbs={crumbs}>
+  <PageHero title="Contact us" lede="While we're often on the water delivering unforgettable fishing experiences, we do our best to respond quickly." crumbs={crumbs} tag="Talk to the captain" seed={16} />
+  <section class="pg-contact">
+    <div class="wrap pg-contact__grid">
+      <div class="pg-hub">
+        <h2 class="sr-only">Ways to reach us</h2>
+        <a class="pg-hub__call" href={SITE.phoneHref} data-reveal="up">
+          <span class="pg-hub__ic"><Icon name="phone" size={28} /></span>
+          <span class="pg-hub__label">Call Captain Clinton</span>
+          <span class="pg-hub__num">{SITE.phone}</span>
+          <span class="pg-hub__hint">The fastest way to reach him.</span>
+        </a>
+        <a class="pg-hub__row" href={`mailto:${SITE.email}`} data-reveal="up">
+          <span class="pg-hub__ic"><Icon name="mail" size={24} /></span>
+          <span><span class="pg-hub__label">Email</span><span class="pg-hub__mail">{SITE.email}</span></span>
+        </a>
+        <div class="pg-meet" data-reveal="up">
+          <MapCard />
+          <div class="pg-meet__body">
+            <h3>Where we meet</h3>
+            <address id="pg-addr">{a.street}<br />{a.city}, {a.region} {a.postal}</address>
+            <div class="pg-meet__actions">
+              <button type="button" class="btn btn--primary btn--sm" data-copy={full} data-magnetic><Icon name="link" size={16} /><span data-copy-label>Copy address</span></button>
+              <a class="btn btn--ghost btn--sm" href={maps} target="_blank" rel="noopener">Open in Maps<Icon name="arrowUpRight" size={16} /></a>
+            </div>
+            <p class="sr-only" role="status" aria-live="polite" data-copy-status></p>
+          </div>
+        </div>
+        <p class="pg-hub__note" data-reveal="fade"><Icon name="anchor" size={18} />We are often out on the water, so we do our best to respond quickly.</p>
+      </div>
+      <div class="pg-formwrap" data-reveal="up">
+        <h2>Request a trip</h2>
+        <p class="pg-formwrap__sub">Tell us the date and trip you have in mind. We will get back to you.</p>
+        <BookingForm client:load trips={TRIPS.map(({ slug, name, price }) => ({ slug, name, price }))} email={SITE.email} />
+      </div>
+    </div>
+  </section>
+  <script>
+    function copyInit() {
+      document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+        if (b.dataset.ready) return;
+        b.dataset.ready = '1';
+        b.addEventListener('click', async () => {
+          const label = b.querySelector('[data-copy-label]');
+          const status = document.querySelector('[data-copy-status]');
+          let ok = false;
+          try { await navigator.clipboard.writeText(b.dataset.copy || ''); ok = true; } catch {}
+          if (!ok) {
+            const r = document.createRange();
+            const el = document.getElementById('pg-addr');
+            if (el) { r.selectNodeContents(el); const s = getSelection(); s?.removeAllRanges(); s?.addRange(r); }
+          }
+          const msg = ok ? 'Address copied' : 'Press copy to copy the selected address';
+          if (label) label.textContent = ok ? 'Copied' : 'Select and copy';
+          if (status) status.textContent = msg;
+          setTimeout(() => { if (label) label.textContent = 'Copy address'; }, 2200);
+        });
+      });
+    }
+    copyInit();
+    document.addEventListener('astro:page-load', copyInit);
+  </script>
+</Base>

@@ -1,0 +1,37 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { PHOTOS } from '../data/photos';
+import type { Trip } from '../data/trips';
+import '../styles/home-top.css';
+
+interface Props { trip: Trip; variant?: 'tag' | 'feature' | 'row'; headingLevel?: 'h2' | 'h3' | 'h4'; eager?: boolean }
+const { trip, variant = 'tag', headingLevel = 'h3', eager = false } = Astro.props;
+const H = headingLevel as any;
+const kindLabel = trip.kind === 'crab' ? 'Crabbing' : trip.kind === 'drift' ? 'Drift boat' : 'River boat';
+const chipIcon = trip.kind === 'crab' ? 'crab' : trip.kind === 'drift' ? 'driftBoat' : 'boat';
+const catchRow = trip.season ? { k: 'Season', v: trip.season.replace('October through December', 'Oct to Dec') } : { k: 'Targets', v: trip.species.slice(0, 2).join(', ') };
+---
+<article class="ht-trip" data-variant={variant} data-kind={trip.kind}>
+  <div class="ht-trip__top">
+    <span class="ht-trip__kind"><Icon name={chipIcon} size={20} />{kindLabel}</span>
+    <span class="ht-trip__hole" aria-hidden="true"></span>
+  </div>
+  <div class="ht-trip__media">
+    <Picture src={PHOTOS[trip.photo]} alt="" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 520, 760, 1140, 1520, 2280]} sizes={variant === 'feature' ? '(min-width: 1100px) 680px, (min-width: 640px) 60vw, 92vw' : '(min-width: 1100px) 520px, (min-width: 640px) 46vw, 92vw'} loading={eager ? 'eager' : 'lazy'} />
+  </div>
+  <div class="ht-trip__body">
+    <H class="ht-trip__name"><a href={`/trips/${trip.slug}`}>{trip.name}</a></H>
+    <p class="ht-trip__short">{trip.short}</p>
+    <dl class="ht-trip__rows">
+      <div><dt>Hours</dt><dd>{trip.hours}</dd></div>
+      <div><dt>Guests</dt><dd>Up to {trip.capacity}</dd></div>
+      <div><dt>Boat</dt><dd>{trip.boatSpec.replace(' drift boat', '')}</dd></div>
+      <div><dt>{catchRow.k}</dt><dd>{catchRow.v}</dd></div>
+    </dl>
+    <div class="ht-trip__foot">
+      <p class="ht-trip__price"><span class="sr-only">Price: </span><b>${trip.price}</b><small>per person</small></p>
+      <span class="ht-trip__go"><span class="ht-trip__go-t">View trip</span><Icon name="arrowUpRight" size={22} /></span>
+    </div>
+  </div>
+</article>

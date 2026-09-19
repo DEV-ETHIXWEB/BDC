@@ -1,0 +1,46 @@
+---
+// Blueprint side elevation of the 16 ft Alumaweld drift boat.
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+const parts: [string, string?][] = [
+  ['M64 104Q120 146 250 150H470Q590 148 646 92'],
+  ['M64 104Q110 196 250 202H470Q606 196 646 92'],
+  ['M96 132Q140 182 250 188H470Q560 186 604 140', 'soft'],
+  ['M64 104L74 96M646 92L636 84'],
+  // rowing frame + seat
+  ['M300 150V128H352V150'],
+  ['M326 128V84M304 84H348'],
+  // oarlock + oar
+  ['M420 150V112M410 112H430'],
+  ['M420 112L268 60', undefined],
+  ['M420 112L572 196'],
+  ['M572 196L598 210Q604 214 606 208L604 196Q600 188 592 186Z'],
+  // passenger seats
+  ['M140 150V128H186V150'],
+  ['M500 150V128H548V150'],
+  ['M146 128V110M540 128V110', 'soft'],
+];
+const dims = ['M64 254H646', 'M64 244V264', 'M646 244V264'];
+---
+<svg class:list={['pg-boat', cls]} viewBox="0 0 700 290" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Blueprint drawing of the 16 foot Alumaweld drift boat with oars and seats" data-pg-draw>
+  <g class="pg-boat__water" stroke-width="1.5" opacity=".55">
+    <path class="pg-wv" d="M0 196q16-8 32 0t32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0" stroke-dasharray="3 7" />
+  </g>
+  {parts.map(([d, k], i) => <path class:list={['pg-d', k === 'soft' && 'pg-soft']} pathLength="1" style={`--d:${(i * 0.09).toFixed(2)}s`} d={d} />)}
+  <g class="pg-dim">
+    {dims.map((d, i) => <path class="pg-d" pathLength="1" style={`--d:${(1.4 + i * 0.1).toFixed(1)}s`} d={d} />)}
+    <rect x="312" y="238" width="86" height="32" rx="4" class="pg-dim__gap" stroke="none" />
+    <text x="355" y="260" text-anchor="middle" class="pg-dim__t">16 ft</text>
+  </g>
+  <g class="pg-marks" stroke-width="1.5">
+    <path d="M60 106L36 60" /><circle cx="32" cy="46" r="17" /><text x="32" y="53" text-anchor="middle">1</text>
+    <path d="M163 128L176 70" /><circle cx="180" cy="54" r="17" /><text x="180" y="61" text-anchor="middle">2</text>
+    <path d="M326 84L326 44" /><circle cx="326" cy="28" r="17" /><text x="326" y="35" text-anchor="middle">3</text>
+    <path d="M330 170L400 232" stroke-dasharray="3 5" opacity="0" />
+    <path d="M500 78L520 128" /><circle cx="496" cy="62" r="17" /><text x="496" y="69" text-anchor="middle">4</text>
+  </g>
+</svg>
+
+<script>
+  import "./draw";
+</script>

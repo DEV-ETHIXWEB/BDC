@@ -1,0 +1,79 @@
+---
+import Icon from '../Icon.astro';
+import '../../styles/home-mid.css';
+
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const rows = [
+  { key: 'steel', name: 'Winter steelhead', s: 1, e: 4, icon: 'fishJump', note: 'Coastal and tributary rivers' },
+  { key: 'chinook', name: 'Spring and early-summer Chinook', s: 4, e: 7, icon: 'fish', note: 'Columbia and Willamette' },
+  { key: 'fall', name: 'Fall salmon', s: 9, e: 11, icon: 'fish', note: 'Additional opportunities', light: true },
+  { key: 'crab', name: 'Dungeness crab charters', s: 10, e: 12, icon: 'crab', note: 'Bays and nearshore waters' },
+];
+const range = (s: number, e: number) => `${months[s - 1].slice(0, 3)} to ${months[e - 1].slice(0, 3)}`;
+const now = new Date();
+const today = (now.getMonth() + (now.getDate() - 0.5) / new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate()) / 12;
+---
+<section class="hm-cal" aria-labelledby="hm-cal-h" data-cal style={`--today:${today.toFixed(4)}`}>
+  <div class="wrap">
+    <div class="hm-cal__head">
+      <h2 id="hm-cal-h" data-reveal="up">The fishing year at a glance</h2>
+      <p class="hm-cal__start" data-reveal="up"><Icon name="calendar" size={22} /><span>Trips are scheduled from the <strong>3rd week of September</strong>.</span></p>
+    </div>
+
+    <div class="hm-cal__sheet" data-reveal="fade">
+      <table class="hm-tbl">
+        <caption class="sr-only">Guided fishing seasons by month. Winter steelhead runs January to April, spring and early-summer Chinook April to July, fall salmon September to November, and crab charters October to December.</caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="sr-only">Season</span></th>
+            {months.map((m) => (<th scope="col"><span class="sr-only">{m}</span><span class="hm-m-full" aria-hidden="true">{m.slice(0, 3)}</span><span class="hm-m-one" aria-hidden="true">{m[0]}</span></th>))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr class={`hm-row hm-row--${r.key}`} style={`--s:${r.s};--e:${r.e};--i:${i}`}>
+              <th scope="row">
+                <div class="hm-row__in">
+                <span class="hm-row__ic"><Icon name={r.icon as any} size={22} /></span>
+                <span class="hm-row__t"><strong>{r.name}</strong><small>{range(r.s, r.e)}<span class="hm-row__note"> · {r.note}</span></small></span>
+                </div>
+              </th>
+              <td colspan="12">
+                <div class="hm-track">
+                  <span class="hm-bar"><span class="hm-bar__t" aria-hidden="true">{range(r.s, r.e)}</span><span class="sr-only">{months[r.s - 1]} through {months[r.e - 1]}{r.light ? ', lighter opportunity' : ''}</span></span>
+                  <i class="hm-today" aria-hidden="true">{i === 0 && <b data-cal-label>Today</b>}</i>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="hm-cal__key"><span class="hm-key hm-key--solid"></span> Prime window <span class="hm-key hm-key--light"></span> Additional opportunity <span class="hm-cal__now" data-cal-now aria-live="polite"></span></p>
+  </div>
+</section>
+
+<script>
+  function initCal() {
+    document.querySelectorAll<HTMLElement>('[data-cal]').forEach((root) => {
+      if (root.dataset.ready) return;
+      root.dataset.ready = '1';
+      const d = new Date();
+      const dim = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+      root.style.setProperty('--today', ((d.getMonth() + (d.getDate() - 0.5) / dim) / 12).toFixed(4));
+      const m = d.getMonth() + 1;
+      const label = root.querySelector('[data-cal-label]');
+      if (label) label.textContent = 'Today';
+      const active = [...root.querySelectorAll<HTMLElement>('.hm-row')].filter((r) => m >= +r.style.getPropertyValue('--s') && m <= +r.style.getPropertyValue('--e')).map((r) => r.querySelector('strong')!.textContent);
+      const out = root.querySelector('[data-cal-now]');
+      if (out) out.textContent = active.length ? `Now in season: ${active.join(', ')}.` : 'Between seasons: trips resume in the fall.';
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'reduce';
+      if (reduce || !('IntersectionObserver' in window)) { root.classList.add('is-drawn'); return; }
+      root.classList.add('hm-anim');
+      const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { root.classList.add('is-drawn'); io.disconnect(); } }, { threshold: 0.3 });
+      io.observe(root.querySelector('.hm-tbl')!);
+    });
+  }
+  initCal();
+  document.addEventListener('astro:page-load', initCal);
+</script>

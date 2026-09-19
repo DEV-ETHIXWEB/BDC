@@ -1,0 +1,22 @@
+---
+import '../../styles/gallery.css';
+import Icon from '../Icon.astro';
+import Contours from './Contours.astro';
+import { SITE } from '../../data/site';
+---
+<section class="gb-cta" aria-labelledby="gb-cta-h">
+  <Contours class="gb-cta__rings" rings={18} seed={1.4} />
+  <Contours variant="ridge" class="gb-cta__ridge" rings={9} seed={0.3} />
+  <div class="wrap gb-cta__inner">
+    <p class="gb-cta__note" data-reveal="fade">Trips scheduled from the third week of September</p>
+    <h2 id="gb-cta-h" data-reveal="up">Come fish the river <em>with Clinton</em>.</h2>
+    <div class="gb-cta__row" data-reveal="up">
+      <a class="btn btn--cream gb-cta__book" data-magnetic href="/oregon-fishing-charter-rates">Book your trip<Icon name="arrowRight" size={18} /></a>
+      <a class="gb-cta__call" href={SITE.phoneHref}>
+        <span>Call Captain Clinton</span>
+        <strong>{SITE.phone}</strong>
+      </a>
+    </div>
+    <p class="gb-cta__addr" data-reveal="fade">Meet at {SITE.address.street}, {SITE.address.city}, {SITE.address.region} {SITE.address.postal}</p>
+  </div>
+</section>

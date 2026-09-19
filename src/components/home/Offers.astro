@@ -1,0 +1,37 @@
+---
+import Coupon from '../Coupon.astro';
+import { COUPONS } from '../../data/coupons';
+import '../../styles/home-top.css';
+---
+<section class="ht-offers" aria-labelledby="ht-offers-h">
+  <h2 id="ht-offers-h" class="sr-only">Current offers</h2>
+  <div class="wrap ht-offers__grid" data-stagger>
+    {COUPONS.map((c, i) => (
+      <div class="ht-offers__slot" data-reveal="up"><Coupon c={c} featured={i === 0} /></div>
+    ))}
+  </div>
+</section>
+
+<script>
+  function initTilt() {
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((el) => {
+      if (el.dataset.tiltInit) return;
+      el.dataset.tiltInit = '1';
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.setProperty('--ry', (px * 5).toFixed(2) + 'deg');
+        el.style.setProperty('--rx', (-py * 4).toFixed(2) + 'deg');
+        el.style.setProperty('--gx', (px + 0.5) * 100 + '%');
+      });
+      el.addEventListener('pointerleave', () => {
+        el.style.setProperty('--ry', '0deg');
+        el.style.setProperty('--rx', '0deg');
+      });
+    });
+  }
+  initTilt();
+  document.addEventListener('astro:page-load', initTilt);
+</script>

@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import logoMark from '../assets/photos/logo-mark.png';
+import { SITE } from '../data/site';
+import Icon from './Icon.astro';
+import MobileMenu from './react/MobileMenu';
+interface Props { nav: readonly { label: string; href: string }[]; current: string }
+const { nav, current } = Astro.props;
+const active = (href: string) => (current === href || current.startsWith(href + '/') ? 'page' : undefined);
+---
+<header class="header" data-header transition:persist="site-header">
+  <div class="wrap wrap--wide header__bar">
+    <a class="brand" href="/" aria-label={`${SITE.name} home`}>
+      <Image src={logoMark} alt="" width={42} height={56} loading="eager" densities={[1, 2, 3]} />
+      <span class="brand__lock" aria-hidden="true"><b>BDC</b><small>Guide Service &middot; Oregon</small></span>
+    </a>
+    <nav class="nav" aria-label="Primary" data-nav>
+      {nav.map((n) => <a href={n.href} aria-current={active(n.href)}>{n.label}</a>)}
+    </nav>
+    <div class="header__cta">
+      <a class="header__phone" href={SITE.phoneHref} aria-label={`Call ${SITE.phone}`}><Icon name="phone" size={20} /><span>{SITE.phone}</span></a>
+      <a class="btn btn--cream btn--sm" href="/oregon-fishing-charter-rates" data-magnetic>Quick Book</a>
+      <MobileMenu client:late nav={nav} phone={SITE.phone} phoneHref={SITE.phoneHref} />
+    </div>
+  </div>
+  <div class="header__progress" aria-hidden="true"><i></i></div>
+</header>

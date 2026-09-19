@@ -1,0 +1,38 @@
+---
+// Highlights the table-of-contents link of the section in view. Script only.
+---
+<script>
+  function spy() {
+    document.querySelectorAll<HTMLElement>('[data-pg-spy]').forEach((nav) => {
+      if (nav.dataset.spyReady) return;
+      nav.dataset.spyReady = '1';
+      const links = [...nav.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+      const map = new Map<Element, HTMLAnchorElement>();
+      links.forEach((a) => {
+        const t = document.getElementById(a.hash.slice(1));
+        if (t) map.set(t, a);
+      });
+      if (!('IntersectionObserver' in window)) return;
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            links.forEach((l) => l.removeAttribute('aria-current'));
+            const a = map.get(e.target);
+            if (a) {
+              a.setAttribute('aria-current', 'true');
+              if (nav.scrollWidth > nav.clientWidth) {
+                const left = a.offsetLeft - nav.clientWidth / 2 + a.clientWidth / 2;
+                nav.scrollTo({ left, behavior: 'smooth' });
+              }
+            }
+          });
+        },
+        { rootMargin: '-25% 0px -65% 0px' }
+      );
+      map.forEach((_, el) => io.observe(el));
+    });
+  }
+  spy();
+  document.addEventListener('astro:page-load', spy);
+</script>

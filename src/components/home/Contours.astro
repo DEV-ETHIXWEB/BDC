@@ -1,0 +1,35 @@
+---
+// Topographic contour rings (or ridge lines), generated once at build time. Decorative only.
+interface Props { variant?: 'rings' | 'ridge'; rings?: number; class?: string; seed?: number }
+const { variant = 'rings', rings = 16, class: cls, seed = 0 } = Astro.props;
+const f = (n: number) => Math.round(n * 10) / 10;
+const paths: string[] = [];
+if (variant === 'rings') {
+  const cx = 300, cy = 200;
+  for (let k = 0; k < rings; k++) {
+    const R = 16 + k * 15;
+    const pts: string[] = [];
+    for (let i = 0; i <= 120; i++) {
+      const t = (i / 120) * Math.PI * 2;
+      const wob = 1 + 0.11 * Math.sin(2 * t + 0.6 + seed + k * 0.11) + 0.06 * Math.sin(3 * t + 1.9 - k * 0.17) + 0.035 * Math.sin(5 * t + seed * 2 + k * 0.05);
+      pts.push(`${i ? 'L' : 'M'}${f(cx + Math.cos(t) * R * 1.45 * wob)} ${f(cy + Math.sin(t) * R * wob)}`);
+    }
+    paths.push(pts.join('') + 'Z');
+  }
+} else {
+  for (let k = 0; k < rings; k++) {
+    const pts: string[] = [];
+    for (let i = 0; i <= 120; i++) {
+      const x = (i / 120) * 1200;
+      const u = x / 1200;
+      const y = 60 + k * 16 - 34 * Math.sin(u * 5.2 + 0.8 + seed) - 20 * Math.sin(u * 11 + 2.1 + k * 0.07) - 8 * Math.sin(u * 23 + k * 0.2);
+      pts.push(`${i ? 'L' : 'M'}${f(x)} ${f(y)}`);
+    }
+    paths.push(pts.join(''));
+  }
+}
+const vb = variant === 'rings' ? '0 0 600 400' : '0 0 1200 320';
+---
+<svg class:list={['gb-contours', `gb-contours--${variant}`, cls]} viewBox={vb} preserveAspectRatio={variant === 'rings' ? 'xMidYMid slice' : 'none'} fill="none" aria-hidden="true" focusable="false">
+  {paths.map((d, i) => <path d={d} stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke" opacity={f(0.35 + (i % 4 === 0 ? 0.45 : 0))} />)}
+</svg>

@@ -1,0 +1,174 @@
+---
+import { Picture } from 'astro:assets';
+import '../styles/trips.css';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Wave from '../components/Wave.astro';
+import CtaBand from '../components/CtaBand.astro';
+import BookingForm from '../components/react/BookingForm';
+import TripPlanner from '../components/react/TripPlanner';
+import { PHOTOS } from '../data/photos';
+import { TRIPS } from '../data/trips';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'Trips & Rates', path: '/oregon-fishing-charter-rates' }];
+const plannerTrips = TRIPS.map(({ slug, name, hours, price, boat, capacity, kind, species, season }) => ({ slug, name, hours, price, boat, capacity, kind, species, season }));
+const formTrips = TRIPS.map(({ slug, name, price, capacity, boat, hours }) => ({ slug, name, price, capacity, boat, hours }));
+const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const rows = [
+  { label: 'Winter steelhead', on: [0, 1, 2, 3], note: 'January to April' },
+  { label: 'Dungeness crab', on: [9, 10, 11], note: 'October to December' },
+];
+---
+<Base
+  title="Oregon Fishing Charter Trips & Rates"
+  description="Guided Oregon fishing charters from $150 per person: salmon and steelhead trips, drift boat trips and fall Dungeness crabbing. Guide and gear included."
+  crumbs={crumbs}
+>
+  <section class="tp-hero tp-hero--rates">
+    <div class="wrap tp-hero__grid">
+      <div class="tp-hero__copy">
+        <nav class="tp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true"> / </span><span aria-current="page">Trips &amp; rates</span></nav>
+        <h1 data-split>Trips &amp; rates</h1>
+        <p class="tp-hero__lede" data-reveal="up">Six guided trips with one simple price per person. Your guide, boat, and all gear come with every trip. Use the planner to see your total.</p>
+        <div class="tp-hero__actions" data-reveal="up">
+          <a class="btn btn--cream" href="#planner" data-magnetic>Plan your trip<Icon name="chevronDown" size={18} /></a>
+          <a class="btn btn--ghost" href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
+        </div>
+      </div>
+      <div class="tp-board" data-reveal="scale">
+        <p class="tp-board__title">Price per person</p>
+        <dl class="tp-board__rows">
+          <div><dt>Half day<small>4 hours</small></dt><dd><i aria-hidden="true"></i>$150</dd></div>
+          <div><dt>Crabbing<small>5 hours</small></dt><dd><i aria-hidden="true"></i>$150</dd></div>
+          <div><dt>Full day<small>8 hours</small></dt><dd><i aria-hidden="true"></i>$250</dd></div>
+        </dl>
+        <p class="tp-board__foot">Minimum 2 guests. 20% tip is customary.</p>
+      </div>
+    </div>
+    <Wave />
+  </section>
+
+  <section class="tp-planner-sec" id="planner" aria-labelledby="planner-h">
+    <div class="wrap">
+      <div class="tp-sechead" data-reveal="up">
+        <h2 id="planner-h">Find your trip</h2>
+        <p>Tell us who is coming and what you want to catch. We show the trips that fit and what they cost.</p>
+      </div>
+      <TripPlanner client:load trips={plannerTrips} />
+    </div>
+  </section>
+
+  <section class="tp-compare" aria-labelledby="compare-h">
+    <div class="wrap">
+      <div class="tp-sechead" data-reveal="up">
+        <h2 id="compare-h">Every trip side by side</h2>
+      </div>
+      <div class="tp-tablewrap" data-reveal="fade">
+        <table class="tp-table">
+          <caption class="tp-sr">Trip comparison: boat, length, guests, target and price per person</caption>
+          <thead><tr><th scope="col">Trip</th><th scope="col">Boat</th><th scope="col">Length</th><th scope="col">Guests</th><th scope="col">Target</th><th scope="col" class="tp-num">Per person</th></tr></thead>
+          <tbody>
+            {TRIPS.map((t) => (
+              <tr>
+                <th scope="row"><a href={`/trips/${t.slug}`}>{t.name}</a></th>
+                <td>{t.boatSpec}</td>
+                <td>{t.hours} hours</td>
+                <td>2 to {t.capacity}</td>
+                <td>{t.species.join(', ')}{t.season ? `, ${t.season}` : ''}</td>
+                <td class="tp-num"><strong>${t.price}</strong></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul class="tp-stack" aria-label="Trip comparison">
+        {TRIPS.map((t) => (
+          <li class="tp-stack__item" data-reveal="up">
+            <div class="tp-stack__head">
+              <h3><a href={`/trips/${t.slug}`}>{t.name}</a></h3>
+              <span class="tp-stack__price">${t.price}<small> pp</small></span>
+            </div>
+            <dl>
+              <div><dt>Boat</dt><dd>{t.boatSpec}</dd></div>
+              <div><dt>Length</dt><dd>{t.hours} hours</dd></div>
+              <div><dt>Guests</dt><dd>2 to {t.capacity}</dd></div>
+              <div><dt>Target</dt><dd>{t.species.join(', ')}</dd></div>
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="tp-info" aria-labelledby="info-h">
+    <div class="wrap tp-info__grid">
+      <div class="tp-info__lead" data-reveal="up">
+        <h2 id="info-h">What every trip includes</h2>
+        <ul class="tp-checks">
+          <li><Icon name="checkCircle" size={22} />Professional guide, Captain Clinton McCulloch</li>
+          <li><Icon name="checkCircle" size={22} />The boat, captained start to finish</li>
+          <li><Icon name="checkCircle" size={22} />Rods, reels, tackle and bait, or crab equipment</li>
+          <li><Icon name="camera" size={22} />Trip photos and videos sent to you</li>
+        </ul>
+        <div class="tp-tag">
+          <Picture src={PHOTOS.salmonOnBoat} alt="Guest standing on the boat with a silver salmon" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 480, 560, 840, 1120, 1680]} sizes="(min-width: 900px) 320px, 70vw" loading="lazy" />
+          <p>Silver salmon from the Willy Predator</p>
+        </div>
+      </div>
+
+      <div class="tp-info__side">
+        <div class="tp-note" data-reveal="up">
+          <span class="tp-note__i"><Icon name="license" size={26} /></span>
+          <div>
+            <h3>You need an Oregon fishing license</h3>
+            <p>Anglers 12 and older need a valid Oregon fishing license. <a href="/oregon-fishing-license">Find out how to get one</a>.</p>
+          </div>
+        </div>
+
+        <div class="tp-sched" data-reveal="up">
+          <h3>2026 schedule</h3>
+          <p>Trips are scheduled from the 3rd week of September. Chinook salmon run in spring and early summer, with more in fall.</p>
+          <div class="tp-months" role="table" aria-label="Season months for steelhead and crabbing">
+            <div class="tp-months__head" role="row" aria-hidden="true">
+              <span></span>
+              {months.map((m) => <b>{m}</b>)}
+            </div>
+            {rows.map((r) => (
+              <div class="tp-months__row" role="row">
+                <span role="rowheader">{r.label}<small>{r.note}</small></span>
+                {months.map((_, i) => <i role="cell" data-on={r.on.includes(i) ? '' : undefined} aria-label={`${monthNames[i]}: ${r.on.includes(i) ? 'in season' : 'out of season'}`}></i>)}
+              </div>
+            ))}
+          </div>
+          <p class="tp-fine">Tip: a 20% gratuity is customary for your guide.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tp-book" id="customize" aria-labelledby="customize-h">
+    <div class="wrap tp-book__grid">
+      <div class="tp-book__copy" data-reveal="up">
+        <h2 id="customize-h">Tell us what you have in mind</h2>
+        <p class="tp-book__lede">Send a request and Captain Clinton will confirm dates, launch time and target fish. Prefer to talk? Call <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+        <ul class="tp-checks tp-checks--deep">
+          <li><Icon name="checkCircle" size={22} />Minimum 2 guests per trip</li>
+          <li><Icon name="checkCircle" size={22} />Salmon trips can start as early as 4:00 AM</li>
+          <li><Icon name="checkCircle" size={22} />Beginners and families welcome</li>
+        </ul>
+      </div>
+      <div data-reveal="up">
+        <noscript>
+          <style>.tp-form, .tp-planner-sec, .tp-hero__actions .btn[href='#planner'] { display: none !important; }</style>
+          <div class="tp-nojs">
+            <h3>Request a trip</h3>
+            <p>This form needs JavaScript. Call <a href={SITE.phoneHref}>{SITE.phone}</a> or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with your trip, number of guests and preferred date.</p>
+          </div>
+        </noscript>
+        <BookingForm client:visible trips={formTrips} email={SITE.email} />
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>

@@ -1,0 +1,160 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import figtreeFont from '@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2?url';
+import barlow800 from '@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url';
+import { SITE, NAV } from '../data/site';
+import { TRIPS } from '../data/trips';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Chatbot from '../components/react/Chatbot';
+import A11yPanel from '../components/react/A11yPanel';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+  crumbs?: { name: string; path: string }[];
+  schema?: Record<string, unknown>[];
+}
+const {
+  title = SITE.title,
+  description = SITE.description,
+  image = '/og-image.jpg',
+  type = 'website',
+  noindex = false,
+  crumbs = [],
+  schema = [],
+} = Astro.props;
+
+// build.format is 'file', so Astro.url.pathname ends in .html at build time: normalise to the public URL.
+const rawPath = Astro.props.path ?? Astro.url.pathname;
+const path = rawPath.replace(/\/index\.html$/, '/').replace(/\.html$/, '').replace(/(.)\/$/, '$1') || '/';
+const is404 = path === '/404';
+const canonical = new URL(path, SITE.url).href;
+const ogImage = new URL(image, SITE.url).href;
+const fullTitle = title === SITE.title ? title : `${title} | ${SITE.name}`;
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': ['LocalBusiness', 'SportsActivityLocation'],
+  '@id': `${SITE.url}/#business`,
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.description,
+  telephone: '+1-503-826-7294',
+  email: SITE.email,
+  image: ogImage,
+  logo: new URL('/icon-512.png', SITE.url).href,
+  priceRange: '$150-$250',
+  founder: { '@type': 'Person', name: SITE.captain },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: SITE.address.street,
+    addressLocality: SITE.address.city,
+    addressRegion: SITE.address.region,
+    postalCode: SITE.address.postal,
+    addressCountry: SITE.address.country,
+  },
+  areaServed: ['Columbia River', 'Willamette River', 'Wilson River', 'Trask River', 'Sandy River', 'Clackamas River', 'Nestucca River'].map((n) => ({ '@type': 'Place', name: `${n}, Oregon` })),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Guided fishing and crabbing trips',
+    itemListElement: TRIPS.map((t) => ({
+      '@type': 'Offer',
+      priceCurrency: 'USD',
+      price: t.price,
+      itemOffered: { '@type': 'TouristTrip', name: t.name, url: `${SITE.url}/trips/${t.slug}` },
+    })),
+  },
+};
+const website = { '@context': 'https://schema.org', '@type': 'WebSite', url: SITE.url, name: SITE.name };
+const breadcrumb = crumbs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [{ name: 'Home', path: '/' }, ...crumbs].map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.name,
+        item: new URL(c.path, SITE.url).href,
+      })),
+    }
+  : null;
+const graph = [path === '/' ? business : null, path === '/' ? website : null, breadcrumb, ...schema].filter(Boolean);
+---
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="preload" as="font" type="font/woff2" href={figtreeFont} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={barlow800} crossorigin />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {!is404 && <link rel="canonical" href={canonical} />}
+    <meta name="robots" content={noindex || is404 ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
+    <meta name="theme-color" content="#0b2434" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="geo.region" content="US-OR" />
+    <meta name="geo.placename" content="Happy Valley, Oregon" />
+    {graph.map((g) => <script type="application/ld+json" set:html={JSON.stringify(g)} />)}
+    <ClientRouter />
+    <script is:inline>
+      // a11y prefs + motion gate. Re-run after every view-transition swap because Astro
+      // replaces <html> attributes with the incoming page's.
+      (function () {
+        function boot() {
+          var r = document.documentElement;
+          try {
+            var p = JSON.parse(localStorage.getItem('bdc-a11y') || '{}');
+            if (p.text) r.dataset.text = p.text;
+            if (p.contrast) r.dataset.contrast = 'high';
+            if (p.links) r.dataset.links = 'underline';
+            if (p.motion) r.dataset.motion = 'reduce';
+            if (p.font) r.dataset.font = 'dyslexic';
+            if (p.cursor) r.dataset.cursor = 'large';
+          } catch (e) {}
+          var ok = !matchMedia('(prefers-reduced-motion: reduce)').matches && r.dataset.motion !== 'reduce';
+          if (ok) r.classList.add('js-motion');
+          // safety net: if the motion runtime never boots, never leave content hidden
+          setTimeout(function () { if (!window.__bdcMotion) r.classList.remove('js-motion'); }, 3500);
+        }
+        boot();
+        document.addEventListener('astro:after-swap', boot);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+    <Header nav={NAV} current={path} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <A11yPanel client:late transition:persist="a11y-panel" />
+    <Chatbot client:late transition:persist="chatbot" />
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

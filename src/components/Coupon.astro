@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import mark from '../assets/photos/logo-mark.png';
+import type { Coupon } from '../data/coupons';
+import '../styles/home-top.css';
+const { c, featured = false } = Astro.props as { c: Coupon; featured?: boolean };
+
+// Decorative barcode: deterministic bar widths derived from the ticket title.
+let seed = 0;
+for (const ch of c.title + c.eyebrow) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+const bars: { x: number; w: number }[] = [];
+let x = 0;
+while (x < 118) {
+  seed = (seed * 1664525 + 1013904223) >>> 0;
+  const w = 1 + (seed % 4);
+  bars.push({ x, w });
+  x += w + 1 + ((seed >> 9) % 3);
+}
+---
+<article class:list={['ht-ticket', featured && 'ht-ticket--featured']} data-tilt>
+  <div class="ht-ticket__shape">
+    <div class="ht-ticket__main">
+      <Image class="ht-ticket__crest" src={mark} alt="" width={300} widths={[300, 600]} format="webp" loading="lazy" aria-hidden="true" />
+      <p class="ht-ticket__eyebrow"><Icon name={c.icon} size={20} />{c.eyebrow}</p>
+      <h3>{c.title}</h3>
+      <p class="ht-ticket__body">{c.body}</p>
+    </div>
+    <div class="ht-ticket__stub">
+      {c.big && (
+        <p class="ht-ticket__big"><span>{c.big}</span><small>{c.bigLabel}</small></p>
+      )}
+      {c.code && <span class="ht-ticket__code" aria-label={`Promo code ${c.code}`}>{c.code}</span>}
+      <svg class="ht-ticket__bars" viewBox="0 0 120 34" preserveAspectRatio="none" aria-hidden="true">
+        {bars.map((b) => <rect x={b.x} y="0" width={b.w} height="34" />)}
+      </svg>
+      <a class="btn btn--cream btn--sm ht-ticket__cta" href={c.href}>{c.cta}<Icon name="arrowRight" size={18} /></a>
+    </div>
+  </div>
+</article>

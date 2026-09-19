@@ -1,0 +1,214 @@
+---
+import { Picture } from 'astro:assets';
+import '../../styles/trips.css';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Wave from '../../components/Wave.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import BookingForm from '../../components/react/BookingForm';
+import { PHOTOS } from '../../data/photos';
+import { TRIPS, type Trip } from '../../data/trips';
+import { SITE } from '../../data/site';
+
+export function getStaticPaths() {
+  return TRIPS.map((trip) => ({ params: { slug: trip.slug }, props: { trip } }));
+}
+const { trip } = Astro.props as { trip: Trip };
+const url = `${SITE.url}/trips/${trip.slug}`;
+const crumbs = [{ name: 'Trips & Rates', path: '/oregon-fishing-charter-rates' }, { name: trip.name, path: `/trips/${trip.slug}` }];
+const related = TRIPS.filter((t) => t.slug !== trip.slug && t.kind === trip.kind).concat(TRIPS.filter((t) => t.slug !== trip.slug && t.kind !== trip.kind)).slice(0, 3);
+const isWilly = trip.boat === 'Willy Predator';
+const isCrab = trip.kind === 'crab';
+const salmon = trip.species.some((s) => /salmon/i.test(s));
+const boatIcon = isCrab ? 'crab' : trip.kind === 'drift' ? 'driftBoat' : 'boat';
+const seasonText = trip.season
+  ?? (trip.kind === 'drift'
+    ? 'Winter steelhead, January to April'
+    : 'Steelhead January to April. Chinook in spring, early summer and fall.');
+const launch = salmon ? 'As early as 4:00 AM for salmon' : 'Confirmed when you book';
+const sheet = [
+  { k: 'Length', v: `${trip.hours} hours`, icon: 'clock' },
+  { k: 'Guests', v: `2 to ${trip.capacity}`, icon: 'users' },
+  { k: 'Boat', v: trip.boatSpec, icon: boatIcon },
+  { k: 'Target', v: trip.species.join(', '), icon: 'fish' },
+  { k: 'Season', v: seasonText, icon: 'calendar' },
+  { k: 'Launch', v: launch, icon: 'sun' },
+  { k: 'Price', v: `$${trip.price} per person`, icon: 'ticket' },
+];
+const flow = [
+  { t: 'Launch', icon: 'sun', d: salmon ? 'Captain Clinton confirms your launch time when you book. Salmon trips can start as early as 4:00 AM, so you are on the water when the fish are moving.' : 'Captain Clinton confirms your launch time and where to meet when you book.' },
+  { t: 'On the water', icon: isCrab ? 'anchor' : 'compass', d: isCrab ? `${trip.hours} hours aboard the ${trip.boat === 'Willy Predator' ? 'Willy Predator' : 'Alumaweld'}, with all crabbing equipment supplied.` : `${trip.hours} guided hours in the ${isWilly ? 'Willy Predator' : 'drift boat'}. Rods, reels, tackle and bait are supplied, and your guide sets you up.` },
+  { t: isCrab ? 'Pull the pots' : 'The catch', icon: isCrab ? 'crab' : 'fishJump', d: isCrab ? 'Pull pots, sort keepers from the rest and take home fresh Dungeness crab.' : `Target: ${trip.species.join(', ')}. Captain Clinton reads the river and conditions to put you on fish.` },
+  { t: 'Photos and videos', icon: 'camera', d: 'You receive photos and videos of your trip to keep and share.' },
+];
+const boatFacts = isWilly
+  ? [['Length', '22 feet'], ['Power', 'Twin Yamaha: 150 HP main, 9.9 HP kicker'], ['Capacity', 'Up to 6 guests, often 4'], ['Built for', 'Salmon on the Columbia and Willamette']]
+  : [['Length', '16 feet'], ['Type', 'Alumaweld guide model drift boat'], ['Capacity', 'Up to 3 guests'], ['Built for', 'Shallow water big boats cannot reach']];
+const hull = isWilly ? 340 : 247;
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'TouristTrip',
+  name: trip.name,
+  description: trip.description,
+  url,
+  touristType: trip.kind === 'crab' ? 'Families, crabbing enthusiasts' : 'Anglers of all skill levels, families',
+  provider: { '@id': `${SITE.url}/#business` },
+  offers: { '@type': 'Offer', price: trip.price, priceCurrency: 'USD', availability: 'https://schema.org/InStock', url },
+}];
+const formTrips = TRIPS.map(({ slug, name, price, capacity, boat, hours }) => ({ slug, name, price, capacity, boat, hours }));
+---
+<Base title={trip.seoTitle} description={`${trip.tagline}. $${trip.price} per person with guide, boat and gear included. Book with BDC Guide Service in Oregon.`} crumbs={crumbs} schema={schema} image="/og-image.jpg">
+  <section class="tp-hero tp-hero--trip">
+    <div class="wrap tp-hero__grid">
+      <div class="tp-hero__copy">
+        <nav class="tp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true"> / </span><a href="/oregon-fishing-charter-rates">Trips &amp; rates</a><span aria-hidden="true"> / </span><span aria-current="page">{trip.name}</span></nav>
+        <p class="tp-chip"><Icon name={boatIcon} size={18} />{trip.boat === 'Willy Predator' ? 'Willy Predator' : 'Alumaweld drift boat'}</p>
+        <h1 data-split>{trip.name}</h1>
+        <p class="tp-hero__lede" data-reveal="up">{trip.tagline}.</p>
+        <div class="tp-hero__price" data-reveal="up"><span class="tp-hero__amt">${trip.price}</span><span>per person<small>Guide, boat and gear included</small></span></div>
+        <div class="tp-hero__actions" data-reveal="up">
+          <a class="btn btn--cream" href="#book" data-magnetic>Request this trip<Icon name="arrowRight" size={18} /></a>
+          <a class="btn btn--ghost" href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
+        </div>
+      </div>
+      <figure class="tp-plate" data-reveal="scale">
+        <Picture src={PHOTOS[trip.photo]} alt={`${trip.name} with BDC Guide Service in Oregon`} formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[400, 560, 1120, 1680, 2240, 3360]} sizes="(min-width: 900px) 520px, min(92vw, 560px)" loading="eager" fetchpriority="high" />
+        <figcaption>{trip.species[0]}<span aria-hidden="true"> · </span>{trip.hours} hours</figcaption>
+      </figure>
+    </div>
+    <Wave />
+  </section>
+
+  <section class="tp-about" aria-labelledby="about-h">
+    <div class="wrap tp-about__grid">
+      <div class="tp-about__text" data-reveal="up">
+        <h2 id="about-h">About this trip</h2>
+        <p class="tp-about__lede">{trip.description}</p>
+        <p class="tp-fine">A valid Oregon fishing license is required for anglers 12 and older. <a href="/oregon-fishing-license">License details</a>.</p>
+      </div>
+      <div class="tp-sheet" data-reveal="up">
+        <p class="tp-sheet__title">Trip sheet</p>
+        <dl>
+          {sheet.map((r) => (
+            <div class="tp-sheet__row">
+              <dt><Icon name={r.icon as any} size={18} />{r.k}</dt>
+              <dd>{r.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="tp-flow" aria-labelledby="flow-h">
+    <div class="wrap">
+      <div class="tp-sechead" data-reveal="up"><h2 id="flow-h">How the day goes</h2></div>
+      <ol class="tp-flow__list" data-stagger>
+        {flow.map((s, i) => (
+          <li data-reveal="up">
+            <span class="tp-flow__node"><Icon name={s.icon as any} size={24} /></span>
+            <span class="tp-flow__n">Step {i + 1}</span>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="tp-boat" aria-labelledby="boat-h">
+    <div class="wrap tp-boat__grid">
+      <div class="tp-boat__draw" data-reveal="fade">
+        <svg viewBox="0 0 400 150" role="img" aria-label={`Side outline of the ${trip.boatSpec}, ${isWilly ? '22' : '16'} feet long`}>
+          <g transform={`translate(${(400 - hull) / 2} 20)`} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+            <path d={`M0 24 Q${hull / 2} ${isWilly ? 40 : 52} ${hull} 24 L${hull - 24} ${isWilly ? 70 : 62} L${isWilly ? 22 : 30} ${isWilly ? 70 : 62} Z`} />
+            <path d={`M${hull * 0.3} 24 V6 H${hull * 0.55} V24`} />
+            {isWilly && <path d={`M${hull * 0.36} 6 V-8 H${hull * 0.48} V6`} />}
+            {isWilly && <path d={`M${hull - 6} 26 h20 v34 h-20 M${hull - 6} 64 h11 v14 h-11`} />}
+            <path d={`M${hull * 0.62} 24 V14 M${hull * 0.7} 24 V14`} opacity="0.6" />
+          </g>
+          <g stroke="currentColor" stroke-width="1" opacity="0.8">
+            <path d={`M${(400 - hull) / 2} 118 H${(400 + hull) / 2} M${(400 - hull) / 2} 111 V125 M${(400 + hull) / 2} 111 V125`} />
+          </g>
+          <text x="200" y="142" text-anchor="middle" fill="currentColor" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="16" letter-spacing="1">{isWilly ? '22 FT' : '16 FT'}</text>
+        </svg>
+      </div>
+      <div class="tp-boat__spec" data-reveal="up">
+        <h2 id="boat-h">{isWilly ? 'The Willy Predator' : 'The Alumaweld drift boat'}</h2>
+        <dl>
+          {boatFacts.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="tp-inc" aria-labelledby="inc-h">
+    <div class="wrap tp-inc__grid">
+      <div data-reveal="up">
+        <h2 id="inc-h">Included in your price</h2>
+        <ul class="tp-checks">
+          {trip.includes.map((s) => <li><Icon name="checkCircle" size={22} />{s}</li>)}
+          <li><Icon name="camera" size={22} />Trip photos and videos</li>
+        </ul>
+      </div>
+      <p class="tp-inc__aside" data-reveal="up">A 20% tip for your guide is customary. Minimum 2 guests per trip.</p>
+    </div>
+  </section>
+
+  <section class="tp-book tp-book--trip" id="book" aria-labelledby="book-h">
+    <div class="wrap tp-book__grid">
+      <div class="tp-book__copy" data-reveal="up">
+        <h2 id="book-h">Request the {trip.name}</h2>
+        <p class="tp-book__lede">Pick your date and Captain Clinton will confirm the launch time, target fish and what to bring. Or call <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+      </div>
+      <div data-reveal="up">
+        <noscript>
+          <style>.tp-form, .tp-planner-sec, .tp-hero__actions .btn[href='#planner'] { display: none !important; }</style>
+          <div class="tp-nojs">
+            <h3>Request a trip</h3>
+            <p>This form needs JavaScript. Call <a href={SITE.phoneHref}>{SITE.phone}</a> or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a> with your trip, number of guests and preferred date.</p>
+          </div>
+        </noscript>
+        <BookingForm client:visible trips={formTrips} email={SITE.email} defaultTrip={trip.name} />
+      </div>
+    </div>
+  </section>
+
+  <section class="tp-related" aria-labelledby="rel-h">
+    <div class="wrap">
+      <div class="tp-sechead" data-reveal="up"><h2 id="rel-h">Other trips</h2></div>
+      <ul class="tp-rel">
+        {related.map((t) => (
+          <li data-reveal="up">
+            <a href={`/trips/${t.slug}`}>
+              <span class="tp-rel__hrs">{t.hours}<small>hrs</small></span>
+              <span class="tp-rel__name">{t.name}<small>{t.boatSpec}, up to {t.capacity} guests</small></span>
+              <span class="tp-rel__price">${t.price}<small> pp</small></span>
+              <Icon name="arrowRight" size={20} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+
+  <div class="tp-bar" id="tp-bar">
+    <p><strong>${trip.price}</strong> per person<small>{trip.hours} hours, up to {trip.capacity} guests</small></p>
+    <a class="btn btn--primary" href="#book">Request trip</a>
+  </div>
+</Base>
+
+<script>
+  function init() {
+    const bar = document.getElementById('tp-bar');
+    const target = document.getElementById('book');
+    if (!bar || !target || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(([e]) => bar.toggleAttribute('data-hide', e.isIntersecting), { threshold: 0.05 });
+    io.observe(target);
+    if ('ResizeObserver' in window) new ResizeObserver(() => { document.body.style.setProperty('--tp-bar-h', bar.offsetHeight + 'px'); }).observe(bar);
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>

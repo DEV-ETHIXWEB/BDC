@@ -1,0 +1,127 @@
+---
+import { Picture } from 'astro:assets';
+import '../styles/pages.css';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Crest from '../components/art/Crest.astro';
+import BoatWilly from '../components/art/BoatWilly.astro';
+import BoatDrift from '../components/art/BoatDrift.astro';
+import { PHOTOS } from '../data/photos';
+import { SITE, RIVERS } from '../data/site';
+const crumbs = [{ name: 'Meet the Captain', path: '/captain-clinton-mcculloch-of-oregon' }];
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.captain,
+  jobTitle: 'Fishing guide and charter captain',
+  worksFor: { '@id': `${SITE.url}/#business` },
+  url: `${SITE.url}/captain-clinton-mcculloch-of-oregon`,
+};
+const principles = [
+  { icon: 'users', title: 'Small groups', body: 'Every guest gets personal attention, from the first cast to the last.' },
+  { icon: 'sparkle', title: 'Patient teaching', body: 'Down-to-earth guidance for first-time anglers and seasoned ones alike.' },
+  { icon: 'shield', title: 'Responsible fishing', body: 'Clinton fishes with respect for the natural environment on every trip.' },
+  { icon: 'rod', title: 'Gear provided', body: 'Rods, reels, tackle and live bait (when applicable) come with the trip.' },
+  { icon: 'camera', title: 'Photos and videos', body: 'Every guest gets trip photos and videos to take home.' },
+  { icon: 'calendar', title: 'Tailored trips', body: 'Season, river conditions and your skill level shape the plan for the day.' },
+] as const;
+const facts = [
+  { n: 45, s: '+', l: 'years fishing Oregon waters' },
+  { n: RIVERS.length, s: '', l: 'rivers on our list' },
+  { n: 2, s: '', l: 'boats: one for big water, one for shallow' },
+  { n: 3, s: '', l: 'targets: salmon, steelhead and Dungeness crab' },
+];
+const willy = [
+  ['Main outboard', '150 HP Yamaha for steady power on big water.'],
+  ['Kicker motor', '9.9 HP Yamaha kicker, the second motor in the twin setup.'],
+  ['Seating', 'Up to 6 anglers, often limited to 4 for comfort.'],
+  ['Sonar', 'A fish finder aboard helps us find the fish.'],
+  ['Home water', 'Built for salmon on larger rivers like the Columbia and Willamette.'],
+];
+const drift = [
+  ['Shallow-water reach', 'The low-profile hull navigates water bigger boats cannot.'],
+  ['Seating', 'Up to 3 guests for a more intimate trip.'],
+  ['Oars', 'A classic drift boat, built for rivers.'],
+  ['Home water', 'Our go-to for winter steelhead trips.'],
+];
+---
+<Base title="Meet Captain Clinton McCulloch" description="Captain Clinton McCulloch has fished Oregon waters for 45+ years. Meet the guide behind BDC Guide Service and see the Willy Predator and Alumaweld drift boat." crumbs={crumbs} schema={[person]}>
+  <PageHero title="Meet Captain Clinton" lede="Over 45 years fishing the waters of Oregon." crumbs={crumbs} tag="Owner and guide" seed={7}>
+    <Crest slot="art" />
+  </PageHero>
+
+  <section class="pg-cap">
+    <div class="wrap pg-cap__grid">
+      <figure class="pg-specimen" data-reveal="up">
+        <div class="pg-specimen__img">
+          <Picture src={PHOTOS.salmonSeated} alt="Fishing guide seated aboard the boat with a fresh salmon on the Columbia River" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 480, 560, 840, 1120, 1680]} sizes="(min-width: 900px) 420px, min(86vw, 420px)" loading="eager" />
+        </div>
+        <figcaption><Icon name="pin" size={16} />Columbia River</figcaption>
+      </figure>
+      <div class="pg-editorial">
+        <p class="pg-dropcap" data-reveal="up">Captain Clinton McCulloch owns and operates BDC Guide Service. He has spent over 45 years fishing the waters of Oregon, starting with a passion for local rivers that grew into a professional guiding career. His knowledge spans the Columbia, Willamette, Wilson and Trask rivers.</p>
+        <p class="pg-pull" data-reveal="up">Down-to-earth and patient, Clinton is just as comfortable with a first-time angler as with a seasoned one.</p>
+        <p data-reveal="up">He keeps groups small so every guest gets personal attention, and he fishes responsibly with respect for the natural environment.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pg-tide" aria-label="Captain at a glance">
+    <div class="wrap">
+      <dl class="pg-tide__row" data-stagger>
+        {facts.map((f) => (
+          <div data-reveal="up">
+            <dt><span class="pg-tide__n"><span data-count={f.n} data-count-suffix={f.s}>{f.n}{f.s}</span></span></dt>
+            <dd>{f.l}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="pg-principles">
+    <div class="wrap pg-principles__grid">
+      <div class="pg-principles__head" data-reveal="up">
+        <h2>How every trip runs</h2>
+        <p class="lede">You bring the curiosity. Clinton brings the boat, the gear and 45 years of river sense.</p>
+      </div>
+      <ul class="pg-rules" data-stagger>
+        {principles.map((p) => (
+          <li data-reveal="up">
+            <span class="pg-rules__ic"><Icon name={p.icon} size={26} /></span>
+            <div><h3>{p.title}</h3><p>{p.body}</p></div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="pg-boats" id="boats">
+    <div class="wrap">
+      <div class="pg-boats__head" data-reveal="up">
+        <h2>Two boats, two kinds of water</h2>
+        <p class="lede">Clinton matches the boat to the river and the season. Here is how each one is built.</p>
+      </div>
+      <div class="pg-boats__grid">
+        <figure class="pg-sheet">
+          <div class="pg-sheet__title"><h3>Willy Predator</h3><span>22 ft, twin outboard</span></div>
+          <BoatWilly />
+          <figcaption>
+            <ol class="pg-legend">{willy.map(([t, d]) => <li><strong>{t}</strong><span>{d}</span></li>)}</ol>
+          </figcaption>
+        </figure>
+        <figure class="pg-sheet">
+          <div class="pg-sheet__title"><h3>Alumaweld Guide Model</h3><span>16 ft drift boat</span></div>
+          <BoatDrift />
+          <figcaption>
+            <ol class="pg-legend">{drift.map(([t, d]) => <li><strong>{t}</strong><span>{d}</span></li>)}</ol>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="pg-boats__more"><a class="btn btn--cream" href="/oregon-fishing-charter-rates">Choose your boat and trip<Icon name="arrowRight" size={18} /></a></p>
+    </div>
+  </section>
+  <CtaBand />
+</Base>

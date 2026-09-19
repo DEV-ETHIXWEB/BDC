@@ -1,0 +1,118 @@
+---
+import Icon from '../Icon.astro';
+import { RIVERS } from '../../data/site';
+import '../../styles/home-mid.css';
+
+// Schematic chart geometry (not geographic). Coast left, Columbia across the top.
+const geo: Record<string, { d: string; pin: [number, number]; label: [number, number]; anchor: 'start' | 'middle' | 'end'; short: string; species: string[] }> = {
+  'Columbia River': { d: 'M84,74 C190,58 262,104 372,92 S560,112 632,96 S742,112 800,100', pin: [400, 98], label: [400, 66], anchor: 'middle', short: 'Columbia', species: ['Chinook'] },
+  'Willamette River': { d: 'M498,520 C520,440 478,392 530,334 S578,226 566,106', pin: [512, 388], label: [492, 392], anchor: 'end', short: 'Willamette', species: ['Chinook'] },
+  'Wilson River': { d: 'M336,236 C270,226 214,246 160,218 S104,212 84,206', pin: [250, 233], label: [250, 208], anchor: 'middle', short: 'Wilson', species: ['Steelhead'] },
+  'Trask River': { d: 'M330,306 C262,302 206,278 152,264 S104,254 86,250', pin: [232, 284], label: [232, 318], anchor: 'middle', short: 'Trask', species: ['Steelhead'] },
+  'Sandy River': { d: 'M770,306 C728,268 706,208 684,164 S646,116 626,100', pin: [702, 226], label: [720, 230], anchor: 'start', short: 'Sandy', species: ['Steelhead'] },
+  'Clackamas River': { d: 'M738,486 C708,432 668,388 626,358 S562,328 538,324', pin: [668, 386], label: [684, 414], anchor: 'start', short: 'Clackamas', species: ['Steelhead', 'Salmon'] },
+  'Nestucca River': { d: 'M304,396 C244,388 176,398 132,378 S102,372 90,368', pin: [222, 392], label: [222, 424], anchor: 'middle', short: 'Nestucca', species: ['Steelhead'] },
+};
+const rivers = RIVERS.map((r) => ({ ...r, ...geo[r.name] }));
+---
+<section class="hm-rivers" aria-labelledby="hm-rivers-h" data-rivers>
+  <div class="wrap">
+    <div class="hm-rivers__head">
+      <h2 id="hm-rivers-h" data-reveal="up">Seven rivers, one captain</h2>
+      <p class="hm-rivers__lede" data-reveal="up">From the Columbia's big water to the Coast Range steelhead streams, we fish the river that fits the season. Pick one to see what we chase there.</p>
+    </div>
+
+    <div class="hm-rivers__grid">
+      <figure class="hm-chart" data-reveal="fade">
+        <svg viewBox="0 0 800 520" role="img" aria-labelledby="hm-chart-t" preserveAspectRatio="xMidYMid meet">
+          <title id="hm-chart-t">Schematic map of the seven rivers BDC Guide Service fishes, between the Oregon coast and Portland</title>
+          <defs>
+            <pattern id="hm-grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="currentColor" stroke-opacity=".07"/></pattern>
+          </defs>
+          <rect width="800" height="520" fill="url(#hm-grid)" class="hm-chart__grid"/>
+          <path class="hm-chart__sea" d="M0,0 H62 C82,50 58,100 78,150 C92,190 72,230 88,270 C104,320 78,360 92,410 C100,450 88,490 96,520 H0Z"/>
+          <path class="hm-chart__shore" d="M62,0 C82,50 58,100 78,150 C92,190 72,230 88,270 C104,320 78,360 92,410 C100,450 88,490 96,520"/>
+          <g class="hm-chart__contour" aria-hidden="true">
+            <path d="M210,150 C260,120 330,150 350,210 S330,330 250,340 S170,190 210,150Z"/>
+            <path d="M232,178 C266,160 314,180 326,214 S308,300 256,308 S204,206 232,178Z"/>
+            <path d="M690,340 C730,320 786,350 790,410 S740,500 690,470 S650,360 690,340Z"/>
+            <path d="M708,368 C736,356 766,376 768,412 S738,470 708,452 S684,382 708,368Z"/>
+          </g>
+          <g class="hm-chart__ticks" aria-hidden="true">
+            <text x="20" y="300" transform="rotate(-90 20 300)" text-anchor="middle">Pacific Ocean</text>
+            <text x="112" y="196">Tillamook Bay</text>
+            <text x="738" y="340" text-anchor="middle" class="hm-chart__peak">Mt. Hood</text>
+          </g>
+          {rivers.map((r, i) => (
+            <g class="hm-river" data-river={i} style={`--d:${i}`} data-species={r.species.join(',')}>
+              <path class="hm-river__line" d={r.d} pathLength="1" />
+              <path class="hm-river__flow" d={r.d} />
+              <path class="hm-river__hit" d={r.d} />
+              <circle class="hm-river__pin" cx={r.pin[0]} cy={r.pin[1]} r="7" />
+              <circle class="hm-river__halo" cx={r.pin[0]} cy={r.pin[1]} r="14" />
+              <text class="hm-river__label" x={r.label[0]} y={r.label[1]} text-anchor={r.anchor}>{r.short}</text>
+            </g>
+          ))}
+          <g class="hm-chart__city" aria-hidden="true">
+            <rect x="574" y="166" width="11" height="11" transform="rotate(45 579.5 171.5)"/>
+            <text x="596" y="176">Portland</text>
+          </g>
+          <g class="hm-chart__compass" transform="translate(742 52)" aria-hidden="true">
+            <circle r="24" fill="none" stroke="currentColor" stroke-opacity=".4"/>
+            <path d="M0,-20 L5,0 L0,20 L-5,0Z" fill="currentColor" fill-opacity=".85"/>
+            <path d="M0,-20 L5,0 L-5,0Z" fill="var(--cream-50)"/>
+            <text y="-30" text-anchor="middle">N</text>
+          </g>
+        </svg>
+        <figcaption class="hm-chart__cap">Schematic chart, not to scale</figcaption>
+      </figure>
+
+      <ul class="hm-rlist" data-stagger>
+        {rivers.map((r, i) => (
+          <li data-reveal="up">
+            <button type="button" class="hm-rbtn" data-river-btn={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+              <span class="hm-rbtn__main"><strong>{r.name}</strong><span>{r.note}</span></span>
+              <span class="hm-rbtn__sp">
+                {r.species.map((s) => (<span class="hm-chip"><Icon name={s === 'Salmon' || s === 'Chinook' ? 'fish' : 'fishJump'} size={14} />{s}</span>))}
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  function initRivers() {
+    document.querySelectorAll<HTMLElement>('[data-rivers]').forEach((root) => {
+      if (root.dataset.ready) return;
+      root.dataset.ready = '1';
+      const groups = [...root.querySelectorAll<SVGGElement>('.hm-river')];
+      const btns = [...root.querySelectorAll<HTMLButtonElement>('[data-river-btn]')];
+      const set = (i: number) => {
+        groups.forEach((g, k) => g.classList.toggle('is-on', k === i));
+        btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
+        root.classList.add('has-active');
+      };
+      set(0);
+      groups.forEach((g, i) => {
+        g.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') set(i); });
+        g.addEventListener('click', () => set(i));
+      });
+      btns.forEach((b, i) => {
+        b.addEventListener('click', () => set(i));
+        b.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') set(i); });
+        b.addEventListener('focus', () => set(i));
+      });
+      // line-draw on reveal
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'reduce';
+      if (reduce || !('IntersectionObserver' in window)) { root.classList.add('is-drawn'); return; }
+      root.classList.add('hm-anim');
+      const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { root.classList.add('is-drawn'); io.disconnect(); } }, { threshold: 0.25 });
+      io.observe(root.querySelector('.hm-chart')!);
+    });
+  }
+  initRivers();
+  document.addEventListener('astro:page-load', initRivers);
+</script>

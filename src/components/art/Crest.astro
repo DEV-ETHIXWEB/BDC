@@ -1,0 +1,19 @@
+---
+// Crest-shaped decorative motif: shield, peaks, river and waves, drawn in line.
+interface Props { class?: string; draw?: boolean }
+const { class: cls, draw = true } = Astro.props;
+const shield = 'M20 8H180Q192 8 192 22V150Q192 176 100 236Q8 176 8 150V22Q8 8 20 8Z';
+---
+<svg class:list={['pg-crest', cls]} viewBox="0 0 200 244" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" data-pg-draw={draw ? '' : undefined}>
+  <path class="pg-d" pathLength="1" d={shield} />
+  <path class="pg-d" pathLength="1" style="--d:.2s" d="M20 20H180Q182 20 182 24V148Q182 168 100 222Q18 168 18 148V24Q18 20 20 20Z" opacity=".5" />
+  <path class="pg-d" pathLength="1" style="--d:.4s" d="M30 132L70 66L92 98L120 50L170 132" />
+  <path class="pg-d" pathLength="1" style="--d:.6s" d="M120 50L131 68M70 66L78 79" opacity=".6" />
+  <path class="pg-d" pathLength="1" style="--d:.8s" d="M100 132C70 146 130 158 100 172S86 190 100 204" stroke-width="2.4" />
+  <path class="pg-d" pathLength="1" style="--d:1s" d="M34 118Q47 112 60 118T86 118M114 118Q127 112 140 118T166 118" opacity=".6" />
+  <circle class="pg-d" pathLength="1" style="--d:1.2s" cx="100" cy="30" r="7" />
+</svg>
+
+<script>
+  import "./draw";
+</script>

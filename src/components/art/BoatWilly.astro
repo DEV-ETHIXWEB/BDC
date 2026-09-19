@@ -1,0 +1,48 @@
+---
+// Blueprint side elevation of the Willy Predator. Numbered markers map to the legend below.
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+const hull: [string, string?][] = [
+  ['M118 132H548Q606 132 640 108'],
+  ['M118 132L114 190Q114 210 136 210H520Q612 204 640 108'],
+  ['M126 148H545', 'soft'],
+  ['M150 172H500', 'soft'],
+  // console + windshield
+  ['M300 132V96Q300 90 306 90H356Q362 90 364 96L378 132'],
+  ['M312 96L320 66Q321 62 326 62H344Q349 62 350 66L358 90'],
+  ['M322 106H352V122H322Z', 'soft'],
+  // seats
+  ['M178 132V108Q178 104 182 104H206Q210 104 210 108V132'],
+  ['M232 132V108Q232 104 236 104H260Q264 104 264 108V132'],
+  ['M430 132V116H486V132'],
+  // outboards
+  ['M104 90Q104 84 110 84H146Q152 84 152 90V126H104Z'],
+  ['M112 126V214Q112 224 122 224H136V126'],
+  ['M96 128V150H108'],
+  ['M60 116Q60 111 65 111H84Q89 111 89 116V150H60Z'],
+  ['M66 150V200H80V150'],
+];
+const dims = ['M118 254H640', 'M118 244V264', 'M640 244V264'];
+---
+<svg class:list={['pg-boat', cls]} viewBox="0 0 700 290" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Blueprint drawing of the 22 foot Willy Predator with twin outboards and a center console" data-pg-draw>
+  <g class="pg-boat__water" stroke-width="1.5" opacity=".55">
+    <path class="pg-wv" d="M0 196q16-8 32 0t32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0 32 0" stroke-dasharray="3 7" />
+  </g>
+  {hull.map(([d, k], i) => <path class:list={['pg-d', k === 'soft' && 'pg-soft']} pathLength="1" style={`--d:${(i * 0.09).toFixed(2)}s`} d={d} />)}
+  <g class="pg-dim">
+    {dims.map((d, i) => <path class="pg-d" pathLength="1" style={`--d:${(1.4 + i * 0.1).toFixed(1)}s`} d={d} />)}
+    <rect x="336" y="238" width="86" height="32" rx="4" class="pg-dim__gap" stroke="none" />
+    <text x="379" y="260" text-anchor="middle" class="pg-dim__t">22 ft</text>
+  </g>
+  <g class="pg-marks" stroke-width="1.5">
+    <path d="M128 84L112 44" /><circle cx="108" cy="30" r="17" /><text x="108" y="37" text-anchor="middle">1</text>
+    <path d="M72 200L44 236" /><circle cx="36" cy="250" r="17" /><text x="36" y="257" text-anchor="middle">2</text>
+    <path d="M221 104L232 56" /><circle cx="234" cy="40" r="17" /><text x="234" y="47" text-anchor="middle">3</text>
+    <path d="M338 62L420 40" /><circle cx="436" cy="34" r="17" /><text x="436" y="41" text-anchor="middle">4</text>
+    <path d="M540 132L560 74" /><circle cx="564" cy="58" r="17" /><text x="564" y="65" text-anchor="middle">5</text>
+  </g>
+</svg>
+
+<script>
+  import "./draw";
+</script>

@@ -1,0 +1,25 @@
+---
+import '../../styles/gallery.css';
+import Faq from '../react/Faq';
+import Icon from '../Icon.astro';
+import FaqNoJs from '../FaqNoJs.astro';
+import { FAQS } from '../../data/content';
+import { SITE } from '../../data/site';
+---
+<section class="gb-hfaq section" aria-labelledby="gb-hfaq-h">
+  <div class="wrap gb-hfaq__grid">
+    <div class="gb-hfaq__intro">
+      <h2 id="gb-hfaq-h" data-reveal="up">Before you board</h2>
+      <p class="gb-hfaq__lede" data-reveal="fade">Meeting point, licenses, gear and start times, answered straight.</p>
+      <div class="gb-hfaq__aside" data-reveal="fade">
+        <p>Something we missed? Call Captain Clinton.</p>
+        <a class="gb-phone" href={SITE.phoneHref}><Icon name="phone" size={20} />{SITE.phone}</a>
+        <a class="gb-textlink" href="/fishing-faqs">Read every question</a>
+      </div>
+    </div>
+    <div class="gb-hfaq__list" data-reveal="up">
+      <FaqNoJs />
+      <Faq client:visible openFirst={false} items={FAQS.slice(0, 6)} />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,10 @@
+---
+interface Props { tone?: 'page' | 'sand' | 'deep' }
+const { tone = 'page' } = Astro.props;
+---
+<div class:list={['wave', tone === 'sand' && 'wave--sand', tone === 'deep' && 'wave--deep']} aria-hidden="true">
+  <svg viewBox="0 0 1440 96" preserveAspectRatio="none">
+    <path class="wave__b" fill="currentColor" opacity="0.16" d="M-120 48c120-40 240-40 360 0s240 40 360 0 240-40 360 0 240 40 360 0 240-40 360 0V96H-120z" />
+    <path class="wave__a" fill="currentColor" d="M-120 64c120-30 240-30 360 0s240 30 360 0 240-30 360 0 240 30 360 0 240-30 360 0V96H-120z" />
+  </svg>
+</div>

@@ -1,0 +1,33 @@
+---
+import '../styles/pages.css';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import TocSpy from '../components/pg/TocSpy.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'Terms of Service', path: '/terms-of-service' }];
+const toc = [['bookings', 'Bookings'], ['licenses', 'Licenses and safety'], ['weather', 'Weather and river conditions'], ['contact', 'Contact']];
+---
+<Base title="Terms of Service" description="Terms of service for BDC Guide Service fishing and crabbing charters in Oregon." crumbs={crumbs}>
+  <PageHero title="Terms of service" crumbs={crumbs} tag="The fine print" seed={2} />
+  <div class="wrap pg-article pg-legal">
+    <aside class="pg-toc" aria-label="On this page">
+      <details class="pg-toc__d" open>
+        <summary>On this page</summary>
+        <nav data-pg-spy><ol>{toc.map(([id, t]) => <li><a href={`#${id}`}>{t}</a></li>)}</ol></nav>
+      </details>
+    </aside>
+    <article class="pg-prose">
+      <p class="pg-stamp"><Icon name="report" size={20} /><span><strong>Draft for review.</strong> Have these terms checked by a lawyer, and add your real deposit, cancellation and weather policies, before relying on them.</span></p>
+      <section id="bookings"><h2>Bookings</h2>
+        <p>Trips are shared trips with a minimum of 2 guests. Prices are per person and include the guide, boat and standard gear. Confirm your date, launch time and target fish with {SITE.name} before your trip.</p></section>
+      <section id="licenses"><h2>Licenses and safety</h2>
+        <p>Anglers aged 12 and older must hold a valid Oregon fishing license. Guests follow the captain's safety instructions and Oregon fish and wildlife regulations at all times.</p></section>
+      <section id="weather"><h2>Weather and river conditions</h2>
+        <p>The captain may adjust or reschedule a trip for safety, weather or river conditions.</p></section>
+      <section id="contact"><h2>Contact</h2>
+        <p>Questions? Call <a href={SITE.phoneHref}>{SITE.phone}</a> or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p></section>
+    </article>
+  </div>
+  <TocSpy />
+</Base>

@@ -1,0 +1,48 @@
+---
+import '../styles/pages.css';
+import ContourPattern from './art/ContourPattern.astro';
+interface Props {
+  title: string;
+  lede?: string;
+  crumbs?: { name: string; path: string }[];
+  /** colour of the section that follows the hero, so the river edge blends into it */
+  edge?: 'page' | 'sand' | 'deep' | 'paper';
+  /** small tag above the headline, e.g. "Field guide" */
+  tag?: string;
+  seed?: number;
+  /** show the art slot on phones too */
+  artOnMobile?: boolean;
+}
+const { title, lede, crumbs = [], edge = 'page', tag, seed = 4, artOnMobile = false } = Astro.props;
+const hasArt = Astro.slots.has('art');
+const ripple = 'M0 40' + 'q90-26 180 0t180 0'.repeat(1) + Array.from({ length: 15 }, () => 't180 0').join('');
+---
+<section class:list={['pg-hero', `pg-hero--${edge}`, hasArt && 'pg-hero--art']}>
+  <ContourPattern class="pg-hero__contour" seed={seed} rings={18} />
+  <div class="wrap pg-hero__grid">
+    <div class="pg-hero__text">
+      {crumbs.length > 0 && (
+        <nav class="pg-crumbs" aria-label="Breadcrumb" data-reveal="fade">
+          <ol>
+            <li><a href="/">Home</a></li>
+            {crumbs.map((c, i) => (
+              <li>{i === crumbs.length - 1 ? <span aria-current="page">{c.name}</span> : <a href={c.path}>{c.name}</a>}</li>
+            ))}
+          </ol>
+        </nav>
+      )}
+      {tag && <p class="pg-hero__tag" data-reveal="fade">{tag}</p>}
+      <h1 data-split>{title}</h1>
+      {lede && <p class="pg-hero__lede" data-reveal="up">{lede}</p>}
+      <slot name="actions" />
+    </div>
+    {hasArt && <div class:list={['pg-hero__art', artOnMobile && 'is-mobile']} data-reveal="scale"><slot name="art" /></div>}
+  </div>
+  <div class="pg-edge" aria-hidden="true">
+    <svg class="pg-edge__b" viewBox="0 0 2880 80" preserveAspectRatio="none"><path d={ripple + 'V80H0Z'} fill="currentColor" opacity=".35" /></svg>
+    <svg class="pg-edge__f" viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path d="M0 48C170 12 330 74 540 44S900 6 1100 40s260 26 340-10V80H0Z" fill="currentColor" />
+      <path d="M0 48C170 12 330 74 540 44S900 6 1100 40s260 26 340-10" fill="none" stroke="var(--pine-200)" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="2 7" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+    </svg>
+  </div>
+</section>

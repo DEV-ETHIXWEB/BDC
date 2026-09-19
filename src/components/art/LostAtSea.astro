@@ -1,0 +1,30 @@
+---
+import ContourPattern from './ContourPattern.astro';
+---
+<div class="pg-lost" aria-hidden="true">
+  <ContourPattern class="pg-lost__contour" seed={21} rings={12} />
+  <svg viewBox="0 0 520 440" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+    <g class="pg-lost__rings" stroke-width="1.2" opacity=".5">
+      <circle cx="260" cy="190" r="70" /><circle cx="260" cy="190" r="118" stroke-dasharray="2 8" /><circle cx="260" cy="190" r="168" />
+    </g>
+    <g class="pg-lost__compass" transform="translate(260 190)">
+      <circle r="52" />
+      <g stroke-width="1.5"><path d="M0 -52V-44M0 52V44M-52 0H-44M52 0H44" /></g>
+      <g class="pg-lost__needle"><path d="M0 -38L8 0L0 -6L-8 0Z" fill="var(--pine-200)" stroke="none" /><path d="M0 38L8 0L0 6L-8 0Z" fill="currentColor" fill-opacity=".35" stroke="none" /></g>
+      <circle r="3" fill="currentColor" stroke="none" />
+    </g>
+    <path class="pg-lost__jump" d="M70 300Q98 232 140 262" stroke-dasharray="3 7" opacity=".6" />
+    <g transform="translate(140 262)"><g class="pg-lost__fish"><path d="M0 0C10-9 24-9 34 0C24 9 10 9 0 0ZM34 0L44-7V7Z" fill="currentColor" fill-opacity=".2" /></g></g>
+    <g class="pg-lost__boat">
+      <path d="M186 296Q218 322 300 324H392Q436 320 452 284" />
+      <path d="M186 296Q214 300 300 300H392Q436 298 452 284" />
+      <path d="M312 300V270H340V300M326 270V236" stroke-width="1.6" />
+      <path d="M392 288V268" /><path d="M392 268L470 316" stroke-width="1.6" />
+    </g>
+    <g class="pg-lost__waves" stroke-width="1.8">
+      <path class="pg-lost__w1" d="M-40 336q20-12 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0" />
+      <path class="pg-lost__w2" d="M-40 364q20-12 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0" opacity=".6" />
+      <path class="pg-lost__w1" d="M-40 394q20-12 40 0t40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0 40 0" opacity=".35" />
+    </g>
+  </svg>
+</div>

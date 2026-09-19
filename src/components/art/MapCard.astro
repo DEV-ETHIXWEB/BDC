@@ -1,0 +1,29 @@
+---
+import ContourPattern from './ContourPattern.astro';
+---
+<div class="pg-map" data-pg-draw>
+  <ContourPattern class="pg-map__contour" seed={11} rings={14} />
+  <svg viewBox="0 0 480 300" preserveAspectRatio="xMidYMid slice" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path class="pg-d pg-map__river" pathLength="1" d="M-10 226C80 176 150 262 250 212S410 118 490 158" />
+    <path class="pg-d pg-map__river" pathLength="1" style="--d:.3s" d="M-10 244C80 196 150 280 250 232S410 138 490 178" opacity=".45" />
+    <path class="pg-d pg-map__road" pathLength="1" style="--d:.5s" d="M30 -10L170 120L330 310" />
+    <path class="pg-d pg-map__road" pathLength="1" style="--d:.7s" d="M-10 96L200 84L490 40" />
+    <path class="pg-d pg-map__road" pathLength="1" style="--d:.9s" d="M330 -10L292 150L430 310" />
+    <path class="pg-map__road pg-map__road--minor" d="M100 -10L60 310M400 -10L470 200M-10 30H490" />
+    <g class="pg-map__pin" transform="translate(268 132)">
+      <circle class="pg-map__pulse" r="10" />
+      <circle class="pg-map__pulse pg-map__pulse--2" r="10" />
+      <path d="M0 22C-15 4 -18 -2 -18 -10A18 18 0 0 1 18 -10C18 -2 15 4 0 22Z" class="pg-map__drop" />
+      <circle cy="-10" r="6" class="pg-map__dot" />
+    </g>
+    <g class="pg-map__n" transform="translate(432 44)">
+      <circle r="20" />
+      <path d="M0 -14L6 6L0 2L-6 6Z" class="pg-map__needle" />
+      <text y="-26" text-anchor="middle">N</text>
+    </g>
+  </svg>
+  <span class="pg-map__label">Meet here</span>
+</div>
+<script>
+  import './draw';
+</script>

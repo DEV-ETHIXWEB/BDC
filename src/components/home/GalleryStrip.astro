@@ -1,0 +1,94 @@
+---
+import '../../styles/gallery.css';
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import { PHOTOS, GALLERY } from '../../data/photos';
+
+// Pick a tight, honest set for the home strip (all real trip photos; scenery goes last).
+const items = GALLERY.map((g) => {
+  const m = PHOTOS[g.key];
+  const ratio = Math.min(1.45, Math.max(0.74, m.width / m.height));
+  return { ...g, ratio: Math.round(ratio * 100) / 100 };
+});
+---
+<section class="gb-strip" aria-labelledby="gb-strip-h">
+  <div class="wrap gb-strip__top">
+    <div>
+      <h2 id="gb-strip-h" data-reveal="up">Fresh off the water</h2>
+      <p class="gb-strip__lede" data-reveal="fade">Salmon, steelhead and crab from real BDC trips. Drag, swipe or use the arrow keys.</p>
+    </div>
+    <div class="gb-strip__ctrl" data-reveal="fade">
+      <button type="button" class="gb-round" data-strip-prev aria-label="Previous photos"><Icon name="arrowRight" size={20} class="gb-flip" /></button>
+      <button type="button" class="gb-round" data-strip-next aria-label="Next photos"><Icon name="arrowRight" size={20} /></button>
+    </div>
+  </div>
+
+  <div class="gb-strip__viewport" role="region" aria-roledescription="carousel" aria-label="Trip photo strip" tabindex="0" data-strip>
+    <ul class="gb-strip__track">
+      {items.map((g, i) => (
+        <li class="gb-frame" style={`--r:${g.ratio};--tilt:${[-1.6, 1.2, -0.8, 1.8, -1.2, 0.9][i % 6]}deg`}>
+          <figure>
+            <div class="gb-frame__img">
+              <Picture src={PHOTOS[g.key]} alt={g.alt} formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[360, 520, 760, 1140, 1520, 2280]} sizes="(min-width: 1024px) 480px, 340px" loading={i < 3 ? 'eager' : 'lazy'} draggable="false" />
+            </div>
+            <figcaption>{g.caption}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="wrap gb-strip__foot">
+    <div class="gb-progress" aria-hidden="true"><i data-strip-bar></i></div>
+    <a class="gb-textlink" href="/oregon-fishing-charter-photos">See the full gallery</a>
+  </div>
+</section>
+
+<script>
+  function init() {
+    document.querySelectorAll<HTMLElement>('[data-strip]').forEach((vp) => {
+      if (vp.dataset.ready) return;
+      vp.dataset.ready = '1';
+      const sec = vp.closest('.gb-strip') as HTMLElement;
+      const bar = sec.querySelector<HTMLElement>('[data-strip-bar]')!;
+      const prev = sec.querySelector<HTMLButtonElement>('[data-strip-prev]')!;
+      const next = sec.querySelector<HTMLButtonElement>('[data-strip-next]')!;
+      const step = () => Math.max(240, vp.clientWidth * 0.8);
+      const update = () => {
+        const max = vp.scrollWidth - vp.clientWidth;
+        const p = max > 0 ? vp.scrollLeft / max : 0;
+        bar.style.transform = `scaleX(${Math.max(0.04, p)})`;
+        prev.disabled = vp.scrollLeft < 4;
+        next.disabled = vp.scrollLeft > max - 4;
+      };
+      vp.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+      window.addEventListener('resize', update);
+      prev.addEventListener('click', () => vp.scrollBy({ left: -step(), behavior: 'smooth' }));
+      next.addEventListener('click', () => vp.scrollBy({ left: step(), behavior: 'smooth' }));
+      vp.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); vp.scrollBy({ left: step() / 2, behavior: 'smooth' }); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); vp.scrollBy({ left: -step() / 2, behavior: 'smooth' }); }
+        else if (e.key === 'Home') { e.preventDefault(); vp.scrollTo({ left: 0, behavior: 'smooth' }); }
+        else if (e.key === 'End') { e.preventDefault(); vp.scrollTo({ left: vp.scrollWidth, behavior: 'smooth' }); }
+      });
+      // Mouse drag (touch and trackpads scroll natively).
+      let down = false, sx = 0, sl = 0, moved = false;
+      vp.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        down = true; moved = false; sx = e.clientX; sl = vp.scrollLeft;
+      });
+      window.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - sx;
+        if (!moved && Math.abs(dx) > 4) { moved = true; vp.classList.add('is-drag'); }
+        if (moved) vp.scrollLeft = sl - dx;
+      });
+      const end = () => { if (!down) return; down = false; vp.classList.remove('is-drag'); };
+      window.addEventListener('pointerup', end);
+      window.addEventListener('pointercancel', end);
+      update();
+    });
+  }
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>

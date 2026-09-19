@@ -1,0 +1,59 @@
+---
+import '../styles/gallery.css';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'Reports', path: '/oregon-fishing-reports' }];
+const M = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+const MN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+// 2 = core window, 1 = also fishes / more chances
+const entries = [
+  { icon: 'fishJump', title: 'Winter steelhead', when: 'January to April', months: [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0], where: 'Coastal and tributary rivers', body: 'Early mornings and tide-influenced windows often fish best.' },
+  { icon: 'fish', title: 'Spring salmon', when: 'Spring and early summer, more in fall', months: [0, 0, 2, 2, 2, 2, 1, 0, 1, 1, 1, 0], where: 'Columbia and Willamette rivers', body: 'Strong Chinook runs in spring, with more chances again in fall.' },
+  { icon: 'crab', title: 'Dungeness crab', when: 'October to December', months: [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2], where: 'Family-friendly fall charters', body: 'Fall crabbing charters for fresh Dungeness crab and family fun.' },
+] as const;
+const label = (m: readonly number[]) => MN.filter((_, i) => m[i] === 2).join(', ');
+---
+<Base title="Oregon Fishing Reports" description="Seasonal Oregon fishing outlook: winter steelhead runs, spring salmon migrations and fall Dungeness crabbing, plus how to get the latest on-the-water report." crumbs={crumbs}>
+  <PageHero title="Oregon fishing reports" lede="Seasonal outlook from BDC Guide Service, and how to get today's on-the-water report." crumbs={crumbs} />
+  <section class="section gb-log" style="padding-top:0">
+    <div class="wrap gb-log__grid">
+      <aside class="gb-log__now" data-reveal="up">
+        <h2>Today's report</h2>
+        <p>Conditions change by the hour, so the freshest word comes straight from the boat. Call Captain Clinton and he'll tell you what's biting and when to go.</p>
+        <a class="btn btn--cream" data-magnetic href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
+        <p class="gb-log__stamp">Fall trips are being scheduled from the third week of September.</p>
+      </aside>
+
+      <div class="gb-log__book">
+        <h2 class="gb-log__h" data-reveal="up">The season, by the month</h2>
+        <ol class="gb-log__rows" data-stagger>
+          {entries.map((e) => (
+            <li class="gb-row" data-reveal="up">
+              <div class="gb-row__head">
+                <span class="gb-row__ic"><Icon name={e.icon} size={26} /></span>
+                <div>
+                  <h3>{e.title}</h3>
+                  <p class="gb-row__when">{e.when}</p>
+                </div>
+              </div>
+              <div class="gb-tide" role="img" aria-label={`${e.title}: best in ${label(e.months)}`}>
+                {e.months.map((v, i) => (
+                  <span class={`gb-tide__m gb-tide__m--${v}`} aria-hidden="true"><i></i><b>{M[i]}</b></span>
+                ))}
+              </div>
+              <dl class="gb-row__notes">
+                <div><dt>Good for</dt><dd>{e.where}</dd></div>
+                <div><dt>Notes</dt><dd>{e.body}</dd></div>
+              </dl>
+            </li>
+          ))}
+        </ol>
+        <p class="gb-log__foot">Solid bars mark the core window, light bars mark extra chances. Runs shift year to year, so call for current windows.</p>
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>

@@ -1,0 +1,46 @@
+---
+import '../styles/gallery.css';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import ReviewWall, { type Review } from '../components/ReviewWall.astro';
+import { SITE } from '../data/site';
+const crumbs = [{ name: 'Reviews', path: '/oregon-fishing-charter-reviews' }];
+// Add real, permissioned guest reviews here: { name, trip, text, rating?, date?, where? }.
+// No AggregateRating markup is emitted until there are genuine, verifiable reviews on the page.
+const reviews: Review[] = [];
+const body = encodeURIComponent('Hi Captain Clinton,\n\nTrip I took (salmon, steelhead or crab):\nApproximate date:\nWhat stood out:\n\nMy name as I would like it shown:\nOK to publish this review on your website? (yes/no)\n');
+---
+<Base title="Oregon Fishing Charter Reviews" description="Read what guests say about fishing with BDC Guide Service and Captain Clinton McCulloch: successful trips, memorable catches and personalized service." crumbs={crumbs}>
+  <PageHero title="Guest reviews" lede="Our clients consistently share positive feedback about successful trips, memorable catches, and personalized service." crumbs={crumbs} />
+  <section class="section gb-reviews" style="padding-top:0">
+    <div class="wrap">
+      {reviews.length === 0 ? (
+        <div class="gb-invite">
+          <div class="gb-invite__copy">
+            <h2 data-reveal="up">Been out with Captain Clinton?</h2>
+            <p data-reveal="fade">We're moving guest reviews to the new site, and this page is waiting for yours. Send a few lines about your trip and, with your OK, it goes on the wall.</p>
+            <div class="gb-invite__actions" data-reveal="fade">
+              <a class="btn btn--primary" data-magnetic href={`mailto:${SITE.email}?subject=${encodeURIComponent('My BDC trip review')}&body=${body}`}><Icon name="mail" size={18} />Email your review</a>
+              <a class="btn btn--ghost gb-invite__call" href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
+            </div>
+          </div>
+          <aside class="gb-slip" aria-label="What to include in your review" data-reveal="scale">
+            <p class="gb-slip__title">Guest book slip</p>
+            <dl>
+              <div><dt>Trip</dt><dd>Salmon, steelhead or crab</dd></div>
+              <div><dt>Date</dt><dd>Roughly when you fished</dd></div>
+              <div><dt>Story</dt><dd>What you caught, what you'll remember</dd></div>
+              <div><dt>Name</dt><dd>As you'd like it shown</dd></div>
+            </dl>
+            <p class="gb-slip__note">Reviews are published only with the guest's permission.</p>
+          </aside>
+        </div>
+      ) : (
+        <ReviewWall reviews={reviews} />
+      )}
+    </div>
+  </section>
+  <CtaBand />
+</Base>

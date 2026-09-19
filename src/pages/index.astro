@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Offers from '../components/home/Offers.astro';
+import Trips from '../components/home/Trips.astro';
+import Story from '../components/home/Story.astro';
+import Rivers from '../components/home/Rivers.astro';
+import Calendar from '../components/home/Calendar.astro';
+import Species from '../components/home/Species.astro';
+import GalleryStrip from '../components/home/GalleryStrip.astro';
+import HomeFaq from '../components/home/HomeFaq.astro';
+import Cta from '../components/home/Cta.astro';
+import { FAQS } from '../data/content';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.slice(0, 6).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+---
+<Base schema={[faqSchema]}>
+  <Hero />
+  <Offers />
+  <Trips />
+  <Story />
+  <Rivers />
+  <Calendar />
+  <Species />
+  <GalleryStrip />
+  <HomeFaq />
+  <Cta />
+</Base>

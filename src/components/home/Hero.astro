@@ -1,0 +1,121 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from '../Icon.astro';
+import { PHOTOS } from '../../data/photos';
+import { SITE } from '../../data/site';
+import { seasonStatus } from './season';
+import '../../styles/home-top.css';
+
+const status = seasonStatus();
+
+// Periodic contour lines: every path repeats every 1600 units so the layer can loop by -50%.
+const W = 3200, P = 1600;
+function contour(i: number, n: number, amp: number, top: number, span: number) {
+  const base = top + (span * i) / (n - 1);
+  const k1 = 1 + (i % 2), k2 = 3;
+  const ph = i * 0.42;
+  let d = '';
+  for (let x = 0; x <= W; x += 40) {
+    const t = (2 * Math.PI * x) / P;
+    const y = base + amp * Math.sin(k1 * t + ph) + amp * 0.35 * Math.sin(k2 * t + ph * 1.7) + i * 1.6;
+    d += (x === 0 ? 'M' : 'L') + x + ' ' + y.toFixed(1) + ' ';
+  }
+  return d;
+}
+const far = Array.from({ length: 16 }, (_, i) => contour(i, 16, 34, 40, 780));
+const near = Array.from({ length: 9 }, (_, i) => contour(i + 30, 9, 58, 120, 700));
+---
+<section class="ht-hero" aria-labelledby="ht-hero-h">
+  <div class="ht-hero__bg" aria-hidden="true">
+    <svg class="ht-contours ht-contours--far" viewBox={`0 0 ${W} 900`} preserveAspectRatio="none" data-parallax="0.06">
+      <g>{far.map((d) => <path d={d} vector-effect="non-scaling-stroke" />)}</g>
+    </svg>
+    <svg class="ht-contours ht-contours--near" viewBox={`0 0 ${W} 900`} preserveAspectRatio="none" data-parallax="0.14">
+      <g>{near.map((d, i) => <path d={d} vector-effect="non-scaling-stroke" class={i === 4 ? 'is-accent' : ''} />)}</g>
+    </svg>
+    <span class="ht-hero__vignette"></span>
+  </div>
+
+  <div class="ht-hero__inner">
+    <div class="ht-hero__copy">
+      <p class="ht-badge" data-reveal="fade"><Icon name="star" size={18} />Rated #1 by Customers</p>
+      <h1 id="ht-hero-h" class="ht-hero__h" data-split>Explore like never before.</h1>
+      <p class="ht-hero__sub" data-reveal="up">Guided salmon, steelhead and Dungeness crab trips on Oregon's rivers and coast with Captain Clinton McCulloch. Gear, bait and know-how included.</p>
+      <div class="ht-hero__actions" data-reveal="up">
+        <a class="btn btn--cream" href="/oregon-fishing-charter-rates" data-magnetic><Icon name="ticket" size={20} />Quick book</a>
+        <a class="btn btn--ghost" href="/contact-us" data-magnetic><Icon name="compass" size={20} />Customize trip</a>
+      </div>
+    </div>
+
+    <div class="ht-comp" data-reveal="scale">
+      <div class="ht-shield">
+        <div class="ht-shield__ring"></div>
+        <div class="ht-shield__photo">
+          <Picture class="ht-slide ht-slide--1" src={PHOTOS.chinookLake} alt="Angler holding a large silver Chinook salmon on a BDC Guide Service boat" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[360, 520, 700, 1050, 1400, 2100]} sizes="(min-width: 960px) 440px, 72vw" loading="eager" fetchpriority="high" />
+          <template data-late>
+          <Picture class="ht-slide ht-slide--2" src={PHOTOS.winterSteelhead} alt="Angler holding a fresh winter steelhead on the Willy Predator" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[360, 520, 700, 1050, 1400, 2100]} sizes="(min-width: 960px) 440px, 72vw" loading="lazy" fetchpriority="low" />
+          <Picture class="ht-slide ht-slide--3" src={PHOTOS.salmonTeal} alt="Angler in a teal shirt holding a large salmon on the water" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[360, 520, 700, 1050, 1400, 2100]} sizes="(min-width: 960px) 440px, 72vw" loading="lazy" fetchpriority="low" />
+          </template>
+        </div>
+        <span class="ht-shield__tag">BDC Guide Service</span>
+      </div>
+      <template data-late>
+      <figure class="ht-spec ht-spec--a">
+        <Picture src={PHOTOS.dungenessCrab} alt="Bucket full of fresh Dungeness crab after an Oregon crabbing charter" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[220, 360, 540, 720, 1080]} sizes="200px" loading="lazy" />
+        <figcaption>Dungeness crab</figcaption>
+      </figure>
+      <figure class="ht-spec ht-spec--b">
+        <Picture src={PHOTOS.steelheadDrift} alt="Angler holding a steelhead in the drift boat" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[220, 360, 540, 720, 1080]} sizes="180px" loading="lazy" />
+        <figcaption>Steelhead</figcaption>
+      </figure>
+      </template>
+    </div>
+  </div>
+
+  <div class="ht-strip-wrap">
+    <div class="ht-strip" data-reveal="fade">
+      <p class="ht-strip__status" id="ht-status" data-state={status.state}>
+        <span class="ht-pulse" aria-hidden="true"></span>
+        <strong id="ht-status-label">{status.label}</strong>
+        <span id="ht-status-detail">{status.detail}</span>
+      </p>
+      <ul class="ht-strip__facts">
+        <li><Icon name="phone" size={18} /><a href={SITE.phoneHref}>{SITE.phone}</a></li>
+        <li><Icon name="pin" size={18} />Meet in {SITE.address.city}, {SITE.address.region}</li>
+        <li><Icon name="users" size={18} />Up to 6 guests per boat</li>
+      </ul>
+    </div>
+  </div>
+
+  <svg class="ht-hero__edge" viewBox="0 0 1600 60" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 60V34C160 8 320 8 480 30S800 56 960 34 1280 6 1440 22l160 12v26z" />
+  </svg>
+</section>
+
+<script>
+  import { seasonStatus } from './season';
+  function updateStatus() {
+    const s = seasonStatus();
+    const $ = (id: string) => document.getElementById(id);
+    const l = $('ht-status-label'), d = $('ht-status-detail'), w = $('ht-status');
+    if (l) l.textContent = s.label;
+    if (d) d.textContent = s.detail;
+    if (w) w.dataset.state = s.state;
+  }
+  updateStatus();
+  document.addEventListener('astro:page-load', updateStatus);
+</script>
+
+<script>
+  // Decorative photos (hidden slides, polaroids) are inert until the page has loaded, so they
+  // never compete with the hero photo for bandwidth. Swapped in when idle.
+  function revealLate() {
+    document.querySelectorAll<HTMLTemplateElement>('template[data-late]').forEach((t) => t.replaceWith(t.content.cloneNode(true)));
+  }
+  function scheduleLate() {
+    const run = () => setTimeout(revealLate, 250);
+    if (document.readyState === 'complete') run();
+    else window.addEventListener('load', run, { once: true });
+  }
+  document.addEventListener('astro:page-load', scheduleLate);
+</script>

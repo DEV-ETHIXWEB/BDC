@@ -1,0 +1,26 @@
+---
+import '../styles/pages.css';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import LostAtSea from '../components/art/LostAtSea.astro';
+---
+<Base title="Page not found" description="This page could not be found." noindex>
+  <section class="pg-404">
+    <div class="wrap pg-404__grid">
+      <div class="pg-404__text">
+        <p class="pg-hero__tag" data-reveal="fade">Error 404</p>
+        <h1 data-split>Lost at sea</h1>
+        <p class="pg-hero__lede" data-reveal="up">That page isn't here. Head back to shore and pick your trip.</p>
+        <p class="pg-404__actions" data-reveal="up"><a class="btn btn--cream" href="/" data-magnetic>Go home</a><a class="btn btn--ghost" href="/oregon-fishing-charter-rates">View trips<Icon name="arrowRight" size={18} /></a></p>
+        <h2 class="sr-only">Where to next</h2>
+        <ul class="pg-404__links" data-reveal="fade">
+          <li><a href="/oregon-fishing-species">Target species</a></li>
+          <li><a href="/fishing-faqs">FAQ</a></li>
+          <li><a href="/contact-us">Contact us</a></li>
+          <li><a href="/sitemap">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="pg-404__art"><LostAtSea /></div>
+    </div>
+  </section>
+</Base>

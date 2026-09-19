@@ -1,0 +1,29 @@
+---
+// Topographic contour lines: decorative, reusable. Colour with `color`/currentColor.
+interface Props { seed?: number; rings?: number; class?: string; centers?: number; width?: number }
+const { seed = 3, rings = 16, class: cls, centers = 2, width = 1 } = Astro.props;
+let s = seed * 9301 + 49297;
+const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+const W = 800, H = 600;
+const paths: string[] = [];
+for (let c = 0; c < centers; c++) {
+  const cx = W * (c === 0 ? 0.28 + rnd() * 0.1 : 0.72 + rnd() * 0.12);
+  const cy = H * (0.35 + rnd() * 0.3);
+  const harm = [0, 1, 2].map(() => ({ k: 2 + Math.floor(rnd() * 3), a: 0.05 + rnd() * 0.07, p: rnd() * 6.28 }));
+  for (let i = 1; i <= rings; i++) {
+    const base = i * (c === 0 ? 24 : 18);
+    const pts: string[] = [];
+    const N = 96;
+    for (let j = 0; j <= N; j++) {
+      const t = (j / N) * Math.PI * 2;
+      let r = base;
+      for (const h of harm) r *= 1 + h.a * Math.sin(h.k * t + h.p + i * 0.08);
+      pts.push(`${(cx + r * 1.25 * Math.cos(t)).toFixed(1)} ${(cy + r * 0.85 * Math.sin(t)).toFixed(1)}`);
+    }
+    paths.push(`M${pts.join('L')}Z`);
+  }
+}
+---
+<svg class:list={['pg-contour', cls]} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width={width} vector-effect="non-scaling-stroke" aria-hidden="true" focusable="false">
+  {paths.map((d, i) => <path d={d} vector-effect="non-scaling-stroke" opacity={i % 5 === 0 ? 1 : 0.55} />)}
+</svg>
