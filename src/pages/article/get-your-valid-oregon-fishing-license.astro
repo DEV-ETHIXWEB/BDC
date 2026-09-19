@@ -2,7 +2,6 @@
 import '../../styles/pages.css';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
 import Icon from '../../components/Icon.astro';
 import TocSpy from '../../components/pg/TocSpy.astro';
 import { SITE } from '../../data/site';
@@ -33,7 +32,7 @@ const toc = [
       </details>
     </aside>
     <article class="pg-prose">
-      <p class="pg-byline"><span class="pg-byline__by">By Clinton McCulloch</span><time datetime="2026-07-10">July 10, 2026</time></p>
+      <p class="pg-byline"><span class="pg-byline__by">By <a href="/profile/clinton-mcculloch">Clinton McCulloch</a></span><time datetime="2026-07-10">July 10, 2026</time></p>
 
       <p>Planning a trip with BDC Guide Service? Understanding Oregon fishing license requirements is an important first step before heading out on the water. In Oregon, any angler age 12 and older must have a valid Oregon fishing license to fish in public waters, including rivers like the Columbia, Willamette, Wilson, Sandy, and other systems we guide on. Whether you're targeting salmon or steelhead, having the proper license ensures you're fishing legally and helps support conservation efforts across the state.</p>
       <p><a class="btn btn--primary" href={SITE.licenseUrl} rel="noopener" target="_blank">Purchase your Oregon fishing license<Icon name="arrowUpRight" size={18} /></a></p>
@@ -87,5 +86,4 @@ const toc = [
     </article>
   </div>
   <TocSpy />
-  <CtaBand />
 </Base>

@@ -1,0 +1,52 @@
+---
+import '../styles/contact-band.css';
+import Icon from './Icon.astro';
+import ContactForm from './react/ContactForm';
+import { SITE } from '../data/site';
+import { TRIPS } from '../data/trips';
+interface Props { title?: string; body?: string }
+const {
+  title = 'Questions before you book?',
+  body = 'Ask Captain Clinton anything: what to bring, which trip fits your group, kids, licenses. He replies as soon as he is off the water.',
+} = Astro.props;
+const a = SITE.address;
+---
+<section class="cb section" id="message" aria-labelledby="cb-h">
+  <div class="wrap cb__grid">
+    <div class="cb__copy" data-reveal="up">
+      <p class="cb__tag">Ask the captain</p>
+      <h2 id="cb-h">{title}</h2>
+      <p class="cb__lede">{body}</p>
+      <ul class="cb__ways">
+        <li>
+          <a class="cb__way" href={SITE.phoneHref}>
+            <span class="cb__ic"><Icon name="phone" size={22} /></span>
+            <span><small>Call, the fastest way</small><strong>{SITE.phone}</strong></span>
+          </a>
+        </li>
+        <li>
+          <a class="cb__way" href={`mailto:${SITE.email}`}>
+            <span class="cb__ic"><Icon name="mail" size={22} /></span>
+            <span><small>Email</small><strong>{SITE.email}</strong></span>
+          </a>
+        </li>
+        <li>
+          <a class="cb__way" href="/contact-us">
+            <span class="cb__ic"><Icon name="pin" size={22} /></span>
+            <span><small>Where we meet</small><strong>{a.city}, {a.region} {a.postal}</strong></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="cb__card" data-reveal="up">
+      <noscript>
+        <style>.cb-form { display: none !important; }</style>
+        <div class="cb-nojs">
+          <h3>Send a message</h3>
+          <p>The form needs JavaScript. Call <a href={SITE.phoneHref}>{SITE.phone}</a> or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+        </div>
+      </noscript>
+      <ContactForm client:visible trips={TRIPS.map(({ slug, name }) => ({ slug, name }))} email={SITE.email} />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,20 @@
+---
+import '../styles/content-pages.css';
+import Icon from './Icon.astro';
+import { ARTICLES, shortDate } from '../data/articles';
+---
+<ul class="cp-arts" data-stagger>
+  {ARTICLES.map((a) => (
+    <li data-reveal="up">
+      <a class="cp-art" href={`/article/${a.slug}`}>
+        <span class="cp-art__ic"><Icon name={a.icon} size={26} /></span>
+        <span class="cp-art__body">
+          <span class="cp-art__meta">Article<span aria-hidden="true"> · </span><time datetime={a.published}>{shortDate(a.published)}</time></span>
+          <h2 class="cp-art__t">{a.title}</h2>
+          <span class="cp-art__d">{a.description}</span>
+        </span>
+        <span class="cp-art__go"><span class="cp-art__go-t">Read</span><Icon name="arrowUpRight" size={20} /></span>
+      </a>
+    </li>
+  ))}
+</ul>

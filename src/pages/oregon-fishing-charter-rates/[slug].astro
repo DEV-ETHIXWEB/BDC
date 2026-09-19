@@ -58,7 +58,7 @@ const schema = [{
 }];
 const formTrips = TRIPS.map(({ slug, name, price, capacity, boat, hours }) => ({ slug, name, price, capacity, boat, hours }));
 ---
-<Base title={trip.seoTitle} description={trip.metaDescription} crumbs={crumbs} schema={schema} image="/og-image.jpg">
+<Base contact={false} title={trip.seoTitle} description={trip.metaDescription} crumbs={crumbs} schema={schema} image="/og-image.jpg">
   <section class="tp-hero tp-hero--trip">
     <div class="wrap tp-hero__grid">
       <div class="tp-hero__copy">

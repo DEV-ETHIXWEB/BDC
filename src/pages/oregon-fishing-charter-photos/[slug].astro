@@ -1,0 +1,99 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import '../../styles/content-pages.css';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import { PHOTOS } from '../../data/photos';
+import { PHOTO_PAGES, type PhotoPage } from '../../data/photo-pages';
+import { TRIPS } from '../../data/trips';
+import { SITE } from '../../data/site';
+import { longDate } from '../../data/articles';
+
+export function getStaticPaths() {
+  return PHOTO_PAGES.map((page, i) => ({
+    params: { slug: page.slug },
+    props: {
+      page,
+      prev: PHOTO_PAGES[(i - 1 + PHOTO_PAGES.length) % PHOTO_PAGES.length],
+      next: PHOTO_PAGES[(i + 1) % PHOTO_PAGES.length],
+      more: [1, 2, 3, 4].map((n) => PHOTO_PAGES[(i + n) % PHOTO_PAGES.length]),
+    },
+  }));
+}
+const { page, prev, next, more } = Astro.props as { page: PhotoPage; prev: PhotoPage; next: PhotoPage; more: PhotoPage[] };
+const path = `/oregon-fishing-charter-photos/${page.slug}`;
+const crumbs = [{ name: 'Gallery', path: '/oregon-fishing-charter-photos' }, { name: page.title, path }];
+const src = PHOTOS[page.key];
+const share = await getImage({ src, width: 1200, format: 'jpg', quality: 82 });
+const trips = (page.cat === 'Crab' ? TRIPS.filter((t) => t.kind === 'crab').concat(TRIPS.filter((t) => t.kind !== 'crab')) : TRIPS.filter((t) => t.kind !== 'crab')).slice(0, 3);
+const schema = [{
+  '@context': 'https://schema.org',
+  '@type': 'ImageObject',
+  name: page.title,
+  caption: page.alt,
+  contentUrl: new URL(share.src, SITE.url).href,
+  url: `${SITE.url}${path}`,
+  datePublished: page.published,
+  creditText: 'BDC Guide Service',
+  creator: { '@id': `${SITE.url}/#business` },
+}];
+const thumb = (p: PhotoPage) => PHOTOS[p.key];
+---
+<Base title={page.metaTitle} description={page.metaDescription} crumbs={crumbs} schema={schema} image={share.src} contactTitle="Want a day like this?" contactBody="Ask Captain Clinton about dates, which trip fits your group, or anything else. He replies as soon as he is off the water.">
+  <PageHero title={page.title} lede={page.sub.replace(/ - What to Expect$/, '')} crumbs={crumbs} tag="Trip photo" seed={(page.slug.length % 9) + 3} compact edge="sand" />
+
+  <section class="cp-sec cp-sec--sand cp-photo">
+    <div class="wrap cp-photo__grid">
+      <figure class="cp-plate" data-reveal="scale">
+        <div class="cp-plate__frame">
+          <Picture src={src} alt={page.alt} formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[420, 640, 900, 1280, 1800, 2400]} sizes="(min-width: 1000px) 640px, 92vw" loading="eager" fetchpriority="high" />
+        </div>
+        <figcaption><Icon name="camera" size={16} />BDC Guide Service trip photo<span aria-hidden="true"> · </span><time datetime={page.published}>{longDate(page.published)}</time></figcaption>
+      </figure>
+
+      <div class="cp-photo__side" data-reveal="up">
+        <h2>Fish with Captain Clinton</h2>
+        <p>Guided trips on Oregon rivers and the coast, with the boat, gear and know-how included. Minimum 2 guests. A valid Oregon fishing license is required for anglers 12 and older.</p>
+        <p class="cp-photo__actions">
+          <a class="btn btn--primary" href="/oregon-fishing-charter-rates">See trips and rates<Icon name="arrowRight" size={18} /></a>
+          <a class="btn btn--ghost on-light" href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
+        </p>
+        <ul class="cp-trips" aria-label="Trips">
+          {trips.map((t) => (
+            <li>
+              <a href={`/oregon-fishing-charter-rates/${t.slug}`}>
+                <span class="cp-trips__n">{t.name}<small>{t.hours} hours, up to {t.capacity} guests</small></span>
+                <span class="cp-trips__p">${t.price}<small> pp</small></span>
+                <Icon name="arrowRight" size={18} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cp-sec cp-more" aria-labelledby="cp-more-h">
+    <div class="wrap">
+      <div class="cp-head" data-reveal="up">
+        <h2 id="cp-more-h">More from the water</h2>
+        <p class="cp-pn">
+          <a href={`/oregon-fishing-charter-photos/${prev.slug}`} rel="prev"><Icon name="arrowRight" size={18} class="cp-flip" /><span>Previous photo</span></a>
+          <a href={`/oregon-fishing-charter-photos/${next.slug}`} rel="next"><span>Next photo</span><Icon name="arrowRight" size={18} /></a>
+        </p>
+      </div>
+      <ul class="cp-thumbs" data-stagger>
+        {more.map((p) => (
+          <li data-reveal="up">
+            <a href={`/oregon-fishing-charter-photos/${p.slug}`}>
+              <span class="cp-thumbs__img"><Picture src={thumb(p)} alt={p.alt} formats={['avif', 'webp']} fallbackFormat="webp" quality={70} widths={[200, 300, 420, 600]} sizes="(min-width: 900px) 260px, 44vw" loading="lazy" /></span>
+              <span class="cp-thumbs__t">{p.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="cp-back"><a href="/oregon-fishing-charter-photos">All photos in the gallery<Icon name="arrowRight" size={18} /></a></p>
+    </div>
+  </section>
+</Base>

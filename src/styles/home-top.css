@@ -170,7 +170,7 @@
   .ht-ticket__cta { grid-area: cta; justify-self: end; align-self: center; width: auto; max-width: none; }
 }
 @media (max-width: 380px) {
-  .ht-ticket__stub { grid-template-columns: 1fr; grid-template-areas: 'big' 'cta'; --stubh: 132px; }
+  .ht-ticket__stub { grid-template-columns: 1fr; grid-template-areas: 'big' 'cta'; --stubh: 148px; }
   .ht-ticket__bars { display: none; }
   .ht-ticket__big { flex-direction: row; }
   .ht-ticket__cta { justify-self: stretch; }
@@ -210,7 +210,7 @@
 @media (max-width: 699px) {
   .ht-board {
     display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
-    margin-inline: calc(-1 * var(--gutter)); padding: 4px var(--gutter) 6px; scroll-padding-inline: var(--gutter);
+    margin-inline: calc(-1 * var(--gutter)); margin-block: -24px -44px; padding: 28px var(--gutter) 50px; scroll-padding-inline: var(--gutter); /* room for card shadow and hover lift inside the scroller */
   }
   .ht-board::-webkit-scrollbar { display: none; }
   .ht-board__item { flex: 0 0 min(80vw, 340px); scroll-snap-align: start; }

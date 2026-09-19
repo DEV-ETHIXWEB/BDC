@@ -115,8 +115,10 @@ function initMagnetic() {
     const strength = parseFloat(el.dataset.magnetic || '') || 0.28;
     const move = (e: PointerEvent) => {
       const r = el.getBoundingClientRect();
-      const x = (e.clientX - (r.left + r.width / 2)) * strength;
-      const y = (e.clientY - (r.top + r.height / 2)) * strength;
+      // capped so a magnetic element never travels past the padding its container leaves around it
+      const cap = (v: number) => Math.max(-8, Math.min(8, v));
+      const x = cap((e.clientX - (r.left + r.width / 2)) * strength);
+      const y = cap((e.clientY - (r.top + r.height / 2)) * strength);
       el.style.setProperty('--mx', `${x.toFixed(1)}px`); el.style.setProperty('--my', `${y.toFixed(1)}px`);
       if (!(el as HTMLElement).classList.contains('btn')) el.style.translate = `${x}px ${y}px`;
     };

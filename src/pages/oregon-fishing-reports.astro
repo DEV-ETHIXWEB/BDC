@@ -3,7 +3,6 @@ import '../styles/gallery.css';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import CtaBand from '../components/CtaBand.astro';
 import { SITE } from '../data/site';
 import { season, monthsOf } from '../data/seasons';
 const crumbs = [{ name: 'Reports', path: '/oregon-fishing-reports' }];
@@ -57,5 +56,4 @@ const label = (m: readonly number[]) => MN.filter((_, i) => m[i] === 2).join(', 
       </div>
     </div>
   </section>
-  <CtaBand />
 </Base>

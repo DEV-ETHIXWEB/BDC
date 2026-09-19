@@ -334,3 +334,16 @@ html[data-motion='reduce'] .wd-fab, html[data-motion='reduce'] .wd-menu__nav li,
 html[data-motion='reduce'] .wd-fab__dot::after { display: none; }
 
 @media print { .wd-dock, .wd-panel, .wd-scrim { display: none !important; } }
+
+/* "Powered by ETHIXWEB": a small soft-clay pill (inflated, matte, lit from the top left) */
+.wd-by { flex: none; display: flex; justify-content: center; padding: 6px 14px 12px; background: var(--cream-100); }
+.wd-by a { display: inline-flex; align-items: center; gap: 9px; min-height: 30px; padding: 8px 16px 8px 15px; border-radius: 999px; text-decoration: none; color: #5a5a4c;
+  font: 600 0.66rem/1 var(--font-body); letter-spacing: 0.06em; text-transform: uppercase;
+  background: radial-gradient(120% 160% at 25% 0%, #fbf6e4 0%, #efe6c6 55%, #e4d9b3 100%);
+  box-shadow: 0 7px 12px -5px rgba(13, 46, 59, 0.3), 0 2px 3px rgba(13, 46, 59, 0.14), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -3px 5px rgba(140, 118, 60, 0.28);
+  transition: transform 0.35s var(--wd-spring), box-shadow 0.25s; }
+.wd-by a:hover { transform: translateY(-2px); box-shadow: 0 11px 16px -6px rgba(13, 46, 59, 0.34), 0 2px 4px rgba(13, 46, 59, 0.14), inset 0 2px 3px rgba(255, 255, 255, 0.95), inset 0 -3px 5px rgba(140, 118, 60, 0.28); }
+.wd-by a:active { transform: translateY(1px) scale(0.98); box-shadow: 0 2px 4px rgba(13, 46, 59, 0.2), inset 0 3px 6px rgba(140, 118, 60, 0.35), inset 0 -1px 2px rgba(255, 255, 255, 0.8); }
+.wd-by img { display: block; height: 11px; width: auto; opacity: 0.9; }
+@media (max-width: 640px) { .wd-by { padding: 4px 14px calc(10px + env(safe-area-inset-bottom, 0px)); } }
+html[data-motion='reduce'] .wd-by a { transition: none; }

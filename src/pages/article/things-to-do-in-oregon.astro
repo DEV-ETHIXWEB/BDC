@@ -2,7 +2,6 @@
 import '../../styles/pages.css';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
 import Icon from '../../components/Icon.astro';
 import TocSpy from '../../components/pg/TocSpy.astro';
 import { SITE } from '../../data/site';
@@ -30,7 +29,7 @@ const toc = [
       </details>
     </aside>
     <article class="pg-prose">
-      <p class="pg-byline"><span class="pg-byline__by">By Clinton McCulloch</span><time datetime="2026-07-10">July 10, 2026</time></p>
+      <p class="pg-byline"><span class="pg-byline__by">By <a href="/profile/clinton-mcculloch">Clinton McCulloch</a></span><time datetime="2026-07-10">July 10, 2026</time></p>
 
       <p>Oregon is packed with unforgettable experiences, from scenic outdoor adventures to vibrant local culture and family-friendly attractions. Whether you're visiting for a weekend or planning a longer stay, there are plenty of things to do in Oregon that go beyond the water. While BDC Guide Service offers incredible fishing opportunities, the surrounding region also delivers diverse activities that make your trip even more memorable.</p>
 
@@ -72,5 +71,4 @@ const toc = [
     </article>
   </div>
   <TocSpy />
-  <CtaBand />
 </Base>

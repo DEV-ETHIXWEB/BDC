@@ -1,0 +1,66 @@
+/* Articles index, profile and photo pages (.cp-). Room around every hover lift so nothing is ever clipped. */
+.cp-sec { padding-block: clamp(36px, 6vw, 88px); }
+.cp-sec--sand { background: var(--cream-200); }
+.cp-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: clamp(16px, 3vw, 28px); }
+.cp-head h2 { margin: 0; font-size: var(--fs-xl); }
+.cp-head p { margin: 0; color: var(--ink-soft); }
+
+/* article cards */
+.cp-arts { list-style: none; margin: 0; padding: 8px 0 12px; display: grid; gap: clamp(14px, 2vw, 22px); }
+@media (min-width: 900px) { .cp-arts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cp-art { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: 16px; height: 100%; padding: clamp(18px, 2.6vw, 28px); border-radius: 20px; background: #fff; border: 1px solid var(--line); color: var(--ink); text-decoration: none; box-shadow: 0 12px 28px -22px rgba(13, 46, 59, 0.5); transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s, border-color 0.25s; }
+.cp-art:hover { transform: translateY(-4px); border-color: var(--pine-500); box-shadow: 0 22px 36px -22px rgba(13, 46, 59, 0.55); }
+.cp-art:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+.cp-art__ic { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--navy-800); color: var(--cream-50); }
+.cp-art__body { display: grid; gap: 8px; min-width: 0; }
+.cp-art__meta { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pine-700); }
+.cp-art__t { margin: 0; font-size: clamp(1.7rem, 1.4rem + 1vw, 2.3rem); line-height: 1.02; }
+.cp-art__d { color: var(--ink-soft); }
+.cp-art__go { display: inline-flex; align-items: center; gap: 6px; align-self: end; font-weight: 700; color: var(--navy-700); }
+@media (max-width: 599px) { .cp-art { grid-template-columns: auto minmax(0, 1fr); } .cp-art__go { grid-column: 2; } }
+
+/* profile */
+.cp-prof { padding-bottom: clamp(28px, 5vw, 56px); }
+.cp-prof__bio { max-width: 62ch; }
+.cp-prof__bio h2 { margin: 0 0 12px; font-size: var(--fs-xl); }
+.cp-prof__bio p { color: var(--ink-soft); }
+.cp-prof__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+
+/* photo page */
+.cp-photo__grid { display: grid; gap: clamp(24px, 4vw, 56px); align-items: start; }
+@media (min-width: 1000px) { .cp-photo__grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); } }
+.cp-plate { margin: 0; padding: clamp(10px, 1.6vw, 16px); border-radius: 22px; background: #fff; border: 1px solid var(--line); box-shadow: 0 30px 50px -34px rgba(13, 46, 59, 0.6); }
+.cp-plate__frame { border-radius: 14px; overflow: hidden; background: var(--cream-300); }
+.cp-plate__frame img { display: block; width: 100%; height: auto; max-height: 78vh; object-fit: contain; }
+.cp-plate figcaption { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 12px 6px 4px; font-size: 0.9rem; color: var(--ink-soft); }
+.cp-photo__side h2 { margin: 0 0 10px; font-size: var(--fs-xl); }
+.cp-photo__side > p { color: var(--ink-soft); }
+.cp-photo__actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 22px; }
+.cp-trips { list-style: none; margin: 0; padding: 4px 0 8px; display: grid; gap: 10px; }
+.cp-trips a { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 14px; padding: 14px 16px; min-height: 64px; border-radius: 14px; background: rgba(255, 255, 255, 0.7); border: 1px solid var(--line); color: var(--ink); text-decoration: none; transition: transform 0.2s ease, background 0.2s, box-shadow 0.2s; }
+.cp-trips a:hover { transform: translateX(4px); background: #fff; box-shadow: 0 12px 22px -16px rgba(13, 46, 59, 0.5); }
+.cp-trips a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.cp-trips__n { display: grid; gap: 2px; font-weight: 700; }
+.cp-trips small { font-weight: 500; color: var(--ink-soft); font-size: 0.85rem; }
+.cp-trips__p { font-weight: 800; font-size: 1.15rem; white-space: nowrap; }
+.cp-trips__p small { font-size: 0.8rem; }
+
+.cp-more { background: var(--bg); }
+.cp-pn { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 0; }
+.cp-pn a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--navy-700); text-decoration: none; }
+.cp-pn a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.cp-pn a:focus-visible, .cp-back a:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 6px; }
+.cp-flip { transform: scaleX(-1); }
+.cp-thumbs { list-style: none; margin: 0; padding: 8px 0 12px; display: grid; gap: clamp(12px, 2vw, 22px); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 900px) { .cp-thumbs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.cp-thumbs a { display: grid; gap: 10px; color: var(--ink); text-decoration: none; transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.cp-thumbs a:hover { transform: translateY(-4px); }
+.cp-thumbs a:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 14px; }
+.cp-thumbs__img { display: block; aspect-ratio: 4 / 5; border-radius: 14px; overflow: hidden; background: var(--cream-300); box-shadow: 0 14px 26px -20px rgba(13, 46, 59, 0.6); }
+.cp-thumbs__img img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.cp-thumbs a:hover img { transform: scale(1.05); }
+.cp-thumbs__t { font-size: 0.95rem; font-weight: 600; line-height: 1.3; }
+.cp-back { margin: 14px 0 0; }
+.cp-back a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--navy-700); }
+@media (prefers-reduced-motion: reduce) { .cp-art, .cp-trips a, .cp-thumbs a, .cp-thumbs img { transition: none; } .cp-art:hover, .cp-thumbs a:hover { transform: none; } }
+html[data-motion='reduce'] .cp-art, html[data-motion='reduce'] .cp-trips a, html[data-motion='reduce'] .cp-thumbs a, html[data-motion='reduce'] .cp-thumbs img { transition: none; }

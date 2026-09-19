@@ -12,12 +12,14 @@ interface Props {
   seed?: number;
   /** show the art slot on phones too */
   artOnMobile?: boolean;
+  /** smaller headline for long titles (photo pages) */
+  compact?: boolean;
 }
-const { title, lede, crumbs = [], edge = 'page', tag, seed = 4, artOnMobile = false } = Astro.props;
+const { title, lede, crumbs = [], edge = 'page', tag, seed = 4, artOnMobile = false, compact = false } = Astro.props;
 const hasArt = Astro.slots.has('art');
 const ripple = 'M0 40' + 'q90-26 180 0t180 0'.repeat(1) + Array.from({ length: 15 }, () => 't180 0').join('');
 ---
-<section class:list={['pg-hero', `pg-hero--${edge}`, hasArt && 'pg-hero--art']}>
+<section class:list={['pg-hero', `pg-hero--${edge}`, hasArt && 'pg-hero--art', compact && 'pg-hero--compact']}>
   <ContourPattern class="pg-hero__contour" seed={seed} rings={18} />
   <div class="wrap pg-hero__grid">
     <div class="pg-hero__text">

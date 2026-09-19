@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ArticleCards from '../../components/ArticleCards.astro';
+const crumbs = [{ name: 'Articles', path: '/article' }];
+---
+<Base title="Articles | BDC Guide Service" description="Articles from Captain Clinton McCulloch: things to do in Oregon and how to get a valid Oregon fishing license before your trip." crumbs={crumbs}>
+  <PageHero title="Articles" lede="Trip prep and things to do in Oregon, from Captain Clinton." crumbs={crumbs} tag="From the captain" seed={11} edge="sand" />
+  <section class="cp-sec cp-sec--sand">
+    <div class="wrap">
+      <ArticleCards />
+    </div>
+  </section>
+</Base>

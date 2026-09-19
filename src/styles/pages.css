@@ -13,6 +13,7 @@
 .pg-hero__contour { position: absolute; inset: 0; width: 100%; height: 100%; color: rgba(191, 214, 197, 0.13); z-index: -1; }
 .pg-hero__grid { display: grid; gap: 28px; align-items: center; position: relative; }
 .pg-hero h1 { color: var(--cream-50); font-size: clamp(3rem, 1.6rem + 7vw, 6.5rem); line-height: 0.94; margin: 0 0 clamp(12px, 2vw, 22px); max-width: 14ch; }
+.pg-hero--compact h1 { font-size: clamp(2.4rem, 1.5rem + 4.2vw, 4.6rem); max-width: 22ch; line-height: 1; }
 .pg-hero__lede { font-size: clamp(1.1rem, 1rem + 0.7vw, 1.4rem); color: var(--on-deep-soft); max-width: 44ch; margin: 0; }
 .pg-hero__tag { display: inline-flex; align-items: center; gap: 12px; margin: 0 0 14px; font-weight: 600; font-size: 0.98rem; color: var(--pine-200); }
 .pg-hero__tag::before { content: ''; width: 28px; height: 2px; border-radius: 2px; background: var(--pine-500); }
@@ -239,7 +240,7 @@
 .pg-hub__row .pg-hub__label { color: var(--pine-700); }
 .pg-hub__mail { display: block; font-weight: 700; font-size: clamp(0.98rem, 0.85rem + 0.6vw, 1.15rem); overflow-wrap: anywhere; }
 .pg-meet { border: 1.5px solid var(--navy-700); border-radius: 6px; overflow: hidden; background: var(--cream-50); display: grid; }
-.pg-meet__body { padding: clamp(16px, 3vw, 24px); display: grid; gap: 10px; }
+.pg-meet__body { padding: clamp(16px, 3vw, 24px) clamp(16px, 3vw, 24px) calc(clamp(16px, 3vw, 24px) + 12px); display: grid; gap: 10px; }
 .pg-meet h3 { margin: 0; font-size: 1.7rem; }
 .pg-meet address { font-style: normal; font-size: 1.08rem; line-height: 1.5; }
 .pg-meet__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
@@ -356,3 +357,4 @@
 .pg-editorial .pg-pull { clear: both; margin-top: clamp(28px, 4vw, 48px); }
 .pg-faq__plain dt { font: 700 1.6rem/1.1 var(--font-display); margin-top: 22px; color: var(--navy-800); }
 .pg-faq__plain dd { margin: 6px 0 0; }
+.pg-byline__by a { color: inherit; text-decoration: underline; text-decoration-color: var(--pine-500); text-underline-offset: 4px; }

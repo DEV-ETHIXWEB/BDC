@@ -8,6 +8,7 @@ export interface WallItem {
   alt: string;
   caption: string;
   cat: string;
+  href?: string;
   ratio: number;
   thumb: { src: string; srcset: string; width: number; height: number };
   full: { src: string; srcset: string; width: number; height: number; maxDisplay: number };
@@ -35,7 +36,7 @@ export default function GalleryWall({ items, cats }: { items: WallItem[]; cats: 
 
   return (
     <div className="gb-wall">
-      <div className="gb-filter" role="group" aria-label="Filter photos by catch">
+      <div className="gb-filter" role="group" aria-label="Filter photos">
         <ToggleButtonGroup
           className="gb-filter__group"
           selectionMode="single"
@@ -130,7 +131,7 @@ export default function GalleryWall({ items, cats }: { items: WallItem[]; cats: 
                     </Button>
                     <p className="gb-lb__cap">
                       <strong>{cur.caption}</strong>
-                      <span>{(open ?? 0) + 1} of {shown.length}</span>
+                      <span>{(open ?? 0) + 1} of {shown.length}{cur.href && <> · <a className="gb-lb__more" href={cur.href}>Photo page</a></>}</span>
                     </p>
                     <Button className="gb-lb__nav gb-lb__nav--next" aria-label="Next photo" onPress={() => go(1)}>
                       <Icon name="arrowRight" size={24} />

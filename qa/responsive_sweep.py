@@ -3,7 +3,7 @@ import json, sys
 from playwright.sync_api import sync_playwright
 AXE=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","node_modules","axe-core","axe.min.js")).read()
 B=os.environ.get("QA_BASE","http://localhost:4325")
-pages=["/","/oregon-fishing-charter-rates","/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip","/oregon-fishing-charter-rates/oregon-crabbing-charter-bdc-guide-service","/oregon-fishing-species","/oregon-fishing-charter-photos","/oregon-fishing-charter-reviews","/oregon-fishing-reports","/captain-clinton-mcculloch-of-oregon","/fishing-faqs","/contact-us","/article/things-to-do-in-oregon","/article/get-your-valid-oregon-fishing-license","/terms-of-service","/privacy-policy","/sitemap","/nope-404"]
+pages=["/article","/profile/clinton-mcculloch","/oregon-fishing-charter-photos/clackamas-chinook-salmon-catch-2532","/oregon-fishing-charter-photos/dungeness-crab-bucket-clackamas-2297","/","/oregon-fishing-charter-rates","/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip","/oregon-fishing-charter-rates/oregon-crabbing-charter-bdc-guide-service","/oregon-fishing-species","/oregon-fishing-charter-photos","/oregon-fishing-charter-reviews","/oregon-fishing-reports","/captain-clinton-mcculloch-of-oregon","/fishing-faqs","/contact-us","/article/things-to-do-in-oregon","/article/get-your-valid-oregon-fishing-license","/terms-of-service","/privacy-policy","/sitemap","/nope-404"]
 widths=[(320,640),(375,812),(390,844),(430,932),(600,900),(768,1024),(820,1180),(1024,768),(1180,820),(1280,800),(1440,900),(1728,1117),(1920,1080),(2560,1440)]
 res=[]
 with sync_playwright() as p:

@@ -3,19 +3,13 @@ import '../styles/gallery.css';
 import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import CtaBand from '../components/CtaBand.astro';
 import GalleryWall from '../components/react/GalleryWall';
 import * as P from '../data/photos';
 const { PHOTOS, GALLERY } = P;
 const META: Record<string, { maxDisplay?: number }> = P.PHOTO_META ?? {};
 const crumbs = [{ name: 'Gallery', path: '/oregon-fishing-charter-photos' }];
 
-// Categories describe visible content only (species are not confirmed, so there is no species filter).
-const CAT: Record<string, string> = {
-  dungenessCrab: 'Crab',
-  oregonCoast: 'On the water', channelBuoy: 'On the water', fishfinder: 'On the water',
-};
-const cats = ['Catches', 'Crab', 'On the water'];
+const cats = ['Catches', 'Crab', 'Boats', 'On the water'];
 
 const items = await Promise.all(
   GALLERY.map(async (g) => {
@@ -30,7 +24,8 @@ const items = await Promise.all(
       id: g.key,
       alt: g.alt,
       caption: g.caption,
-      cat: CAT[g.key] ?? 'Catches',
+      cat: g.cat,
+      href: g.href,
       ratio: m.width / m.height,
       thumb: { src: t.src, srcset: thumbs.map((x, i) => `${x.src} ${tw[i]}w`).join(', '), width: Number(t.attributes.width), height: Number(t.attributes.height) },
       full: { src: fulls[0].src, srcset: fulls.map((x, i) => `${x.src} ${fw[i]}w`).join(', '), width: Number(fulls[0].attributes.width), height: Number(fulls[0].attributes.height), maxDisplay },
@@ -38,12 +33,11 @@ const items = await Promise.all(
   }),
 );
 ---
-<Base title="Oregon Fishing Charter Photos" description="Photos of anglers, catches and crab from Oregon fishing trips with BDC Guide Service." crumbs={crumbs}>
+<Base contactTitle="Want to be in the next photo?" title="Oregon Fishing Charter Photos" description="Photos of anglers, catches and crab from Oregon fishing trips with BDC Guide Service." crumbs={crumbs}>
   <PageHero title="Trip gallery" lede="Anglers, catches and views from the water." crumbs={crumbs} />
   <section class="gb-gallery section" style="padding-top:0">
     <div class="wrap">
       <GalleryWall client:load items={items} cats={cats} />
     </div>
   </section>
-  <CtaBand title="Want to be in the next photo?" />
 </Base>

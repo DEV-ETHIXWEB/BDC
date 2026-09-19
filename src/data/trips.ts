@@ -41,7 +41,7 @@ export const TRIPS: Trip[] = [
     tagline: '8 hours of guided drift-boat steelhead fishing',
     description:
       "Spend a full day on Oregon’s scenic rivers aboard our Alumaweld Guide Model, built for smooth and productive Oregon fishing charters in shallow water conditions. This 8-hour trip is perfect for targeting winter steelhead while enjoying an authentic drift boat experience with a knowledgeable Oregon fishing guide. Designed for smaller groups, this trip offers a more personal and focused approach, making it one of the most rewarding guided fishing trips in Oregon for anglers who want to explore premier river systems.",
-    photo: 'steelheadDrift',
+    photo: 'cohoBoatCatch',
     includes: fishIncludes,
   },
   {
@@ -60,7 +60,7 @@ export const TRIPS: Trip[] = [
     tagline: '8-hour guided trip for salmon, steelhead & more',
     description:
       "Enjoy a full day on the water with BDC Guide Service aboard our Willy Predator sled, built for productive and comfortable Oregon fishing charters. This 8-hour trip is ideal for anglers looking to maximize their time targeting salmon, steelhead, or seasonal species across Oregon’s top rivers. With expert guidance from a professional Oregon fishing guide, you’ll fish proven locations using techniques tailored to current conditions, making this one of the most rewarding guided fishing trips in Oregon.",
-    photo: 'winterSteelhead',
+    photo: 'twoAnglersChinook',
     includes: fishIncludes,
   },
   {
@@ -138,7 +138,7 @@ export const TRIPS: Trip[] = [
     tagline: '5-hour crabbing trip with a river-and-coast twist',
     description:
       "Experience a unique take on Oregon crabbing trips with BDC Guide Service aboard our Alumaweld Guide Model during the fall season from October through December. This 5-hour trip offers a more intimate and hands-on Oregon crabbing charter, perfect for small groups looking for a relaxed and personalized outing. Guided by an experienced Oregon fishing guide, you’ll enjoy a fun and educational experience while targeting fresh Dungeness crab in select accessible areas.",
-    photo: 'dungenessCrab',
+    photo: 'alumaweldBoat',
     includes: crabIncludes,
   },
 ];

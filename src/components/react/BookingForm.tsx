@@ -2,17 +2,13 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button, FieldError, Form, Input, Label, Radio, RadioGroup, TextArea, TextField } from 'react-aria-components';
 import { Icon } from './Icon';
 import { SITE } from '../../data/site';
+import { ENDPOINT, validators } from './form-shared';
 
 interface Props {
   trips: { slug: string; name: string; price: number; capacity?: number; boat?: string; hours?: number }[];
   email: string;
   defaultTrip?: string;
 }
-
-// If PUBLIC_FORM_ENDPOINT is set at build time (Formspree, Basin, Netlify, etc.) the form POSTs there and
-// only a confirmed 2xx response is shown as "sent". Without it the form can NOT know whether anything was
-// delivered, so it opens the visitor's mail app and says plainly that the request is not sent yet.
-const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
 
 const CAPACITY_BY_NAME: Record<string, number> = { 'Willy Predator': 6, 'Alumaweld Guide Model': 3 };
 const money = (n: number) => `$${n.toLocaleString('en-US')}`;
@@ -24,12 +20,6 @@ const fmtDate = (iso: string) => {
   if (!iso) return 'Flexible';
   const [y, m, d] = iso.split('-').map(Number);
   return new Date(y, m - 1, d).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-};
-
-const validators = {
-  name: (v: string) => (v.trim().length < 2 ? 'Enter your name so Captain Clinton knows who to call.' : ''),
-  phone: (v: string) => (v.replace(/\D/g, '').length < 10 ? 'Enter a phone number with area code, like (503) 555-0123.' : ''),
-  email: (v: string) => (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? 'Enter an email address like name@example.com.' : ''),
 };
 
 export default function BookingForm({ trips, email, defaultTrip }: Props) {

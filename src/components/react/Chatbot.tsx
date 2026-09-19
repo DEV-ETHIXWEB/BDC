@@ -258,6 +258,13 @@ export default function Chatbot() {
           <button type="submit" className="wd-send" aria-label="Send message" disabled={!draft.trim() || typing}><Icon name="send" size={20} /></button>
         </form>
         <p className="wd-note">Automated answers from our trip info, not a person. For anything else call <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
+        <p className="wd-by">
+          <a href="https://www.ethixweb.com" target="_blank" rel="noopener noreferrer">
+            <span>Powered by</span>
+            <img src="/ethixweb-wordmark.png" alt="ETHIXWEB" width="79" height="11" />
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        </p>
       </section>
     </>
   );

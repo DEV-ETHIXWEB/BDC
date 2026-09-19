@@ -4,11 +4,14 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { NAV, LEGAL_LINKS } from '../data/site';
 import { TRIPS } from '../data/trips';
+import { ARTICLES } from '../data/articles';
+import { PHOTO_PAGES } from '../data/photo-pages';
 const crumbs = [{ name: 'Sitemap', path: '/sitemap' }];
 const groups = [
   { title: 'Main', links: [{ label: 'Home', href: '/' }, ...NAV] },
   { title: 'Trips', links: TRIPS.map((t) => ({ label: t.name, href: `/oregon-fishing-charter-rates/${t.slug}` })) },
-  { title: 'Guides', links: [{ label: 'Things To Do In Oregon', href: '/article/things-to-do-in-oregon' }, { label: 'Oregon Fishing License', href: '/article/get-your-valid-oregon-fishing-license' }] },
+  { title: 'Articles', links: [{ label: 'All articles', href: '/article' }, ...ARTICLES.map((a) => ({ label: a.title, href: `/article/${a.slug}` })), { label: 'Clinton McCulloch', href: '/profile/clinton-mcculloch' }] },
+  { title: 'Photos', links: PHOTO_PAGES.map((p) => ({ label: p.title, href: `/oregon-fishing-charter-photos/${p.slug}` })) },
   { title: 'Info', links: [...LEGAL_LINKS] },
 ];
 ---

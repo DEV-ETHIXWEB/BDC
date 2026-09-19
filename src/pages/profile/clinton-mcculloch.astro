@@ -1,0 +1,44 @@
+---
+import '../../styles/content-pages.css';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ArticleCards from '../../components/ArticleCards.astro';
+import Crest from '../../components/art/Crest.astro';
+import Icon from '../../components/Icon.astro';
+import { ARTICLES } from '../../data/articles';
+import { SITE } from '../../data/site';
+const crumbs = [{ name: 'Clinton McCulloch', path: '/profile/clinton-mcculloch' }];
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Clinton McCulloch',
+  url: `${SITE.url}/profile/clinton-mcculloch`,
+  jobTitle: 'Fishing guide and charter captain',
+  description: 'Clinton McCulloch is an outdoor adventure expert and contributor at BDC Guide Service.',
+  worksFor: { '@id': `${SITE.url}/#business` },
+};
+---
+<Base title="Clinton McCulloch | BDC Guide Service" description="Clinton McCulloch is an outdoor adventure expert and contributor at BDC Guide Service. Read his articles and meet the captain." crumbs={crumbs} schema={[person]}>
+  <PageHero title="Clinton McCulloch" lede="Outdoor adventure expert and contributor at BDC Guide Service." crumbs={crumbs} tag="Owner and guide" seed={12} edge="sand">
+    <Crest slot="art" />
+  </PageHero>
+  <section class="cp-sec cp-sec--sand">
+    <div class="wrap cp-prof">
+      <div class="cp-prof__bio" data-reveal="up">
+        <h2>Meet your captain</h2>
+        <p>Captain Clinton McCulloch, the owner and guide behind BDC Guide Service, has spent over 45 years fishing the waters of Oregon. Known for his down-to-earth personality and patient approach, he connects easily with anglers of all experience levels.</p>
+        <p class="cp-prof__actions">
+          <a class="btn btn--primary" href="/captain-clinton-mcculloch-of-oregon">Full captain profile<Icon name="arrowRight" size={18} /></a>
+          <a class="btn btn--ghost on-light" href="/oregon-fishing-charter-rates">See trips and rates</a>
+        </p>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="cp-head" data-reveal="up">
+        <h2>Articles by Clinton McCulloch</h2>
+        <p>{ARTICLES.length} articles</p>
+      </div>
+      <ArticleCards />
+    </div>
+  </section>
+</Base>

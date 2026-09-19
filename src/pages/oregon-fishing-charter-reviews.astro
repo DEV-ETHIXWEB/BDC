@@ -3,7 +3,6 @@ import '../styles/gallery.css';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import CtaBand from '../components/CtaBand.astro';
 import ReviewWall, { type Review } from '../components/ReviewWall.astro';
 import { SITE } from '../data/site';
 const crumbs = [{ name: 'Reviews', path: '/oregon-fishing-charter-reviews' }];
@@ -42,5 +41,4 @@ const body = encodeURIComponent('Hi Captain Clinton,\n\nTrip I took (salmon, ste
       )}
     </div>
   </section>
-  <CtaBand />
 </Base>

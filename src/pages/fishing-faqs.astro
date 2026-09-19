@@ -2,7 +2,6 @@
 import '../styles/pages.css';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 import Faq from '../components/react/Faq';
 import FaqNoJs from '../components/FaqNoJs.astro';
@@ -15,7 +14,7 @@ const schema = [{
   mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
 }];
 ---
-<Base title="Oregon Fishing Charter FAQ" description="Answers to common questions about BDC Guide Service trips: where we meet, fishing licenses, gear, tipping, start times and how many guests fit on each boat." crumbs={crumbs} schema={schema}>
+<Base contactTitle="Still have a question?" contactBody="Ask Captain Clinton. He replies as soon as he is off the water, or call and tell him what you want to catch." title="Oregon Fishing Charter FAQ" description="Answers to common questions about BDC Guide Service trips: where we meet, fishing licenses, gear, tipping, start times and how many guests fit on each boat." crumbs={crumbs} schema={schema}>
   <PageHero title="Fishing FAQs" lede="Everything you need to know before your trip." crumbs={crumbs} tag="Before you go" seed={5} />
   <section class="pg-faq">
     <div class="wrap pg-faq__grid">
@@ -37,5 +36,4 @@ const schema = [{
       </div>
     </div>
   </section>
-  <CtaBand title="Ready when you are" body="Pick a trip, or call Captain Clinton and tell him what you want to catch." />
 </Base>

@@ -2,7 +2,7 @@ import os
 import json, sys
 from playwright.sync_api import sync_playwright
 B=os.environ.get("QA_BASE","http://localhost:4325")
-PAGES=["/","/oregon-fishing-charter-rates","/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip","/oregon-fishing-charter-rates/oregon-crabbing-charter-bdc-guide-service","/oregon-fishing-species","/oregon-fishing-charter-photos","/oregon-fishing-charter-reviews","/oregon-fishing-reports","/captain-clinton-mcculloch-of-oregon","/fishing-faqs","/contact-us","/article/things-to-do-in-oregon","/article/get-your-valid-oregon-fishing-license","/terms-of-service","/privacy-policy","/sitemap","/no-such-page"]
+PAGES=["/article","/profile/clinton-mcculloch","/oregon-fishing-charter-photos/clackamas-chinook-salmon-catch-2532","/oregon-fishing-charter-photos/dungeness-crab-bucket-clackamas-2297","/","/oregon-fishing-charter-rates","/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip","/oregon-fishing-charter-rates/oregon-crabbing-charter-bdc-guide-service","/oregon-fishing-species","/oregon-fishing-charter-photos","/oregon-fishing-charter-reviews","/oregon-fishing-reports","/captain-clinton-mcculloch-of-oregon","/fishing-faqs","/contact-us","/article/things-to-do-in-oregon","/article/get-your-valid-oregon-fishing-license","/terms-of-service","/privacy-policy","/sitemap","/no-such-page"]
 def run(p,label,browser_name,ctx_args):
     br=getattr(p,browser_name).launch()
     ctx=br.new_context(**ctx_args); ctx.set_default_timeout(5000); ctx.set_default_navigation_timeout(20000); pg=ctx.new_page(); res={"label":label,"errors":[],"overflow":[],"broken":[],"checks":{}}

@@ -39,6 +39,7 @@ export const FOOTER_LINKS = [
   { label: 'Willy Half Day', href: '/oregon-fishing-charter-rates/oregon-fishing-charter-half-day-trip' },
   { label: 'Willy Full Day', href: '/oregon-fishing-charter-rates/full-day-oregon-river-fishing-charter' },
   { label: 'Full Day Drift', href: '/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip' },
+  { label: 'All Articles', href: '/article' },
 ] as const;
 
 export const LEGAL_LINKS = [
