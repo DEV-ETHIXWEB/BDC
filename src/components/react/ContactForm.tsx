@@ -5,7 +5,6 @@ import { SITE } from '../../data/site';
 import { ENDPOINT, mailtoHref, postLead, validators } from './form-shared';
 
 interface Props {
-  trips: { slug: string; name: string }[];
   email: string;
   /** trip preselected from the page the form sits on, if any */
   defaultTrip?: string;
@@ -13,17 +12,14 @@ interface Props {
 
 const NOT_SURE = 'Not sure yet';
 const OTHER = 'Other';
-const TOPICS = ['Book a trip', 'Prices and dates', 'Which trip fits us', 'Kids and families', 'What to bring', 'Licenses and rules', 'Crab trips', 'Group or private trip', 'Gift or special occasion', OTHER];
-const SIZES = ['2', '3', '4', '5', '6'];
-const WHENS = ['Within 2 weeks', 'This season', 'Later this year', 'Just exploring'];
-const REACH = ['Call', 'Text', 'Email'];
+const TOPICS = ['Book a trip', 'Prices and dates', 'Kids and families', 'What to bring', 'Licenses and rules', OTHER];
 
 const setToText = (k: Iterable<unknown>) => [...k].map(String);
 
 // Site-wide "ask the captain" form. Tap-to-select answers (chips) keep it quick; only name, email and a way to say what
 // you need are required. Same delivery rules as BookingForm: a confirmed 2xx from PUBLIC_FORM_ENDPOINT is "sent";
 // without an endpoint it opens the visitor's mail app and says plainly that nothing has been sent yet.
-export default function ContactForm({ trips, email, defaultTrip }: Props) {
+export default function ContactForm({ email, defaultTrip }: Props) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error'>('idle');
   const [draft, setDraft] = useState<{ body: string; subject: string } | null>(null);
   const [copied, setCopied] = useState(false);
@@ -31,10 +27,6 @@ export default function ContactForm({ trips, email, defaultTrip }: Props) {
   const [mail, setMail] = useState('');
   const [phone, setPhone] = useState('');
   const [topics, setTopics] = useState<string[]>([]);
-  const [trip, setTrip] = useState<string>(defaultTrip ?? '');
-  const [size, setSize] = useState('');
-  const [when, setWhen] = useState('');
-  const [reach, setReach] = useState('');
   const [message, setMessage] = useState('');
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const submitting = useRef(false);
@@ -46,7 +38,7 @@ export default function ContactForm({ trips, email, defaultTrip }: Props) {
   const errs = {
     name: validators.name(name),
     email: validators.email(mail),
-    phone: phone.trim() ? validators.phone(phone) : (reach === 'Call' || reach === 'Text') ? `Add a phone number so we can ${reach.toLowerCase()} you, or choose Email.` : '',
+    phone: phone.trim() ? validators.phone(phone) : '',
     message: otherPicked && message.trim().length < 5 ? 'You chose Other: tell us a little about what you need.' : !topics.length && message.trim().length < 5 ? 'Pick at least one topic above, or write us a short question.' : '',
   };
   const touch = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
@@ -67,14 +59,13 @@ export default function ContactForm({ trips, email, defaultTrip }: Props) {
     }
     if (((new FormData(e.currentTarget).get('company') as string) || '')) return; // honeypot
     const data = {
-      name: name.trim(), email: mail.trim(), phone: phone.trim(), topics: topics.join(', '), trip: trip || NOT_SURE, group: size, when, reach,
+      name: name.trim(), email: mail.trim(), phone: phone.trim(), topics: topics.join(', '), trip: defaultTrip ?? NOT_SURE,
       message: message.trim(), page: window.location.pathname,
     };
-    const subject = data.trip !== NOT_SURE ? `Question about: ${data.trip}` : topics.length ? `Question: ${topics[0]}` : 'Question from the website';
+    const subject = topics.length ? `Question: ${topics[0]}` : 'Question from the website';
     const body = [
-      `Name: ${data.name}`, `Email: ${data.email}`, `Phone: ${data.phone || 'not given'}`, `Best way to reach me: ${reach || 'any'}`,
-      `About: ${data.topics || 'see message'}`, `Trip: ${data.trip}`, `Group size: ${size || 'not given'}`, `When: ${when || 'not given'}`,
-      `Sent from: ${data.page}`, '', data.message,
+      `Name: ${data.name}`, `Email: ${data.email}`, `Phone: ${data.phone || 'not given'}`,
+      `About: ${data.topics || 'see message'}`, `Sent from: ${data.page}`, '', data.message,
     ].join('\n');
     if (!ENDPOINT) {
       setDraft({ body, subject });
@@ -135,14 +126,9 @@ export default function ContactForm({ trips, email, defaultTrip }: Props) {
 
   return (
     <Form className="cb-form" onSubmit={onSubmit} validationBehavior="aria" ref={formRef}>
-      {Chips({ id: 'topics', label: 'What can we help with?', hint: 'Pick any', options: TOPICS, value: topics, multiple: true, onChange: setTopics })}
-      {Chips({ id: 'trip', label: 'Which trip?', hint: 'Optional', options: [...trips.map((t) => t.name), NOT_SURE], value: trip ? [trip] : [], onChange: (v) => setTrip(v[0] ?? '') })}
-      <div className="cb-row">
-        {Chips({ id: 'size', label: 'Guests', hint: 'Optional', options: SIZES, value: size ? [size] : [], onChange: (v) => setSize(v[0] ?? '') })}
-        {Chips({ id: 'when', label: 'When are you thinking?', hint: 'Optional', options: WHENS, value: when ? [when] : [], onChange: (v) => setWhen(v[0] ?? '') })}
-      </div>
+      {Chips({ id: 'topics', label: 'What can we help with?', hint: 'Tap any that apply', options: TOPICS, value: topics, multiple: true, onChange: setTopics })}
 
-      <div className="cb-row">
+      <div className="cb-row cb-row--3">
         <TextField className="cb-fl" name="name" maxLength={80} isRequired autoComplete="name" value={name} onChange={setName} onBlur={() => touch('name')} isInvalid={!!show('name')}>
           <Input placeholder=" " />
           <Label>Your name</Label>
@@ -153,14 +139,11 @@ export default function ContactForm({ trips, email, defaultTrip }: Props) {
           <Label>Email</Label>
           <FieldError className="cb-err">{errs.email}</FieldError>
         </TextField>
-      </div>
-      <div className="cb-row">
         <TextField className="cb-fl" name="phone" maxLength={30} type="tel" inputMode="tel" autoComplete="tel" value={phone} onChange={setPhone} onBlur={() => touch('phone')} isInvalid={!!show('phone')}>
           <Input placeholder=" " />
           <Label>Phone (optional)</Label>
           <FieldError className="cb-err">{errs.phone}</FieldError>
         </TextField>
-        {Chips({ id: 'reach', label: 'Best way to reach you', hint: 'Optional', options: REACH, value: reach ? [reach] : [], onChange: (v) => setReach(v[0] ?? '') })}
       </div>
 
       <TextField className="cb-fl cb-fl--area" name="message" maxLength={1500} value={message} onChange={setMessage} onBlur={() => touch('message')} isInvalid={!!show('message')}>

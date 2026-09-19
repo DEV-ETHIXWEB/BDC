@@ -61,3 +61,4 @@
 @media (prefers-reduced-motion: reduce) { .cb-chip, .cb-chip__tick { transition: none; } }
 html[data-motion='reduce'] .cb-chip, html[data-motion='reduce'] .cb-chip__tick { transition: none; }
 @media (min-width: 900px) { .cb__copy { position: sticky; top: calc(var(--header-h, 76px) + 24px); } }
+@media (min-width: 640px) { .cb-row--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

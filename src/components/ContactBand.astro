@@ -3,7 +3,6 @@ import '../styles/contact-band.css';
 import Icon from './Icon.astro';
 import ContactForm from './react/ContactForm';
 import { SITE } from '../data/site';
-import { TRIPS } from '../data/trips';
 interface Props { title?: string; body?: string }
 const {
   title = 'Questions before you book?',
@@ -46,7 +45,7 @@ const a = SITE.address;
           <p>The form needs JavaScript. Call <a href={SITE.phoneHref}>{SITE.phone}</a> or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
         </div>
       </noscript>
-      <ContactForm client:visible trips={TRIPS.map(({ slug, name }) => ({ slug, name }))} email={SITE.email} />
+      <ContactForm client:visible email={SITE.email} />
     </div>
   </div>
 </section>
