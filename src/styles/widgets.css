@@ -102,7 +102,10 @@ body:has(.tp-bar:not([data-hide])) .wd-dock { --wd-lift: var(--tp-bar-h, 84px); 
 @media (max-width: 639px) {
   .wd-scrim { display: block; }
   .wd-panel { left: 0; right: 0; bottom: var(--wd-kb, 0px); border-radius: 26px 26px 0 0; border-bottom: 0; transform: translate3d(0, 100%, 0); transform-origin: bottom center; }
-  .wd-chat { height: min(calc(var(--wd-vh, 100dvh) - 10px - env(safe-area-inset-top)), 760px); }
+  /* chat: full screen on phones (still keyboard-aware through --wd-vh / --wd-kb); the accessibility panel stays a sheet */
+  .wd-chat { top: 0; height: var(--wd-vh, 100dvh); max-height: none; border-radius: 0; border: 0; }
+  .wd-chat .wd-grip { display: none; }
+  .wd-chat .wd-head { padding-top: env(safe-area-inset-top); }
   .wd-a11y { max-height: calc(var(--wd-vh, 100dvh) - 10px - env(safe-area-inset-top)); }
   /* when a sheet is open the other floating button steps aside */
   html[data-wd-open='chat'] .wd-dock--a11y, html[data-wd-open='a11y'] .wd-dock--chat { opacity: 0; visibility: hidden; pointer-events: none; }
