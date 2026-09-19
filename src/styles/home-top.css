@@ -66,6 +66,7 @@
 .ht-spec img { width: 100%; aspect-ratio: 1; object-fit: cover; }
 .ht-spec figcaption { font: 700 clamp(0.75rem, 3.4cqw, 0.95rem)/1 var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--navy-800); padding: 2.2cqw 0 2.6cqw; text-align: center; white-space: nowrap; }
 .ht-spec--a { width: 38%; right: 0; bottom: 2%; rotate: 4deg; }
+.ht-spec--b img { object-position: 50% 4%; } /* portrait photo in a square frame: keep the face and the fish */
 .ht-spec--b { width: 31%; right: 4%; top: 2%; rotate: -5deg; }
 
 /* conditions strip */
