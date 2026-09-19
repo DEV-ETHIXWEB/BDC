@@ -27,6 +27,7 @@ Every URL from the previous site's sitemap exists at the same address (trip page
 - Home: animated hero, offer tickets, trip board, captain story, river chart, fishing-season calendar, species field guide, gallery strip, FAQ.
 - Trips: `/oregon-fishing-charter-rates` (live-price trip planner) and six trip pages under `/oregon-fishing-charter-rates/<slug>`.
 - Species, captain, gallery (with lightbox) and 16 photo pages, reviews, reports, FAQ, contact, articles and the author profile, legal pages, 404.
+- A one-row "Request a trip" bar in the home hero (trip, date, name, phone), visible without scrolling on desktop and phone.
 - An "Ask the captain" contact form at the bottom of every page (the trip pages and Contact Us carry the full trip-request form instead).
 - Chat assistant (answers only from real site data, honest phone/email fallback, small clay "Powered by ETHIXWEB" badge) and an accessibility panel (text size,
   contrast, links, motion, dyslexia font, larger cursor).

@@ -1,0 +1,44 @@
+/* Home hero "Request a trip" ribbon (.qr). Glass bar on the navy hero. */
+.qr { display: grid; gap: 10px; padding: 14px; border-radius: 18px; background: rgba(250, 246, 232, 0.08); border: 1px solid rgba(250, 246, 232, 0.22); backdrop-filter: blur(6px); color: var(--on-deep); }
+.qr__title { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; margin: 0; font: 700 1.15rem/1 var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--cream-50); }
+.qr__f { position: relative; min-width: 0; }
+.qr__f label { position: absolute; left: 12px; top: 6px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); pointer-events: none; }
+.qr__f input, .qr__f select { display: block; width: 100%; min-height: 54px; padding: 22px 12px 6px; font: 600 0.98rem/1.2 var(--font-body); color: var(--ink); background: var(--cream-50); border: 1.5px solid transparent; border-radius: 12px; -webkit-appearance: none; appearance: none; text-overflow: ellipsis; }
+.qr__f select { padding-right: 34px; background: var(--cream-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d2e3b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center / 16px; }
+.qr__f input:focus, .qr__f select:focus { outline: 3px solid var(--focus); outline-offset: 1px; }
+.qr__f [aria-invalid='true'] { border-color: #e5645b; }
+.qr__f--date input { text-align: left; }
+.qr__f--date input::-webkit-date-and-time-value { text-align: left; min-height: 1.2em; }
+.qr__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.qr__go { width: 100%; min-height: 54px; }
+.qr__msg { grid-column: 1 / -1; margin: 0; min-height: 0; font-size: 0.9rem; font-weight: 600; color: #ffb4ad; }
+.qr__msg:empty { display: none; }
+.qr--done { display: flex; align-items: flex-start; gap: 12px; margin: 0; max-width: none; }
+.qr--done a { color: var(--pine-200); font-weight: 700; }
+.qr--done .ic { flex: none; margin-top: 2px; color: var(--pine-200); }
+/* phone: two columns, the trip and the button span the row */
+@media (max-width: 899px) {
+  .qr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .qr { gap: 8px; padding: 12px; }
+  .qr__f--trip { grid-column: 1 / -1; }
+  /* order: trip, name + phone, date + button, so the whole form is short and sits high on the phone */
+  .qr__title { order: 0; } .qr__f--trip { order: 1; } .qr__f:nth-of-type(3) { order: 2; } .qr__f:nth-of-type(4) { order: 3; } .qr__f--date { order: 4; } .qr__go { order: 5; } .qr__msg { order: 6; }
+  .qr__title { font-size: 1.05rem; }
+  .qr__f input, .qr__f select, .qr__go { min-height: 50px; }
+  /* the form replaces the "Customize trip" button on phones */
+  .ht-hero__actions .btn--ghost { display: none; }
+}
+/* desktop: one row */
+@media (min-width: 900px) {
+  .qr { grid-template-columns: auto minmax(0, 1.35fr) minmax(150px, 1.05fr) minmax(0, 1fr) minmax(0, 1fr) auto; align-items: center; padding: 12px 14px; border-radius: 999px; gap: 10px; padding-inline: 22px 14px; }
+  .qr__title { grid-column: auto; white-space: nowrap; }
+  .qr__go { width: auto; padding-inline: 1.6rem; border-radius: 999px; }
+  .qr__f input, .qr__f select { border-radius: 999px; padding-inline: 18px 14px; }
+  .qr__f label { left: 18px; }
+  .qr__f select { padding-right: 38px; }
+  .qr__msg { grid-column: 1 / -1; padding-left: 8px; }
+}
+/* the phone copy sits under the hero buttons; the desktop copy sits in the ribbon at the bottom */
+.qr-mob { display: block; margin-top: clamp(16px, 3svh, 28px); max-width: 560px; }
+.qr-desk { display: none; }
+@media (min-width: 900px) { .qr-mob { display: none; } .qr-desk { display: block; padding-bottom: 14px; } }

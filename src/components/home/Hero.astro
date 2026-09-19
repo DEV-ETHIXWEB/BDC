@@ -5,8 +5,12 @@ import { PHOTOS } from '../../data/photos';
 import { SITE } from '../../data/site';
 import { seasonStatus } from './season';
 import '../../styles/home-top.css';
+import '../../styles/quick-request.css';
+import QuickRequest from '../react/QuickRequest';
+import { TRIPS } from '../../data/trips';
 
 const status = seasonStatus();
+const quickTrips = TRIPS.map(({ slug, name, price }) => ({ slug, name, price }));
 
 // Periodic contour lines: every path repeats every 1600 units so the layer can loop by -50%.
 const W = 3200, P = 1600;
@@ -45,6 +49,7 @@ const near = Array.from({ length: 9 }, (_, i) => contour(i + 30, 9, 58, 120, 700
         <a class="btn btn--cream" href="/oregon-fishing-charter-rates" data-magnetic><Icon name="ticket" size={20} />Quick book</a>
         <a class="btn btn--ghost" href="/contact-us" data-magnetic><Icon name="compass" size={20} />Customize trip</a>
       </div>
+      <div class="qr-mob"><QuickRequest client:idle trips={quickTrips} email={SITE.email} /></div>
     </div>
 
     <div class="ht-comp" data-reveal="scale">
@@ -73,6 +78,7 @@ const near = Array.from({ length: 9 }, (_, i) => contour(i + 30, 9, 58, 120, 700
   </div>
 
   <div class="ht-strip-wrap">
+    <div class="qr-desk"><QuickRequest client:idle trips={quickTrips} email={SITE.email} /></div>
     <div class="ht-strip" data-reveal="fade">
       <p class="ht-strip__status" id="ht-status" data-state={status.state}>
         <span class="ht-pulse" aria-hidden="true"></span>

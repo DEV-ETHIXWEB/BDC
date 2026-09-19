@@ -13,6 +13,7 @@ python qa/csp_test.py             # Content-Security-Policy violations in 3 engi
 python qa/chat.py                 # chat assistant answers + injection payloads
 python qa/console_warnings.py     # console warnings/errors after load
 python qa/image_sharpness.py      # every image's real pixel width vs device pixels needed (blur guard)
+python qa/quick_request_flow.py   # home hero 'Request a trip' bar: visible without scrolling, validation, honest not-sent state
 python qa/old_site_parity.py      # all 37 URLs of the previous site's sitemap exist as real pages with a form (reads dist/)
 python qa/hover_clip_detector.py  # hover/focus states that get cut off by a parent's overflow or clip
 ```
