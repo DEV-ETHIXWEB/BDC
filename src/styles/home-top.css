@@ -62,7 +62,9 @@
   position: absolute; left: 50%; bottom: 13%; translate: -50% 0; background: var(--navy-900); color: var(--cream-50); padding: 0.55em 1.3em 0.5em; border-radius: 6px;
   font: 700 clamp(0.9rem, 4.4cqw, 1.15rem)/1 var(--font-display); letter-spacing: 0.1em; white-space: nowrap; box-shadow: var(--e2); text-transform: uppercase;
 }
-.ht-spec { position: absolute; margin: 0; background: var(--cream-50); padding: 3.2cqw 3.2cqw 0; box-shadow: 0 16px 30px rgba(0, 0, 0, 0.42); }
+.ht-spec { opacity: 0; transition: opacity 0.6s ease; position: absolute; margin: 0; background: var(--cream-50); padding: 3.2cqw 3.2cqw 0; box-shadow: 0 16px 30px rgba(0, 0, 0, 0.42); }
+.ht-spec.is-ready { opacity: 1; }
+html[data-motion='reduce'] .ht-spec { transition: none; }
 .ht-spec img { width: 100%; aspect-ratio: 1; object-fit: cover; }
 .ht-spec figcaption { font: 700 clamp(0.75rem, 3.4cqw, 0.95rem)/1 var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--navy-800); padding: 2.2cqw 0 2.6cqw; text-align: center; white-space: nowrap; }
 .ht-spec--a { width: 38%; right: 0; bottom: 2%; rotate: 4deg; }

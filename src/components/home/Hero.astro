@@ -117,6 +117,13 @@ const near = Array.from({ length: 9 }, (_, i) => contour(i + 30, 9, 58, 120, 700
   // never compete with the hero photo for bandwidth. Swapped in when idle.
   function revealLate() {
     document.querySelectorAll<HTMLTemplateElement>('template[data-late]').forEach((t) => t.replaceWith(t.content.cloneNode(true)));
+    // a polaroid stays hidden until its photo has loaded, so an empty cream card is never shown
+    document.querySelectorAll<HTMLElement>('.ht-spec:not(.is-ready)').forEach((f) => {
+      const img = f.querySelector('img');
+      const show = () => f.classList.add('is-ready');
+      if (!img || img.complete) show();
+      else { img.addEventListener('load', show, { once: true }); img.addEventListener('error', show, { once: true }); }
+    });
   }
   function scheduleLate() {
     const run = () => setTimeout(revealLate, 250);
