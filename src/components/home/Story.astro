@@ -5,9 +5,9 @@ import { PHOTOS } from '../../data/photos';
 import '../../styles/home-mid.css';
 
 const stats = [
-  { n: 45, suffix: '+', label: 'years guiding Oregon water' },
-  { n: 7, suffix: '', label: 'rivers we fish' },
-  { n: 6, suffix: '', label: 'guests, our maximum' },
+  { n: 45, suffix: '+', label: 'years fishing Oregon waters' },
+  { n: 7, suffix: '', label: 'top rivers we fish' },
+  { n: 6, suffix: '', label: 'guests on our largest boat' },
   { n: 2, suffix: '', label: 'boats, drift and power' },
 ];
 ---
@@ -15,24 +15,24 @@ const stats = [
   <div class="wrap hm-story__grid">
     <div class="hm-collage" data-reveal="fade">
       <figure class="hm-collage__main" data-parallax="0.04">
-        <Picture src={PHOTOS.guestsB} alt="Two guests holding their salmon on a BDC Guide Service boat" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[360, 540, 720, 1080, 1440, 2160]} sizes="(min-width: 900px) 360px, 68vw" loading="lazy" />
+        <Picture src={PHOTOS.guestsB} alt="Two anglers on a boat holding a fish" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[360, 540, 720, 1080, 1440, 2160]} sizes="(min-width: 900px) 360px, 68vw" loading="lazy" />
       </figure>
       <figure class="hm-collage__coast" data-parallax="-0.06">
-        <Picture src={PHOTOS.oregonCoast} alt="Rugged Oregon coastline at sunset" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[280, 420, 560, 840, 1120, 1680]} sizes="(min-width: 900px) 270px, 52vw" loading="lazy" />
+        <Picture src={PHOTOS.oregonCoast} alt="Rugged Oregon coastline" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[280, 420, 560, 840, 1120, 1680]} sizes="(min-width: 900px) 270px, 52vw" loading="lazy" />
       </figure>
       <figure class="hm-collage__tag" data-parallax="-0.1">
-        <Picture src={PHOTOS.chinookGloves} alt="Angler holding a bright Chinook salmon" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[180, 360, 540, 720, 1080]} sizes="(min-width: 900px) 180px, 34vw" loading="lazy" />
-        <figcaption>Chinook, Columbia</figcaption>
+        <Picture src={PHOTOS.chinookGloves} alt="Angler holding a fish" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[180, 360, 540, 720, 1080]} sizes="(min-width: 900px) 180px, 34vw" loading="lazy" />
+        <figcaption>Fresh catch</figcaption>
       </figure>
       <svg class="hm-collage__ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 5"/><circle cx="60" cy="60" r="40" fill="none" stroke="currentColor" stroke-width="1"/></svg>
     </div>
 
     <div class="hm-story__text">
       <h2 id="hm-story-h" data-reveal="up">A captain who reads the water, not the clock</h2>
-      <p class="hm-story__lead" data-reveal="up">Captain Clinton McCulloch has guided Oregon rivers for more than 45 years. He limits every trip to a small group, so each angler gets real time on the rod and real coaching.</p>
-      <p data-reveal="up">He teaches the drift, waits out the bite and follows ODFW rules, handling every fish with care. Beginners and families are welcome; nobody rushes you.</p>
+      <p class="hm-story__lead" data-reveal="up">Captain Clinton McCulloch, the owner and guide behind BDC Guide Service, has spent over 45 years fishing the waters of Oregon.</p>
+      <p data-reveal="up">Known for his down-to-earth personality and patient approach, he connects easily with anglers of all experience levels. He focuses on smaller group sizes so every guest receives attention and guidance throughout the trip.</p>
       <blockquote class="hm-pull" data-reveal="up">
-        <p><span>Small groups.</span> <span>Patient water.</span> <span>Fishing that leaves the river healthy.</span></p>
+        <p><span>Smaller groups.</span> <span>A patient approach.</span> <span>Responsible fishing practices.</span></p>
       </blockquote>
       <a class="btn btn--primary" data-magnetic href="/captain-clinton-mcculloch-of-oregon">Meet Captain Clinton<Icon name="arrowRight" size={18} /></a>
     </div>

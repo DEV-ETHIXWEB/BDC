@@ -1,8 +1,6 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
-import figtreeFont from '@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2?url';
-import barlow800 from '@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url';
 import { SITE, NAV } from '../data/site';
 import { TRIPS } from '../data/trips';
 import Header from '../components/Header.astro';
@@ -25,18 +23,21 @@ const {
   description = SITE.description,
   image = '/og-image.jpg',
   type = 'website',
-  noindex = false,
+  noindex: noindexProp = false,
   crumbs = [],
   schema = [],
 } = Astro.props;
 
 // build.format is 'file', so Astro.url.pathname ends in .html at build time: normalise to the public URL.
 const rawPath = Astro.props.path ?? Astro.url.pathname;
+// Staging/preview builds (PUBLIC_NOINDEX=1) are never indexable, regardless of page props.
+const noindex = noindexProp || import.meta.env.PUBLIC_NOINDEX === '1';
 const path = rawPath.replace(/\/index\.html$/, '/').replace(/\.html$/, '').replace(/(.)\/$/, '$1') || '/';
 const is404 = path === '/404';
 const canonical = new URL(path, SITE.url).href;
 const ogImage = new URL(image, SITE.url).href;
-const fullTitle = title === SITE.title ? title : `${title} | ${SITE.name}`;
+// Titles that already carry a '|' segment (indexed old-site titles) are used as-is; others get the brand suffix.
+const fullTitle = title === SITE.title || title.includes('|') ? title : `${title} | ${SITE.name}`;
 
 const business = {
   '@context': 'https://schema.org',
@@ -45,11 +46,11 @@ const business = {
   name: SITE.name,
   url: SITE.url,
   description: SITE.description,
-  telephone: '+1-503-826-7294',
+  telephone: SITE.phoneHref.replace('tel:', ''),
   email: SITE.email,
   image: ogImage,
   logo: new URL('/icon-512.png', SITE.url).href,
-  priceRange: '$150-$250',
+  priceRange: `$${Math.min(...TRIPS.map((t) => t.price))}-$${Math.max(...TRIPS.map((t) => t.price))}`,
   founder: { '@type': 'Person', name: SITE.captain },
   address: {
     '@type': 'PostalAddress',
@@ -67,7 +68,7 @@ const business = {
       '@type': 'Offer',
       priceCurrency: 'USD',
       price: t.price,
-      itemOffered: { '@type': 'TouristTrip', name: t.name, url: `${SITE.url}/trips/${t.slug}` },
+      itemOffered: { '@type': 'TouristTrip', name: t.name, url: `${SITE.url}/oregon-fishing-charter-rates/${t.slug}` },
     })),
   },
 };
@@ -91,8 +92,7 @@ const graph = [path === '/' ? business : null, path === '/' ? website : null, br
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <link rel="preload" as="font" type="font/woff2" href={figtreeFont} crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href={barlow800} crossorigin />
+
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {!is404 && <link rel="canonical" href={canonical} />}
@@ -117,7 +117,7 @@ const graph = [path === '/' ? business : null, path === '/' ? website : null, br
     <meta name="twitter:image" content={ogImage} />
     <meta name="geo.region" content="US-OR" />
     <meta name="geo.placename" content="Happy Valley, Oregon" />
-    {graph.map((g) => <script type="application/ld+json" set:html={JSON.stringify(g)} />)}
+    {graph.map((g) => <script type="application/ld+json" set:html={JSON.stringify(g).replace(/</g, '\\u003c')} />)}
     <ClientRouter />
     <script is:inline>
       // a11y prefs + motion gate. Re-run after every view-transition swap because Astro

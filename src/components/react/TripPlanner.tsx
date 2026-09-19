@@ -162,7 +162,7 @@ export default function TripPlanner({ trips }: { trips: PlannerTrip[] }) {
                   <span className="tp-ticket__u">hours</span>
                 </div>
                 <div className="tp-ticket__main">
-                  <h3><a href={`/trips/${t.slug}`}>{t.name}</a></h3>
+                  <h3><a href={`/oregon-fishing-charter-rates/${t.slug}`}>{t.name}</a></h3>
                   <p className="tp-ticket__meta">
                     <Icon name={t.kind === 'drift' ? 'driftBoat' : t.kind === 'crab' ? 'crab' : 'boat'} size={18} />
                     {t.boat === 'Willy Predator' ? "22' Willy Predator" : "16' Alumaweld drift boat"}, up to {t.capacity} guests

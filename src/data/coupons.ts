@@ -1,4 +1,5 @@
 import type { IconName } from '../components/icons/paths';
+import { TRIPS } from './trips';
 
 export interface Coupon {
   icon: IconName;
@@ -21,7 +22,7 @@ export const COUPONS: Coupon[] = [
     icon: 'calendar',
     eyebrow: '2026 season',
     title: 'Now booking fall trips',
-    body: 'Trips are scheduled from the 3rd week of September. Salmon, steelhead and more.',
+    body: 'Trips are scheduled from the 3rd week of September.',
     big: 'Sept',
     bigLabel: 'from the 3rd week',
     cta: 'View 2026 trips',
@@ -32,9 +33,9 @@ export const COUPONS: Coupon[] = [
     eyebrow: 'Oct – Dec',
     title: 'Fall crab charters',
     body: 'Five hours of Dungeness crab and family fun aboard the Willy Predator or Alumaweld.',
-    big: '$150',
+    big: `$${TRIPS.find((t) => t.kind === 'crab')!.price}`,
     bigLabel: 'per person',
     cta: 'Book crabbing',
-    href: '/trips/crabbing-charter-willy-predator',
+    href: '/oregon-fishing-charter-rates/oregon-crabbing-charter-bdc-guide-service',
   },
 ];

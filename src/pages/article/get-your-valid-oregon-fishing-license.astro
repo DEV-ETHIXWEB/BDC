@@ -1,0 +1,91 @@
+---
+import '../../styles/pages.css';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import TocSpy from '../../components/pg/TocSpy.astro';
+import { SITE } from '../../data/site';
+import { REGULATIONS } from '../../data/policies';
+
+// Article text is the owner's own, from the previous site (article/get-your-valid-oregon-fishing-license, published
+// Jul 10, 2026). The box "Rules that apply to BDC trips" quotes the owner's FAQ and the ODFW shellfish summary, with sources.
+const crumbs = [{ name: 'Fishing License', path: '/article/get-your-valid-oregon-fishing-license' }];
+const article = { '@context': 'https://schema.org', '@type': 'Article', headline: 'Get Your Valid Oregon Fishing License', datePublished: '2026-07-10', author: { '@type': 'Person', name: 'Clinton McCulloch' }, publisher: { '@id': `${SITE.url}/#business` } };
+const toc = [
+  ['who', 'Who needs a license'],
+  ['get', 'How to get one'],
+  ['cost', 'Cost'],
+  ['rules', 'Freshwater and saltwater rules'],
+  ['notes', 'Exemptions and notes'],
+  ['bdc', 'Rules that apply to BDC trips'],
+];
+---
+<Base title="Oregon Fishing License Guide | Rules, Costs & Info" description="Learn how to get an Oregon fishing license, costs, rules, and requirements for anglers. Plan your trip with confidence before fishing Oregon waters." crumbs={crumbs} schema={[article]} type="article">
+  <PageHero title="Get your Oregon fishing license" lede="Oregon fishing license information for travelers and anglers, by Clinton McCulloch." crumbs={crumbs} tag="Trip prep" seed={14} edge="sand" />
+  <div class="wrap pg-article">
+    <aside class="pg-toc" aria-label="On this page">
+      <details class="pg-toc__d" open>
+        <summary>On this page</summary>
+        <nav data-pg-spy>
+          <ol>{toc.map(([id, t]) => <li><a href={`#${id}`}>{t}</a></li>)}</ol>
+        </nav>
+      </details>
+    </aside>
+    <article class="pg-prose">
+      <p class="pg-byline"><span class="pg-byline__by">By Clinton McCulloch</span><time datetime="2026-07-10">July 10, 2026</time></p>
+
+      <p>Planning a trip with BDC Guide Service? Understanding Oregon fishing license requirements is an important first step before heading out on the water. In Oregon, any angler age 12 and older must have a valid Oregon fishing license to fish in public waters, including rivers like the Columbia, Willamette, Wilson, Sandy, and other systems we guide on. Whether you're targeting salmon or steelhead, having the proper license ensures you're fishing legally and helps support conservation efforts across the state.</p>
+      <p><a class="btn btn--primary" href={SITE.licenseUrl} rel="noopener" target="_blank">Purchase your Oregon fishing license<Icon name="arrowUpRight" size={18} /></a></p>
+
+      <section id="who" data-reveal="up">
+        <h2>Who needs an Oregon fishing license?</h2>
+        <p>Residents and non-residents alike must carry a valid Oregon fishing license when fishing. Youth under 12 are generally exempt, making it easier for families to enjoy a day on the water. Additional tags or endorsements may be required for species like salmon and steelhead, so it's important to review current regulations before your trip.</p>
+      </section>
+
+      <section id="get" data-reveal="up">
+        <h2>How to get a fishing license in Oregon</h2>
+        <p>Getting a license is simple. You can purchase one online through the Oregon Department of Fish and Wildlife, at licensed retailers such as sporting goods stores, or at local vendors near fishing areas. Most anglers choose to buy their license in advance to save time before their trip. If you're wondering how to get a fishing license in Oregon, online purchase is the fastest and most convenient option.</p>
+      </section>
+
+      <section id="cost" data-reveal="up">
+        <h2>Oregon fishing license cost (residents vs. non-residents)</h2>
+        <p>Pricing varies depending on residency and duration. Oregon residents typically pay less for annual licenses, while non-residents can choose from short-term options like 1-day or multi-day licenses, which are ideal for visiting anglers. Additional fees may apply for salmon, steelhead, and harvest tags.</p>
+      </section>
+
+      <section id="rules" data-reveal="up">
+        <h2>Freshwater vs. saltwater fishing rules</h2>
+        <p>Oregon primarily requires a standard fishing license for both freshwater and saltwater fishing, but certain species and locations may require additional tags. For example, salmon and steelhead fishing in rivers or coastal waters may require specific endorsements. While Oregon does not have a separate Oregon saltwater license, regulations can vary depending on the fishery, so it's always best to confirm before your trip.</p>
+      </section>
+
+      <section id="notes" data-reveal="up">
+        <h2>Special exemptions and important notes</h2>
+        <ul>
+          <li>Youth under 12 typically do not need a license</li>
+          <li>Some free fishing days may be offered during the year</li>
+          <li>Seniors may qualify for discounted licenses depending on residency</li>
+          <li>Always carry your license while fishing</li>
+        </ul>
+        <p>BDC Guide Service strongly recommends that all guests secure their license before arrival to ensure a smooth and stress-free experience. If you have questions about what you need, we're happy to help guide you in the right direction.</p>
+      </section>
+
+      <section id="bdc" data-reveal="up">
+        <h2>Rules that apply to BDC trips</h2>
+        <ul>
+          <li>{REGULATIONS.license}</li>
+          <li>{REGULATIONS.columbiaEndorsement}</li>
+          <li><strong>Crabbing:</strong> {REGULATIONS.shellfish}</li>
+        </ul>
+        <p class="pg-fine">Sources: BDC Guide Service FAQ; Oregon Department of Fish &amp; Wildlife, <a href="https://myodfw.com/articles/oregon-shellfish-regulations" rel="noopener" target="_blank">Oregon shellfish regulations</a> (page updated January 5, 2024). Regulations change, so check the current rules with ODFW before your trip.</p>
+      </section>
+
+      <aside class="pg-callout" data-reveal="up">
+        <Icon name="license" size={32} />
+        <div><h3>Not sure what you need?</h3><p>Call <a href={SITE.phoneHref}>{SITE.phone}</a>.</p></div>
+        <a class="btn btn--primary btn--sm" href={SITE.licenseUrl} rel="noopener" target="_blank">ODFW licensing</a>
+      </aside>
+    </article>
+  </div>
+  <TocSpy />
+  <CtaBand />
+</Base>

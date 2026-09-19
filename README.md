@@ -4,7 +4,7 @@ Website for BDC Guide Service, Oregon salmon, steelhead and Dungeness crab chart
 Live domain: https://www.bdcguideservices.com
 
 Built with **Astro** (static, SEO-first) and **React Aria Components** (Adobe's headless layer under Spectrum 2) for the
-interactive parts only. Design concept, palette, motion and responsive rules are in [DESIGN.md](DESIGN.md).
+interactive parts only. Design system: [docs/design-system.md](docs/design-system.md). **Launch status, blockers and handover: [docs/HANDOVER.md](docs/HANDOVER.md).** Tests: [qa/README.md](qa/README.md).
 
 ## Commands
 | Command | What it does |
@@ -13,17 +13,19 @@ interactive parts only. Design concept, palette, motion and responsive rules are
 | `npm run dev` | Dev server at http://localhost:4321 (also serves `/dev/styleguide`) |
 | `npm run build` | Build to `dist/` (21 static pages, AVIF/WebP images) |
 | `npm run preview` | Serve the production build locally |
+| `npm run check` | Type-check (`astro check`) |
+| `npm run lint` | ESLint |
 
 ## Deploy (static, any host)
 Publish `dist/`: build command `npm run build`, output directory `dist`.
-`vercel.json` (Vercel) and `public/_headers` (Netlify, Cloudflare Pages) set security headers and immutable asset caching.
+`vercel.json`, `public/_headers` and `public/_redirects` are generated from `config/` on every build (headers, 301 redirects, immutable caching). A Content-Security-Policy is generated from the built pages after the build. Set the environment variables in `.env.example` on the host.
 The domain is set in `astro.config.mjs` (`site`) and `src/data/site.ts`; canonicals, sitemap and robots.txt follow it.
-Old URLs from the previous site are kept so existing search rankings carry over.
+URLs from the previous site are kept (trip pages under `/oregon-fishing-charter-rates/<slug>`, articles under `/article/<slug>`) and the rest are redirected, so search rankings carry over.
 
 ## What is in the site
 - Custom "river survey" design in the logo palette (deep navy, forest green, cream); custom 79-icon set in `src/components/icons/paths.ts`.
 - Home: animated hero, offer tickets, trip board, captain story, river chart, fishing-season calendar, species field guide, gallery strip, FAQ.
-- Trips: `/oregon-fishing-charter-rates` (live-price trip planner) and six trip pages under `/trips/<slug>`.
+- Trips: `/oregon-fishing-charter-rates` (live-price trip planner) and six trip pages under `/oregon-fishing-charter-rates/<slug>`.
 - Species, captain, gallery (with lightbox), reviews, reports, FAQ, contact, guides, legal pages, 404.
 - Chat assistant (answers only from real site data, honest phone/email fallback) and an accessibility panel (text size,
   contrast, links, motion, dyslexia font, larger cursor).
@@ -31,8 +33,9 @@ Old URLs from the previous site are kept so existing search rankings carry over.
 - Page transitions, scroll reveals and parallax (all off under `prefers-reduced-motion` and with JavaScript disabled).
 
 ## Things you edit (all in `src/data`)
-- `site.ts`: phone, email, address, nav, footer links, booking URL.
-- `trips.ts`: the six trips, prices, copy, SEO titles.
+- `site.ts`: phone, email, address, nav, footer links.
+- `trips.ts`: the six trips, prices, official descriptions, SEO titles.
+- `policies.ts`: the client's booking terms and the cited regulations. `seasons.ts`: the single source for fishing seasons.
 - `coupons.ts`: the offer tickets. Add a `code` once a real promo is approved. No discounts are invented.
 - `content.ts`: species and FAQs (FAQs also feed FAQPage structured data and the chat assistant).
 - `photos.ts`: photo registry. Masters live in `src/assets/photos`; `PHOTO_META` records the largest size each can be shown sharply.

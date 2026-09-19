@@ -1,0 +1,76 @@
+---
+import '../../styles/pages.css';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Icon from '../../components/Icon.astro';
+import TocSpy from '../../components/pg/TocSpy.astro';
+import { SITE } from '../../data/site';
+
+// Article text is the owner's own, from the previous site (article/things-to-do-in-oregon, published Jul 10, 2026).
+const crumbs = [{ name: 'Things To Do', path: '/article/things-to-do-in-oregon' }];
+const article = { '@context': 'https://schema.org', '@type': 'Article', headline: 'Things To Do In Oregon', datePublished: '2026-07-10', author: { '@type': 'Person', name: 'Clinton McCulloch' }, publisher: { '@id': `${SITE.url}/#business` } };
+const toc = [
+  ['parks', 'Scenic state parks and trails'],
+  ['gorge', 'The Columbia River Gorge'],
+  ['dining', 'Local dining and fresh seafood'],
+  ['towns', 'Small-town charm'],
+  ['family', 'Family-friendly outdoor activities'],
+];
+---
+<Base title="Top Things to Do in Oregon | Attractions & Activities" description="Discover top things to do in Oregon, including parks, dining, and family activities. Plan your trip and explore the best Oregon attractions today." crumbs={crumbs} schema={[article]} type="article">
+  <PageHero title="Top things to do in Oregon" lede="Outdoor adventures, local attractions and family-friendly activities, by Clinton McCulloch." crumbs={crumbs} tag="Visitor guide" seed={9} />
+  <div class="wrap pg-article">
+    <aside class="pg-toc" aria-label="On this page">
+      <details class="pg-toc__d" open>
+        <summary>On this page</summary>
+        <nav data-pg-spy>
+          <ol>{toc.map(([id, t]) => <li><a href={`#${id}`}>{t}</a></li>)}</ol>
+        </nav>
+      </details>
+    </aside>
+    <article class="pg-prose">
+      <p class="pg-byline"><span class="pg-byline__by">By Clinton McCulloch</span><time datetime="2026-07-10">July 10, 2026</time></p>
+
+      <p>Oregon is packed with unforgettable experiences, from scenic outdoor adventures to vibrant local culture and family-friendly attractions. Whether you're visiting for a weekend or planning a longer stay, there are plenty of things to do in Oregon that go beyond the water. While BDC Guide Service offers incredible fishing opportunities, the surrounding region also delivers diverse activities that make your trip even more memorable.</p>
+
+      <section id="parks" data-reveal="up">
+        <h2><span class="pg-h-ic"><Icon name="mountain" size={22} /></span>Explore Oregon's scenic state parks and trails</h2>
+        <p>Oregon is known for its breathtaking landscapes, and exploring state parks is one of the top Oregon attractions. From lush forests to rugged coastlines, parks like Silver Falls State Park and the Columbia River Gorge offer miles of hiking trails, waterfalls, and panoramic views. These natural areas are perfect for visitors who want to experience the beauty of the Pacific Northwest.</p>
+        <p>Many parks also provide picnic areas and easy walking paths, making them ideal for Oregon family activities. Whether you're hiking, sightseeing, or simply enjoying the fresh air, these scenic spots are a must-visit during your trip.</p>
+      </section>
+
+      <section id="gorge" data-reveal="up">
+        <h2><span class="pg-h-ic"><Icon name="compass" size={22} /></span>Visit the Columbia River Gorge</h2>
+        <p>The Columbia River Gorge is one of the most iconic destinations in Oregon and a highlight for anyone searching for unique things to do in Oregon. Known for its dramatic cliffs and waterfalls, including the famous Multnomah Falls, the Gorge offers endless opportunities for sightseeing and photography.</p>
+        <p>Visitors can drive along scenic routes, stop at viewpoints, or take short hikes to experience the area up close. It's a great way to spend a relaxing day outdoors before or after your fishing trip with BDC Guide Service.</p>
+      </section>
+
+      <section id="dining" data-reveal="up">
+        <h2><span class="pg-h-ic"><Icon name="crab" size={22} /></span>Enjoy local dining and fresh seafood</h2>
+        <p>Oregon's food scene is another major draw, especially for those who enjoy fresh, locally sourced ingredients. Coastal towns and river communities offer excellent seafood options, from casual fish markets to upscale dining experiences.</p>
+        <p>Trying local dishes is one of the best Oregon attractions for visitors who want to experience the region's culture. After a day on the water, enjoying a fresh meal with family or friends adds another layer to your Oregon adventure.</p>
+      </section>
+
+      <section id="towns" data-reveal="up">
+        <h2><span class="pg-h-ic"><Icon name="pin" size={22} /></span>Discover Oregon's small-town charm</h2>
+        <p>Beyond the major attractions, Oregon is filled with charming small towns that offer a slower pace and authentic local experiences. Towns near Clackamas and along the rivers provide boutique shops, local cafes, and friendly communities.</p>
+        <p>These areas are perfect for exploring at your own pace and are often overlooked when planning things to do in Oregon. They also make great stops before or after your trip with BDC Guide Service.</p>
+      </section>
+
+      <section id="family" data-reveal="up">
+        <h2><span class="pg-h-ic"><Icon name="users" size={22} /></span>Family-friendly outdoor activities</h2>
+        <p>Oregon is an excellent destination for families, offering a wide range of outdoor activities suitable for all ages. From nature walks and wildlife viewing to picnic areas and scenic drives, there are plenty of Oregon family activities to enjoy together.</p>
+        <p>Many locations are easily accessible and provide safe, enjoyable environments for kids and beginners. Pairing these activities with a guided fishing trip creates a well-rounded and memorable family vacation.</p>
+      </section>
+
+      <aside class="pg-callout" data-reveal="up">
+        <Icon name="boat" size={32} />
+        <div><h3>Add a day on the water</h3><p>See the available trips and rates.</p></div>
+        <a class="btn btn--primary btn--sm" href="/oregon-fishing-charter-rates">See trips</a>
+      </aside>
+    </article>
+  </div>
+  <TocSpy />
+  <CtaBand />
+</Base>

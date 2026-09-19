@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState, type SubmitEvent, type ReactNode } from 'react';
 import '../../styles/widgets.css';
 import { Icon } from './Icon';
 import { Crest, G, useDragDismiss, useFocusTrap, useOpenFlag, useSheetMode, useVisualViewport } from './wd-shared';
@@ -7,14 +7,15 @@ import { TRIPS } from '../../data/trips';
 import { SITE } from '../../data/site';
 
 interface Msg { id: number; from: 'bot' | 'user'; text: string; ts: number; cards?: Card[]; actions?: ActionId[]; fallback?: boolean }
-interface Saved { msgs: Msg[]; ctx: Ctx; chips: string[] }
+interface Saved { msgs: Msg[]; ctx: Ctx; chips: string[] | null }
 
 const STORE = 'bdc-chat-v2';
 const NUDGE_KEY = 'bdc-chat-nudge';
 const NUDGE_MS = 12000;
 
 /* ───────── markdown-lite: [label](href), **bold**, bullets, line breaks. Never injects HTML. ───────── */
-const safeHref = (h: string) => /^(\/|tel:|mailto:|https:\/\/)/.test(h);
+// Only same-site paths (not protocol-relative //host), tel:, mailto: and https: links are ever rendered as links.
+const safeHref = (h: string) => /^(\/(?!\/)|tel:|mailto:|https:\/\/)/.test(h);
 function inline(text: string, onNav: () => void): ReactNode[] {
   return text.split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*)/g).map((part, i) => {
     const link = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
@@ -38,7 +39,7 @@ const ACTIONS: Record<ActionId, { label: string; href: string; icon: 'call' | 'm
   call: { label: 'Call now', href: SITE.phoneHref, icon: 'call', primary: true },
   email: { label: 'Email', href: `mailto:${SITE.email}`, icon: 'mail' },
   book: { label: 'See trips', href: '/oregon-fishing-charter-rates', icon: 'ticket' },
-  license: { label: 'License guide', href: '/oregon-fishing-license', icon: 'ticket' },
+  license: { label: 'License guide', href: '/article/get-your-valid-oregon-fishing-license', icon: 'ticket' },
   directions: { label: 'Directions', href: DIRECTIONS_URL, icon: 'pin', ext: true },
 };
 
@@ -145,7 +146,7 @@ export default function Chatbot() {
     : `Hi, I'm the BDC trip assistant. Ask me about trips, prices, seasons, gear or booking. For anything else, Captain Clinton is a call away.`;
 
   function send(text: string) {
-    const t = text.trim();
+    const t = text.trim().slice(0, 200);
     if (!t || typing) return;
     const now = Date.now();
     setMsgs((m) => [...m, { id: idRef.current++, from: 'user', text: t, ts: now }]);
@@ -160,7 +161,7 @@ export default function Chatbot() {
       setTyping(false);
     }, delay);
   }
-  const onSubmit = (e: FormEvent) => { e.preventDefault(); send(draft); };
+  const onSubmit = (e: SubmitEvent) => { e.preventDefault(); send(draft); };
 
   async function copy(m: Msg) {
     try { await navigator.clipboard.writeText(plain(m.text)); setCopied(m.id); window.setTimeout(() => setCopied((c) => (c === m.id ? null : c)), 1600); } catch { /* clipboard blocked */ }
@@ -214,7 +215,7 @@ export default function Chatbot() {
           {msgs.map((m) => (
             <div key={m.id} className={`wd-msg wd-msg--${m.from}`}>
               <div className="wd-bubble" data-fallback={m.fallback ? '' : undefined}>
-                <Rich text={m.text} onNav={onNav} />
+                {m.from === 'user' ? <p>{m.text}</p> : <Rich text={m.text} onNav={onNav} />}
                 {m.cards && <div className="wd-cards">{m.cards.map((c) => <TripCard key={c.slug} c={c} onNav={onNav} />)}</div>}
                 {m.actions && (
                   <div className="wd-actions">

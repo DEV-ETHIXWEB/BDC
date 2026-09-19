@@ -9,7 +9,11 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "prebuild": "node scripts/check-env.mjs && node scripts/generate-host-config.mjs",
+    "postbuild": "node scripts/postbuild-csp.mjs",
+    "check": "astro check",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.6",
@@ -28,6 +32,15 @@
     "esbuild": true
   },
   "devDependencies": {
-    "axe-core": "^4.13.0"
+    "@astrojs/check": "^0.9.10",
+    "@eslint/js": "^9.39.5",
+    "axe-core": "^4.13.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.12.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.0"
   }
 }

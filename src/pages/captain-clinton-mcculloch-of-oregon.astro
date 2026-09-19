@@ -20,12 +20,12 @@ const person = {
   url: `${SITE.url}/captain-clinton-mcculloch-of-oregon`,
 };
 const principles = [
-  { icon: 'users', title: 'Small groups', body: 'Every guest gets personal attention, from the first cast to the last.' },
-  { icon: 'sparkle', title: 'Patient teaching', body: 'Down-to-earth guidance for first-time anglers and seasoned ones alike.' },
-  { icon: 'shield', title: 'Responsible fishing', body: 'Clinton fishes with respect for the natural environment on every trip.' },
-  { icon: 'rod', title: 'Gear provided', body: 'Rods, reels, tackle and live bait (when applicable) come with the trip.' },
-  { icon: 'camera', title: 'Photos and videos', body: 'Every guest gets trip photos and videos to take home.' },
-  { icon: 'calendar', title: 'Tailored trips', body: 'Season, river conditions and your skill level shape the plan for the day.' },
+  { icon: 'users', title: 'Smaller groups', body: 'He focuses on smaller group sizes to ensure every guest receives attention and guidance throughout the trip.' },
+  { icon: 'sparkle', title: 'Patient approach', body: 'A down-to-earth personality that connects easily with anglers of all experience levels.' },
+  { icon: 'shield', title: 'Responsible fishing', body: 'He promotes responsible fishing practices and respects the natural environment.' },
+  { icon: 'rod', title: 'Gear provided', body: 'Rods, reels and tackle are included, plus live bait when applicable.' },
+  { icon: 'camera', title: 'Photos and videos', body: 'Clients receive photos and videos to relive the day long after it ends.' },
+  { icon: 'calendar', title: 'Tailored, safety first', body: 'Every trip is tailored to the season, river conditions and your skill level. Safety is always a priority.' },
 ] as const;
 const facts = [
   { n: 45, s: '+', l: 'years fishing Oregon waters' },
@@ -34,17 +34,17 @@ const facts = [
   { n: 3, s: '', l: 'targets: salmon, steelhead and Dungeness crab' },
 ];
 const willy = [
-  ['Main outboard', '150 HP Yamaha for steady power on big water.'],
-  ['Kicker motor', '9.9 HP Yamaha kicker, the second motor in the twin setup.'],
+  ['Main engine', '150 HP main engine, one of the twin Yamaha motors.'],
+  ['Kicker', '9.9 HP kicker for precise trolling.'],
   ['Seating', 'Up to 6 anglers, often limited to 4 for comfort.'],
-  ['Sonar', 'A fish finder aboard helps us find the fish.'],
-  ['Home water', 'Built for salmon on larger rivers like the Columbia and Willamette.'],
+  ['Comfort', 'Both boats are equipped for comfort and efficiency.'],
+  ['Home water', 'Ideal for salmon fishing on larger rivers, and versatile enough for multiple fisheries throughout the year.'],
 ];
 const drift = [
-  ['Shallow-water reach', 'The low-profile hull navigates water bigger boats cannot.'],
-  ['Seating', 'Up to 3 guests for a more intimate trip.'],
-  ['Oars', 'A classic drift boat, built for rivers.'],
-  ['Home water', 'Our go-to for winter steelhead trips.'],
+  ['Shallow water', 'A 16-foot drift boat designed for smooth navigation in shallow water.'],
+  ['Seating', 'Up to 3 guests for a more personal experience.'],
+  ['Comfort', 'Both boats are equipped for comfort and efficiency.'],
+  ['Home water', 'Used for smaller rivers and winter steelhead trips.'],
 ];
 ---
 <Base title="Meet Captain Clinton McCulloch" description="Captain Clinton McCulloch has fished Oregon waters for 45+ years. Meet the guide behind BDC Guide Service and see the Willy Predator and Alumaweld drift boat." crumbs={crumbs} schema={[person]}>
@@ -56,14 +56,15 @@ const drift = [
     <div class="wrap pg-cap__grid">
       <figure class="pg-specimen" data-reveal="up">
         <div class="pg-specimen__img">
-          <Picture src={PHOTOS.salmonSeated} alt="Fishing guide seated aboard the boat with a fresh salmon on the Columbia River" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 480, 560, 840, 1120, 1680]} sizes="(min-width: 900px) 420px, min(86vw, 420px)" loading="eager" />
+          <Picture src={PHOTOS.oregonCoast} alt="Rugged Oregon coastline framed by a windswept tree" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 480, 560, 840, 1120, 1680]} sizes="(min-width: 900px) 420px, min(86vw, 420px)" loading="eager" />
         </div>
-        <figcaption><Icon name="pin" size={16} />Columbia River</figcaption>
+        <figcaption><Icon name="pin" size={16} />The Oregon coast</figcaption>
       </figure>
       <div class="pg-editorial">
-        <p class="pg-dropcap" data-reveal="up">Captain Clinton McCulloch owns and operates BDC Guide Service. He has spent over 45 years fishing the waters of Oregon, starting with a passion for local rivers that grew into a professional guiding career. His knowledge spans the Columbia, Willamette, Wilson and Trask rivers.</p>
-        <p class="pg-pull" data-reveal="up">Down-to-earth and patient, Clinton is just as comfortable with a first-time angler as with a seasoned one.</p>
-        <p data-reveal="up">He keeps groups small so every guest gets personal attention, and he fishes responsibly with respect for the natural environment.</p>
+        <p class="pg-dropcap" data-reveal="up">Captain Clinton McCulloch, the owner and guide behind BDC Guide Service, has spent over 45 years fishing the waters of Oregon. What began as a lifelong passion quickly turned into a way of life, shaped by early days on local rivers and countless seasons chasing salmon and steelhead.</p>
+        <p class="pg-pull" data-reveal="up">Known for his down-to-earth personality and patient approach, Captain Clinton connects easily with anglers of all experience levels.</p>
+        <p data-reveal="up">He focuses on smaller group sizes to ensure every guest receives attention and guidance throughout the trip. He also provides photos and videos so clients can relive their experience long after the day ends. Safety is always a priority, and every trip is carefully planned around weather, water conditions, and guest experience.</p>
+        <p data-reveal="up">With a strong appreciation for Oregon's fisheries, he promotes responsible fishing practices and respects the natural environment that makes these waters so special.</p>
       </div>
     </div>
   </section>
@@ -85,7 +86,7 @@ const drift = [
     <div class="wrap pg-principles__grid">
       <div class="pg-principles__head" data-reveal="up">
         <h2>How every trip runs</h2>
-        <p class="lede">You bring the curiosity. Clinton brings the boat, the gear and 45 years of river sense.</p>
+        <p class="lede">Clinton brings the boat, the gear and over 45 years fishing the waters of Oregon.</p>
       </div>
       <ul class="pg-rules" data-stagger>
         {principles.map((p) => (
@@ -102,7 +103,7 @@ const drift = [
     <div class="wrap">
       <div class="pg-boats__head" data-reveal="up">
         <h2>Two boats, two kinds of water</h2>
-        <p class="lede">Clinton matches the boat to the river and the season. Here is how each one is built.</p>
+        <p class="lede">The two boats, as described by Captain Clinton.</p>
       </div>
       <div class="pg-boats__grid">
         <figure class="pg-sheet">

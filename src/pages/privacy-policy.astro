@@ -3,12 +3,11 @@ import '../styles/pages.css';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import TocSpy from '../components/pg/TocSpy.astro';
-import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
 const crumbs = [{ name: 'Privacy Policy', path: '/privacy-policy' }];
-const toc = [['collect', 'What we collect'], ['use', 'How we use it'], ['cookies', 'Cookies and storage'], ['contact', 'Contact']];
+const toc = [['collect', 'What we collect'], ['how', 'How your request reaches us'], ['storage', 'What stays in your browser'], ['tracking', 'Tracking and third parties'], ['contact', 'Contact']];
 ---
-<Base title="Privacy Policy" description="How BDC Guide Service collects and uses the personal information you send us when you contact us or request a fishing trip in Oregon." crumbs={crumbs}>
+<Base title="Privacy Policy" description="How BDC Guide Service handles the personal information you send when you contact us or request a fishing trip, and what this website stores in your browser." crumbs={crumbs}>
   <PageHero title="Privacy policy" crumbs={crumbs} tag="Your information" seed={19} />
   <div class="wrap pg-article pg-legal">
     <aside class="pg-toc" aria-label="On this page">
@@ -18,13 +17,16 @@ const toc = [['collect', 'What we collect'], ['use', 'How we use it'], ['cookies
       </details>
     </aside>
     <article class="pg-prose">
-      <p class="pg-stamp"><Icon name="report" size={20} /><span><strong>Draft for review.</strong> Update this if you add analytics, a booking provider or a form service.</span></p>
+      <p>Last updated September 19, 2026. This page describes what this website does with your information.</p>
       <section id="collect"><h2>What we collect</h2>
-        <p>Only what you send us: your name, phone, email and trip preferences when you contact us or request a trip.</p></section>
-      <section id="use"><h2>How we use it</h2>
-        <p>To answer your questions and arrange your trip. We do not sell your information.</p></section>
-      <section id="cookies"><h2>Cookies and storage</h2>
-        <p>This site sets no tracking cookies. Your accessibility choices (text size, contrast) are saved in your own browser only.</p></section>
+        <p>Only what you type into the trip request form when you submit it: your name, phone number, email address, the trip you chose, number of guests, preferred date and any message. If you email or call us directly, we have the details you share with us.</p></section>
+      <section id="how"><h2>How your request reaches us</h2>
+        <p>When you submit the request form, it is sent to {SITE.name} by a form service, or, if that is not available, your email app opens with your request filled in and you send it yourself. We use your details to answer your questions and arrange your trip.</p>
+        <p>The chat assistant answers from the information on this website and runs in your browser. Messages you type into it are not sent to us or to any server.</p></section>
+      <section id="storage"><h2>What stays in your browser</h2>
+        <p>Your accessibility choices (text size, contrast, links, motion, font, cursor) are saved in your browser's local storage so they apply on your next visit. Your chat conversation is kept in your browser's session storage and disappears when you close the tab. Neither is sent anywhere.</p></section>
+      <section id="tracking"><h2>Tracking and third parties</h2>
+        <p>This website sets no cookies, has no analytics or advertising trackers, and loads its fonts and images from its own server.</p></section>
       <section id="contact"><h2>Contact</h2>
         <p>{SITE.name}, {SITE.address.street}, {SITE.address.city}, {SITE.address.region} {SITE.address.postal}. <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p></section>
     </article>

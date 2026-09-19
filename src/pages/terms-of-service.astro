@@ -3,13 +3,13 @@ import '../styles/pages.css';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import TocSpy from '../components/pg/TocSpy.astro';
-import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
+import { BOOKING_TERMS as T, REGULATIONS } from '../data/policies';
 const crumbs = [{ name: 'Terms of Service', path: '/terms-of-service' }];
-const toc = [['bookings', 'Bookings'], ['licenses', 'Licenses and safety'], ['weather', 'Weather and river conditions'], ['contact', 'Contact']];
+const toc = [['bookings', 'Bookings and deposits'], ['cancel', 'Cancellations'], ['trip', 'What is included'], ['licenses', 'Licenses'], ['tips', 'Tipping'], ['contact', 'Contact']];
 ---
-<Base title="Terms of Service" description="Terms of service for BDC Guide Service fishing and crabbing charters in Oregon." crumbs={crumbs}>
-  <PageHero title="Terms of service" crumbs={crumbs} tag="The fine print" seed={2} />
+<Base title="Terms of Service" description="Booking terms for BDC Guide Service fishing and crabbing charters in Oregon: deposit, balance, cancellation, what is included and what to bring." crumbs={crumbs}>
+  <PageHero title="Terms of service" crumbs={crumbs} tag="Booking terms" seed={2} />
   <div class="wrap pg-article pg-legal">
     <aside class="pg-toc" aria-label="On this page">
       <details class="pg-toc__d" open>
@@ -18,13 +18,22 @@ const toc = [['bookings', 'Bookings'], ['licenses', 'Licenses and safety'], ['we
       </details>
     </aside>
     <article class="pg-prose">
-      <p class="pg-stamp"><Icon name="report" size={20} /><span><strong>Draft for review.</strong> Have these terms checked by a lawyer, and add your real deposit, cancellation and weather policies, before relying on them.</span></p>
-      <section id="bookings"><h2>Bookings</h2>
-        <p>Trips are shared trips with a minimum of 2 guests. Prices are per person and include the guide, boat and standard gear. Confirm your date, launch time and target fish with {SITE.name} before your trip.</p></section>
-      <section id="licenses"><h2>Licenses and safety</h2>
-        <p>Anglers aged 12 and older must hold a valid Oregon fishing license. Guests follow the captain's safety instructions and Oregon fish and wildlife regulations at all times.</p></section>
-      <section id="weather"><h2>Weather and river conditions</h2>
-        <p>The captain may adjust or reschedule a trip for safety, weather or river conditions.</p></section>
+      <p>These are the booking terms {SITE.name} publishes for its trips. Trips are shared trips with a minimum of 2 guests, and prices are per person.</p>
+      <section id="bookings"><h2>Bookings and deposits</h2>
+        <p><strong>Deposit.</strong> {T.deposit}</p>
+        <p><strong>Balance.</strong> {T.balance}</p></section>
+      <section id="cancel"><h2>Cancellations</h2>
+        <p><strong>Guest cancellation.</strong> {T.guestCancellation}</p>
+        <p><strong>Guide cancellation.</strong> {T.guideCancellation}</p></section>
+      <section id="trip"><h2>What is included and what to bring</h2>
+        <p><strong>Trip includes:</strong> {T.includes.join('; ')}.</p>
+        <p><strong>What to bring:</strong> {T.bring.join('; ')}.</p></section>
+      <section id="licenses"><h2>Licenses</h2>
+        <p>{REGULATIONS.license}</p>
+        <p>{REGULATIONS.columbiaEndorsement}</p>
+        <p>Crabbing: {REGULATIONS.shellfish} Regulations change; check the current rules with the Oregon Department of Fish &amp; Wildlife. See our <a href="/article/get-your-valid-oregon-fishing-license">license guide</a>.</p></section>
+      <section id="tips"><h2>Tipping</h2>
+        <p>{T.tipping} It is customary to tip 20% of the trip total.</p></section>
       <section id="contact"><h2>Contact</h2>
         <p>Questions? Call <a href={SITE.phoneHref}>{SITE.phone}</a> or email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p></section>
     </article>

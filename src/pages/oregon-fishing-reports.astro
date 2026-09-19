@@ -5,14 +5,16 @@ import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { SITE } from '../data/site';
+import { season, monthsOf } from '../data/seasons';
 const crumbs = [{ name: 'Reports', path: '/oregon-fishing-reports' }];
 const M = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
 const MN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-// 2 = core window, 1 = also fishes / more chances
+// 2 = core window, 1 = more chances. Built from src/data/seasons.ts so this page cannot disagree with the others.
+const grid = (core: Parameters<typeof season>[0][], more: Parameters<typeof season>[0][] = []) => Array.from({ length: 12 }, (_, i) => (core.some((k) => monthsOf(season(k)).includes(i)) ? 2 : more.some((k) => monthsOf(season(k)).includes(i)) ? 1 : 0));
 const entries = [
-  { icon: 'fishJump', title: 'Winter steelhead', when: 'January to April', months: [2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0], where: 'Coastal and tributary rivers', body: 'Early mornings and tide-influenced windows often fish best.' },
-  { icon: 'fish', title: 'Spring salmon', when: 'Spring and early summer, more in fall', months: [0, 0, 2, 2, 2, 2, 1, 0, 1, 1, 1, 0], where: 'Columbia and Willamette rivers', body: 'Strong Chinook runs in spring, with more chances again in fall.' },
-  { icon: 'crab', title: 'Dungeness crab', when: 'October to December', months: [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2], where: 'Family-friendly fall charters', body: 'Fall crabbing charters for fresh Dungeness crab and family fun.' },
+  { icon: 'fishJump', title: 'Winter steelhead', when: 'January to April', months: grid(['steelhead']), where: 'Coastal and tributary rivers', body: 'Early mornings and tide-influenced windows often fish best.' },
+  { icon: 'fish', title: 'Spring salmon', when: 'Spring and early summer, more in fall', months: grid(['chinook'], ['fall']), where: 'Columbia and Willamette rivers', body: 'Strong Chinook runs in spring, with more chances again in fall.' },
+  { icon: 'crab', title: 'Dungeness crab', when: 'October to December', months: grid(['crab']), where: 'Family-friendly fall charters', body: 'Fall crabbing charters for fresh Dungeness crab and family fun.' },
 ] as const;
 const label = (m: readonly number[]) => MN.filter((_, i) => m[i] === 2).join(', ');
 ---
@@ -22,7 +24,7 @@ const label = (m: readonly number[]) => MN.filter((_, i) => m[i] === 2).join(', 
     <div class="wrap gb-log__grid">
       <aside class="gb-log__now" data-reveal="up">
         <h2>Today's report</h2>
-        <p>Conditions change by the hour, so the freshest word comes straight from the boat. Call Captain Clinton and he'll tell you what's biting and when to go.</p>
+        <p>Conditions change by the hour, so the freshest word comes straight from the boat. For current conditions, call or email Captain Clinton.</p>
         <a class="btn btn--cream" data-magnetic href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
         <p class="gb-log__stamp">Fall trips are being scheduled from the third week of September.</p>
       </aside>

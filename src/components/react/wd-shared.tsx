@@ -113,7 +113,7 @@ export function useDragDismiss(sheetRef: RefObject<HTMLElement | null>, gripRef:
   }, [sheetRef, gripRef, onClose, active]);
 }
 
-/** The BDC crest in a medallion. `logo-mark.png` is the real crest artwork. */
+/** The BDC crest in a medallion. `crest-140.webp` is the real crest artwork. */
 export function Crest({ size = 40 }: { size?: number }) {
   return (
     <span className="wd-crest" style={{ width: size, height: size }} aria-hidden="true">

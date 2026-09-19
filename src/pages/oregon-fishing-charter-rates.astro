@@ -10,6 +10,10 @@ import TripPlanner from '../components/react/TripPlanner';
 import { PHOTOS } from '../data/photos';
 import { TRIPS } from '../data/trips';
 import { SITE } from '../data/site';
+// Prices and lengths come from TRIPS so this board can never disagree with the trip cards.
+const halfDay = TRIPS.find((t) => t.hours === 4)!;
+const crab = TRIPS.find((t) => t.kind === 'crab')!;
+const fullDay = TRIPS.find((t) => t.hours === 8)!;
 const crumbs = [{ name: 'Trips & Rates', path: '/oregon-fishing-charter-rates' }];
 const plannerTrips = TRIPS.map(({ slug, name, hours, price, boat, capacity, kind, species, season }) => ({ slug, name, hours, price, boat, capacity, kind, species, season }));
 const formTrips = TRIPS.map(({ slug, name, price, capacity, boat, hours }) => ({ slug, name, price, capacity, boat, hours }));
@@ -22,7 +26,7 @@ const rows = [
 ---
 <Base
   title="Oregon Fishing Charter Trips & Rates"
-  description="Guided Oregon fishing charters from $150 per person: salmon and steelhead trips, drift boat trips and fall Dungeness crabbing. Guide and gear included."
+  description={`Guided Oregon fishing charters from $${Math.min(...TRIPS.map((t) => t.price))} per person: salmon and steelhead trips, drift boat trips and fall Dungeness crabbing. Guide and gear included.`}
   crumbs={crumbs}
 >
   <section class="tp-hero tp-hero--rates">
@@ -30,7 +34,7 @@ const rows = [
       <div class="tp-hero__copy">
         <nav class="tp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true"> / </span><span aria-current="page">Trips &amp; rates</span></nav>
         <h1 data-split>Trips &amp; rates</h1>
-        <p class="tp-hero__lede" data-reveal="up">Six guided trips with one simple price per person. Your guide, boat, and all gear come with every trip. Use the planner to see your total.</p>
+        <p class="tp-hero__lede" data-reveal="up">Six guided trips, priced per person with a 2-guest minimum. Your guide, boat and gear are included. Use the planner to see your total.</p>
         <div class="tp-hero__actions" data-reveal="up">
           <a class="btn btn--cream" href="#planner" data-magnetic>Plan your trip<Icon name="chevronDown" size={18} /></a>
           <a class="btn btn--ghost" href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
@@ -39,9 +43,9 @@ const rows = [
       <div class="tp-board" data-reveal="scale">
         <p class="tp-board__title">Price per person</p>
         <dl class="tp-board__rows">
-          <div><dt>Half day<small>4 hours</small></dt><dd><i aria-hidden="true"></i>$150</dd></div>
-          <div><dt>Crabbing<small>5 hours</small></dt><dd><i aria-hidden="true"></i>$150</dd></div>
-          <div><dt>Full day<small>8 hours</small></dt><dd><i aria-hidden="true"></i>$250</dd></div>
+          <div><dt>Half day<small>{halfDay.hours} hours</small></dt><dd><i aria-hidden="true"></i>${halfDay.price}</dd></div>
+          <div><dt>Crabbing<small>{crab.hours} hours</small></dt><dd><i aria-hidden="true"></i>${crab.price}</dd></div>
+          <div><dt>Full day<small>{fullDay.hours} hours</small></dt><dd><i aria-hidden="true"></i>${fullDay.price}</dd></div>
         </dl>
         <p class="tp-board__foot">Minimum 2 guests. 20% tip is customary.</p>
       </div>
@@ -71,7 +75,7 @@ const rows = [
           <tbody>
             {TRIPS.map((t) => (
               <tr>
-                <th scope="row"><a href={`/trips/${t.slug}`}>{t.name}</a></th>
+                <th scope="row"><a href={`/oregon-fishing-charter-rates/${t.slug}`}>{t.name}</a></th>
                 <td>{t.boatSpec}</td>
                 <td>{t.hours} hours</td>
                 <td>2 to {t.capacity}</td>
@@ -86,7 +90,7 @@ const rows = [
         {TRIPS.map((t) => (
           <li class="tp-stack__item" data-reveal="up">
             <div class="tp-stack__head">
-              <h3><a href={`/trips/${t.slug}`}>{t.name}</a></h3>
+              <h3><a href={`/oregon-fishing-charter-rates/${t.slug}`}>{t.name}</a></h3>
               <span class="tp-stack__price">${t.price}<small> pp</small></span>
             </div>
             <dl>
@@ -112,8 +116,8 @@ const rows = [
           <li><Icon name="camera" size={22} />Trip photos and videos sent to you</li>
         </ul>
         <div class="tp-tag">
-          <Picture src={PHOTOS.salmonOnBoat} alt="Guest standing on the boat with a silver salmon" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 480, 560, 840, 1120, 1680]} sizes="(min-width: 900px) 320px, 70vw" loading="lazy" />
-          <p>Silver salmon from the Willy Predator</p>
+          <Picture src={PHOTOS.salmonOnBoat} alt="Angler standing on a boat holding a fish" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 480, 560, 840, 1120, 1680]} sizes="(min-width: 900px) 320px, 70vw" loading="lazy" />
+          <p>A catch on the boat</p>
         </div>
       </div>
 
@@ -122,7 +126,7 @@ const rows = [
           <span class="tp-note__i"><Icon name="license" size={26} /></span>
           <div>
             <h3>You need an Oregon fishing license</h3>
-            <p>Anglers 12 and older need a valid Oregon fishing license. <a href="/oregon-fishing-license">Find out how to get one</a>.</p>
+            <p>Anglers 12 and older need a valid Oregon fishing license. <a href="/article/get-your-valid-oregon-fishing-license">Find out how to get one</a>.</p>
           </div>
         </div>
 

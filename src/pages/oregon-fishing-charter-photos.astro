@@ -7,30 +7,30 @@ import CtaBand from '../components/CtaBand.astro';
 import GalleryWall from '../components/react/GalleryWall';
 import * as P from '../data/photos';
 const { PHOTOS, GALLERY } = P;
-const META: Record<string, { maxDisplay?: number }> = (P as any).PHOTO_META ?? {};
+const META: Record<string, { maxDisplay?: number }> = P.PHOTO_META ?? {};
 const crumbs = [{ name: 'Gallery', path: '/oregon-fishing-charter-photos' }];
 
+// Categories describe visible content only (species are not confirmed, so there is no species filter).
 const CAT: Record<string, string> = {
-  chinookLake: 'Salmon', salmonSeated: 'Salmon', salmonTeal: 'Salmon', chinookGloves: 'Salmon', salmonOnBoat: 'Salmon',
-  winterSteelhead: 'Steelhead', steelheadRiverbank: 'Steelhead', steelheadBlue: 'Steelhead', steelheadDrift: 'Steelhead',
   dungenessCrab: 'Crab',
+  oregonCoast: 'On the water', channelBuoy: 'On the water', fishfinder: 'On the water',
 };
-const cats = ['Salmon', 'Steelhead', 'Crab', 'On the water'];
+const cats = ['Catches', 'Crab', 'On the water'];
 
 const items = await Promise.all(
   GALLERY.map(async (g) => {
     const m = PHOTOS[g.key];
     const maxDisplay = META[g.key]?.maxDisplay ?? 560;
     const tw = [360, 540, 720, 1080].map((w) => Math.min(w, m.width));
-    const thumbs = await Promise.all(tw.map((w) => getImage({ src: m, width: w, format: 'avif', quality: 66 })));
+    const thumbs = await Promise.all(tw.map((w) => getImage({ src: m, width: w, format: 'avif', quality: 66, layout: 'none' })));
     const fw = [maxDisplay, Math.round(maxDisplay * 1.5), maxDisplay * 2].map((w) => Math.min(w, m.width));
-    const fulls = await Promise.all(fw.map((w) => getImage({ src: m, width: w, format: 'webp' })));
+    const fulls = await Promise.all(fw.map((w) => getImage({ src: m, width: w, format: 'webp', layout: 'none' })));
     const t = thumbs[1];
         return {
       id: g.key,
       alt: g.alt,
       caption: g.caption,
-      cat: CAT[g.key] ?? 'On the water',
+      cat: CAT[g.key] ?? 'Catches',
       ratio: m.width / m.height,
       thumb: { src: t.src, srcset: thumbs.map((x, i) => `${x.src} ${tw[i]}w`).join(', '), width: Number(t.attributes.width), height: Number(t.attributes.height) },
       full: { src: fulls[0].src, srcset: fulls.map((x, i) => `${x.src} ${fw[i]}w`).join(', '), width: Number(fulls[0].attributes.width), height: Number(fulls[0].attributes.height), maxDisplay },
@@ -38,8 +38,8 @@ const items = await Promise.all(
   }),
 );
 ---
-<Base title="Oregon Fishing Charter Photos" description="Photos from BDC Guide Service trips: Chinook salmon, winter steelhead, Dungeness crab and happy guests on the Columbia, Willamette and Oregon coastal rivers." crumbs={crumbs}>
-  <PageHero title="Trip gallery" lede="Real guests, real fish, real Oregon water." crumbs={crumbs} />
+<Base title="Oregon Fishing Charter Photos" description="Photos of anglers, catches and crab from Oregon fishing trips with BDC Guide Service." crumbs={crumbs}>
+  <PageHero title="Trip gallery" lede="Anglers, catches and views from the water." crumbs={crumbs} />
   <section class="gb-gallery section" style="padding-top:0">
     <div class="wrap">
       <GalleryWall client:load items={items} cats={cats} />

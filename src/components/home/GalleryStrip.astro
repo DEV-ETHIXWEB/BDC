@@ -62,7 +62,11 @@ const items = GALLERY.map((g) => {
         next.disabled = vp.scrollLeft > max - 4;
       };
       vp.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
-      window.addEventListener('resize', update);
+      // window listeners are removed when the page is swapped out (Astro view transitions), so they do not pile up
+      const ac = new AbortController();
+      const { signal } = ac;
+      document.addEventListener('astro:before-swap', () => ac.abort(), { once: true });
+      window.addEventListener('resize', update, { signal });
       prev.addEventListener('click', () => vp.scrollBy({ left: -step(), behavior: 'smooth' }));
       next.addEventListener('click', () => vp.scrollBy({ left: step(), behavior: 'smooth' }));
       vp.addEventListener('keydown', (e) => {
@@ -82,10 +86,10 @@ const items = GALLERY.map((g) => {
         const dx = e.clientX - sx;
         if (!moved && Math.abs(dx) > 4) { moved = true; vp.classList.add('is-drag'); }
         if (moved) vp.scrollLeft = sl - dx;
-      });
+      }, { signal });
       const end = () => { if (!down) return; down = false; vp.classList.remove('is-drag'); };
-      window.addEventListener('pointerup', end);
-      window.addEventListener('pointercancel', end);
+      window.addEventListener('pointerup', end, { signal });
+      window.addEventListener('pointercancel', end, { signal });
       update();
     });
   }

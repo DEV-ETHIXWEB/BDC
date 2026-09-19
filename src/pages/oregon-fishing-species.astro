@@ -9,13 +9,14 @@ import TocSpy from '../components/pg/TocSpy.astro';
 import ContourPattern from '../components/art/ContourPattern.astro';
 import { PHOTOS } from '../data/photos';
 import { SPECIES } from '../data/content';
+import { season, monthsOf, MONTHS_FULL, SEASON_DISCLAIMER } from '../data/seasons';
 const crumbs = [{ name: 'Target Species', path: '/oregon-fishing-species' }];
 const MONTHS = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTH_NAMES = [...MONTHS_FULL];
 const CAL: Record<string, { main: number[]; alt?: number[]; mainLabel: string; altLabel?: string; rivers: string[]; short: string }> = {
-  'chinook-salmon': { main: [3, 4, 5, 6], alt: [8, 9, 10], mainLabel: 'Spring and early summer', altLabel: 'Fall, more chances', rivers: ['Columbia River', 'Willamette River'], short: 'Chinook' },
-  'steelhead-trout': { main: [0, 1, 2, 3], mainLabel: 'January through April', rivers: ['Wilson River', 'Trask River', 'Sandy River', 'Clackamas River', 'Nestucca River'], short: 'Steelhead' },
-  'dungeness-crab': { main: [9, 10, 11], mainLabel: 'October through December', rivers: [], short: 'Crab' },
+  'chinook-salmon': { main: monthsOf(season('chinook')), alt: monthsOf(season('fall')), mainLabel: 'Spring and early summer (approx.)', altLabel: 'Fall, more chances (approx.)', rivers: ['Columbia River', 'Willamette River'], short: 'Chinook' },
+  'steelhead-trout': { main: monthsOf(season('steelhead')), mainLabel: 'January through April', rivers: ['Wilson River', 'Trask River', 'Sandy River', 'Clackamas River', 'Nestucca River'], short: 'Steelhead' },
+  'dungeness-crab': { main: monthsOf(season('crab')), mainLabel: 'October through December', rivers: [], short: 'Crab' },
 };
 ---
 <Base title="Oregon Fishing Species" description="Learn about the fish and shellfish we target in Oregon: Chinook salmon, winter steelhead and Dungeness crab. Sizes, seasons, best techniques and rivers." crumbs={crumbs}>
@@ -51,9 +52,9 @@ const CAL: Record<string, { main: number[]; alt?: number[]; mainLabel: string; a
             <div class="pg-plate__body">
               <div class="pg-plate__data">
                 <dl class="pg-vitals" data-stagger>
-                  <div data-reveal="up"><dt>Weight</dt><dd>{s.weight}</dd></div>
-                  <div data-reveal="up"><dt>Length</dt><dd>{s.length}</dd></div>
-                  <div data-reveal="up"><dt>Habitat</dt><dd class="pg-vitals__txt">{s.habitat}</dd></div>
+                  {s.weight && <div data-reveal="up"><dt>Weight</dt><dd>{s.weight}</dd></div>}
+                  {s.length && <div data-reveal="up"><dt>Length</dt><dd>{s.length}</dd></div>}
+                  {s.habitat && <div data-reveal="up"><dt>Habitat</dt><dd class="pg-vitals__txt">{s.habitat}</dd></div>}
                 </dl>
                 <div class="pg-season" role="img" aria-label={`Season: ${c.mainLabel}${c.altLabel ? `; ${c.altLabel}` : ''}`}>
                   <div class="pg-season__bar" data-reveal="line">
@@ -64,18 +65,18 @@ const CAL: Record<string, { main: number[]; alt?: number[]; mainLabel: string; a
                   <p class="pg-season__key"><i class="k-on"></i>{c.mainLabel}{c.altLabel && <><i class="k-alt"></i>{c.altLabel}</>}</p>
                 </div>
                 <p class="pg-plate__season">{s.season}</p>
-                <p class="pg-plate__fine">Bars show typical windows, not guarantees. Conditions change year to year.</p>
+                {c.altLabel && <p class="pg-plate__fine">{SEASON_DISCLAIMER}</p>}
               </div>
               <div class="pg-plate__notes">
                 <div class="pg-plate__photo" data-reveal="up">
-                  <Picture src={PHOTOS[s.photo]} alt={`${s.name} caught on a BDC Guide Service trip`} formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[240, 360, 480, 720, 960, 1440]} sizes="(min-width: 900px) 240px, 46vw" loading="lazy" />
+                  <Picture src={PHOTOS[s.photo]} alt={`${s.name}: angler with a catch`} formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[240, 360, 480, 720, 960, 1440]} sizes="(min-width: 900px) 240px, 46vw" loading="lazy" />
                 </div>
                 <div class="pg-note">
                   <h3>Technique</h3>
                   <p>{s.technique}</p>
                 </div>
                 <div class="pg-note pg-note--tip">
-                  <h3>Key tip</h3>
+                  <h3>Good to know</h3>
                   <p>{s.tip}</p>
                 </div>
               </div>

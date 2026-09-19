@@ -7,7 +7,7 @@ import '../styles/home-top.css';
 
 interface Props { trip: Trip; variant?: 'tag' | 'feature' | 'row'; headingLevel?: 'h2' | 'h3' | 'h4'; eager?: boolean }
 const { trip, variant = 'tag', headingLevel = 'h3', eager = false } = Astro.props;
-const H = headingLevel as any;
+const H = headingLevel as 'h2' | 'h3' | 'h4';
 const kindLabel = trip.kind === 'crab' ? 'Crabbing' : trip.kind === 'drift' ? 'Drift boat' : 'River boat';
 const chipIcon = trip.kind === 'crab' ? 'crab' : trip.kind === 'drift' ? 'driftBoat' : 'boat';
 const catchRow = trip.season ? { k: 'Season', v: trip.season.replace('October through December', 'Oct to Dec') } : { k: 'Targets', v: trip.species.slice(0, 2).join(', ') };
@@ -18,10 +18,10 @@ const catchRow = trip.season ? { k: 'Season', v: trip.season.replace('October th
     <span class="ht-trip__hole" aria-hidden="true"></span>
   </div>
   <div class="ht-trip__media">
-    <Picture src={PHOTOS[trip.photo]} alt="" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 520, 760, 1140, 1520, 2280]} sizes={variant === 'feature' ? '(min-width: 1100px) 680px, (min-width: 640px) 60vw, 92vw' : '(min-width: 1100px) 520px, (min-width: 640px) 46vw, 92vw'} loading={eager ? 'eager' : 'lazy'} />
+    <Picture src={PHOTOS[trip.photo]} alt="" formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[320, 520, 760, 1140, 1520, 2280]} sizes={variant === 'feature' ? '(min-width: 1500px) 940px, (min-width: 1100px) 680px, (min-width: 640px) 60vw, 92vw' : '(min-width: 1100px) 520px, (min-width: 640px) 46vw, 92vw'} loading={eager ? 'eager' : 'lazy'} />
   </div>
   <div class="ht-trip__body">
-    <H class="ht-trip__name"><a href={`/trips/${trip.slug}`}>{trip.name}</a></H>
+    <H class="ht-trip__name"><a href={`/oregon-fishing-charter-rates/${trip.slug}`}>{trip.name}</a></H>
     <p class="ht-trip__short">{trip.short}</p>
     <dl class="ht-trip__rows">
       <div><dt>Hours</dt><dd>{trip.hours}</dd></div>

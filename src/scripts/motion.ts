@@ -1,6 +1,6 @@
 /**
  * BDC motion runtime. Vanilla, dependency free, progressive enhancement.
- * Contract (see DESIGN.md): data-reveal, data-stagger, data-parallax, data-count(+suffix),
+ * Contract (see docs/design-system.md): data-reveal, data-stagger, data-parallax, data-count(+suffix),
  * data-magnetic, data-split, scroll progress, header condense, smooth anchors.
  * Hidden states live in global.css and only apply under html.js-motion.
  */
@@ -182,12 +182,20 @@ function initNav() {
   place(current);
   const enter = (e: Event) => place(e.currentTarget as HTMLElement);
   const leave = () => place(current);
-  if (hoverFine.matches) links.forEach((a) => { a.addEventListener('pointerenter', enter); a.addEventListener('focus', enter); a.addEventListener('blur', leave); });
+  // The header persists across page transitions, so every listener added here must be removed again by teardown().
+  const off: Array<() => void> = [];
+  if (hoverFine.matches) {
+    links.forEach((a) => {
+      a.addEventListener('pointerenter', enter); a.addEventListener('focus', enter); a.addEventListener('blur', leave);
+      off.push(() => { a.removeEventListener('pointerenter', enter); a.removeEventListener('focus', enter); a.removeEventListener('blur', leave); });
+    });
+  }
   nav.addEventListener('pointerleave', leave);
+  off.push(() => nav.removeEventListener('pointerleave', leave));
   const onResize = () => place(current);
   addEventListener('resize', onResize);
   document.fonts?.ready.then(() => place(current));
-  cleanups.push(() => removeEventListener('resize', onResize));
+  cleanups.push(() => { removeEventListener('resize', onResize); off.forEach((f) => f()); });
 }
 
 /* ───────── smooth anchors (delegated once) ───────── */
@@ -225,7 +233,7 @@ function init() {
   teardown();
   const on = motionAllowed();
   root.classList.toggle('js-motion', on);
-  (window as any).__bdcMotion = true;
+  (window as Window & { __bdcMotion?: boolean }).__bdcMotion = true;
   initNav();
   bindGlobals();
   onScroll();
@@ -243,3 +251,5 @@ function init() {
 
 document.addEventListener('astro:page-load', init);
 if (document.readyState !== 'loading') init();
+
+export {};

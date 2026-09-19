@@ -12,15 +12,15 @@ const crumbs = [{ name: 'Reviews', path: '/oregon-fishing-charter-reviews' }];
 const reviews: Review[] = [];
 const body = encodeURIComponent('Hi Captain Clinton,\n\nTrip I took (salmon, steelhead or crab):\nApproximate date:\nWhat stood out:\n\nMy name as I would like it shown:\nOK to publish this review on your website? (yes/no)\n');
 ---
-<Base title="Oregon Fishing Charter Reviews" description="Read what guests say about fishing with BDC Guide Service and Captain Clinton McCulloch: successful trips, memorable catches and personalized service." crumbs={crumbs}>
-  <PageHero title="Guest reviews" lede="Our clients consistently share positive feedback about successful trips, memorable catches, and personalized service." crumbs={crumbs} />
+<Base title="Oregon Fishing Charter Reviews" description="Guest reviews for BDC Guide Service fishing and crabbing charters in Oregon. Been on a trip? Send us a few lines about it." crumbs={crumbs}>
+  <PageHero title="Guest reviews" lede="Guest reviews of BDC Guide Service trips." crumbs={crumbs} />
   <section class="section gb-reviews" style="padding-top:0">
     <div class="wrap">
       {reviews.length === 0 ? (
         <div class="gb-invite">
           <div class="gb-invite__copy">
             <h2 data-reveal="up">Been out with Captain Clinton?</h2>
-            <p data-reveal="fade">We're moving guest reviews to the new site, and this page is waiting for yours. Send a few lines about your trip and, with your OK, it goes on the wall.</p>
+            <p data-reveal="fade">There are no reviews on this page yet. If you have been out with Captain Clinton, send a few lines about your trip and, with your OK, we will post it here.</p>
             <div class="gb-invite__actions" data-reveal="fade">
               <a class="btn btn--primary" data-magnetic href={`mailto:${SITE.email}?subject=${encodeURIComponent('My BDC trip review')}&body=${body}`}><Icon name="mail" size={18} />Email your review</a>
               <a class="btn btn--ghost gb-invite__call" href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
@@ -29,7 +29,7 @@ const body = encodeURIComponent('Hi Captain Clinton,\n\nTrip I took (salmon, ste
           <aside class="gb-slip" aria-label="What to include in your review" data-reveal="scale">
             <p class="gb-slip__title">Guest book slip</p>
             <dl>
-              <div><dt>Trip</dt><dd>Salmon, steelhead or crab</dd></div>
+              <div><dt>Trip</dt><dd>Which trip you took</dd></div>
               <div><dt>Date</dt><dd>Roughly when you fished</dd></div>
               <div><dt>Story</dt><dd>What you caught, what you'll remember</dd></div>
               <div><dt>Name</dt><dd>As you'd like it shown</dd></div>

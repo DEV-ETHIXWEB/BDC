@@ -551,7 +551,7 @@ button { font-family: inherit; }
 
 /* ───────── 11. Motion contract (runtime: src/scripts/motion.ts) ─────────
    Hidden states apply ONLY under html.js-motion, so no-JS and reduced-motion users see everything. */
-html.js-motion [data-reveal]:not(.is-in) { opacity: 0; will-change: transform, opacity; }
+html.js-motion [data-reveal]:not(.is-in) { opacity: 0; }
 html.js-motion [data-reveal='up']:not(.is-in),
 html.js-motion [data-reveal='']:not(.is-in) { transform: translate3d(0, 32px, 0); }
 /* scale + mask never hide the element fully: photos are often the LCP element and must be painted at first paint */
@@ -561,7 +561,7 @@ html.js-motion [data-reveal='line']:not(.is-in) { opacity: 1; transform: scaleX(
 html.js-motion [data-reveal] {
   transition: opacity var(--dur-4) var(--ease-out) var(--d, 0ms), transform 1s var(--ease-out) var(--d, 0ms), clip-path 1.1s var(--ease-out) var(--d, 0ms);
 }
-html.js-motion [data-reveal].is-in { opacity: 1; transform: none; clip-path: inset(0 0 0 0); will-change: auto; }
+html.js-motion [data-reveal].is-in { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
 html.js-motion [data-reveal='line'].is-in { transform: scaleX(1); }
 html.js-motion [data-reveal='mask']:not(.is-in) { transition: none; }
 
@@ -569,7 +569,7 @@ html.js-motion [data-reveal='mask']:not(.is-in) { transition: none; }
 [data-split] .w { display: inline-block; overflow: hidden; vertical-align: top; padding-block: 0.06em 0.16em; margin-block: -0.06em -0.16em; }
 [data-split] .wi { display: inline-block; }
 html.js-motion [data-split]:not(.is-in) .wi { transform: translate3d(0, 108%, 0); }
-html.js-motion [data-split] .wi { transition: transform 1s var(--ease-out) calc(var(--l, 0) * 110ms + var(--i, 0) * 28ms); will-change: transform; }
+html.js-motion [data-split] .wi { transition: transform 1s var(--ease-out) calc(var(--l, 0) * 110ms + var(--i, 0) * 28ms); }
 html.js-motion [data-split].is-in .wi { transform: none; will-change: auto; }
 html.js-motion [data-split]:not([data-split-ready]) { visibility: hidden; }   /* until words are wrapped: prevents a flash */
 
@@ -582,7 +582,7 @@ html.js-motion [data-split]:not([data-split-ready]) { visibility: hidden; }   /*
 @supports not (animation-timeline: view()) { html.js-motion [data-parallax] { translate: 0 calc(var(--py, 0) * 1px); will-change: translate; } }
 
 [data-count] { font-variant-numeric: tabular-nums; }
-[data-magnetic] { will-change: translate; }
+
 
 /* view transitions */
 @keyframes vt-out { to { opacity: 0; transform: translate3d(0, -14px, 0) scale(0.995); } }

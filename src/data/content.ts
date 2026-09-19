@@ -1,3 +1,6 @@
+// Chinook and steelhead figures, seasons and tips are taken from the "Target Species" page of the previous
+// bdcguideservices.com. The crab entry uses only what the owner's crabbing pages state (no size/weight/habitat figures
+// are given there, so none are shown).
 export const SPECIES = [
   {
     slug: 'chinook-salmon',
@@ -35,47 +38,46 @@ export const SPECIES = [
     name: 'Dungeness Crab',
     latin: 'Metacarcinus magister',
     family: 'Cancridae',
-    weight: '1-3 lb',
-    length: '6-9 in',
-    habitat: 'Sandy and eelgrass bottoms in bays and nearshore waters',
+    weight: null,
+    length: null,
+    habitat: null,
     season: 'Our crabbing charters run October through December.',
-    technique: 'Baited pots and rings pulled by hand, with the captain sorting keepers.',
-    tip: 'Bring a cooler and a hungry family: it is the freshest crab you will ever eat.',
+    technique: 'Crab pots with fresh bait. Captain Clinton shows you how to bait a pot and how to tell legal keepers from the ones that go back.',
+    tip: 'Keepers are male Dungeness crab at least 5\u00be inches across the shell. Female crabs always go back.',
     icon: 'crab',
     photo: 'dungenessCrab',
   },
 ] as const;
 
+// The ten questions and answers from the previous site's FAQ page, wording unchanged except three obvious typos
+// ("Where in Oregon to we meet" -> "do we", "12 year" -> "12 years", "bring you own gear" -> "your own gear").
 export const FAQS = [
   {
     q: 'Where does BDC Guide Service fish?',
-    a: 'We fish the Oregon area, including Eagle Creek, Lithgow Creek, Clear Creek, Deep Creek, Clackamette Cove, Eda Creek and Van Zyl Reservoir, plus the big rivers below.',
+    a: 'We fish the Oregon area, including Eagle Creek, Lithgow Creek, Clear Creek, Deep Creek, Clackamette Cove, Eda Creek, Van Zyl Reservoir.',
+  },
+  { q: 'What are the target fish?', a: 'Target fish include Winter Steelhead, Spring Salmon' },
+  { q: 'Where in Oregon do we meet our guests?', a: 'We meet at 9018 Southeast Bridge Crk Ct, Happy Valley, OR 97015, USA' },
+  { q: 'Do I need a state fishing license?', a: 'Yes, a Fishing license is required' },
+  {
+    q: 'Where do I get a state fishing license?',
+    a: 'Oregon Department of Fish & Wildlife - Fishing An Oregon fishing license is required for anyone aged 12 years or older. All anglers (regardless of age) need a valid angling tag and must follow regulations on recording harvest. All anglers, regardless of age, must have in possession a valid Columbia River Basin Endorsement when angling for salmon, steelhead and sturgeon in the mainstem Columbia River, and in all rivers and their tributaries that flow into the Columbia River. Please visit the Oregon Department of Fish & Wildlife website for more information and to purchase your license.',
+  },
+  { q: 'How much should I tip?', a: 'It is customary to tip 20% of the trip total. We work tirelessly to make sure you have a guest experience!' },
+  {
+    q: 'Do I need to bring my own gear?',
+    a: "No, we provide standard gear such as rods and reels so you don\u2019t need to worry about anything. But please feel free to bring your own gear if you prefer.",
   },
   {
     q: 'What rivers do you fish in Oregon?',
-    a: 'BDC Guide Service fishes several top Oregon rivers, including the Columbia, Willamette, Wilson, Trask, Sandy, Clackamas and Nestucca.',
-  },
-  { q: 'What are the target fish?', a: 'Target fish include winter steelhead, spring salmon and, in fall, Dungeness crab.' },
-  {
-    q: 'Where do we meet our guests?',
-    a: 'We meet at 9018 Southeast Bridge Crk Ct, Happy Valley, OR 97015, USA.',
-  },
-  { q: 'Do I need a state fishing license?', a: 'Yes, a fishing license is required.' },
-  {
-    q: 'Where do I get a state fishing license?',
-    a: 'Contact the Oregon Department of Fish & Wildlife. An Oregon fishing license is required for anyone aged 12 or older, and some waters need additional endorsements.',
-  },
-  { q: 'How much should I tip?', a: 'It is customary to tip 20% of the trip total.' },
-  {
-    q: 'Do I need to bring my own gear?',
-    a: "No. We provide standard gear such as rods and reels so you don't need to worry about anything.",
+    a: 'BDC Guide Service fishes several top Oregon rivers, including the Columbia, Willamette, Wilson, Trask, Sandy, Clackamas, and Nestucca. The exact location depends on the season and where fish are actively biting.',
   },
   {
     q: 'How early do fishing trips start?',
-    a: 'Trips can begin as early as 4:00 AM, especially for salmon fishing when early morning conditions are most productive.',
+    a: 'Trips can begin as early as 4:00 AM, especially for salmon fishing when early morning conditions are most productive. Start times are adjusted based on the season and target species.',
   },
   {
     q: 'How many people can join a fishing trip?',
-    a: 'The Willy Predator accommodates up to 6 anglers (often limited to 4 for comfort), while the Alumaweld drift boat takes up to 3 guests for a more intimate experience.',
+    a: 'Group size depends on the boat used. The Willy Predator can take up to 6 anglers (often limited to 4 for comfort), while the Alumaweld drift boat accommodates up to 3 guests for a more personal experience.',
   },
 ] as const;

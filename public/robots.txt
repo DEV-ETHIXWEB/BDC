@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://www.bdcguideservices.com/sitemap-index.xml

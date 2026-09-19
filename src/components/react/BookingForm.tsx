@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button, FieldError, Form, Input, Label, Radio, RadioGroup, TextArea, TextField } from 'react-aria-components';
 import { Icon } from './Icon';
+import { SITE } from '../../data/site';
 
 interface Props {
   trips: { slug: string; name: string; price: number; capacity?: number; boat?: string; hours?: number }[];
@@ -8,8 +9,9 @@ interface Props {
   defaultTrip?: string;
 }
 
-// If PUBLIC_FORM_ENDPOINT is set at build time (Formspree, Basin, Netlify, etc.) the form POSTs
-// there. Otherwise it opens the visitor's mail app with the request pre-filled, so it always works.
+// If PUBLIC_FORM_ENDPOINT is set at build time (Formspree, Basin, Netlify, etc.) the form POSTs there and
+// only a confirmed 2xx response is shown as "sent". Without it the form can NOT know whether anything was
+// delivered, so it opens the visitor's mail app and says plainly that the request is not sent yet.
 const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
 
 const CAPACITY_BY_NAME: Record<string, number> = { 'Willy Predator': 6, 'Alumaweld Guide Model': 3 };
@@ -31,7 +33,13 @@ const validators = {
 };
 
 export default function BookingForm({ trips, email, defaultTrip }: Props) {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error'>('idle');
+  const [copied, setCopied] = useState(false);
+  const submitting = useRef(false);
+  // Computed after mount: on a static site, doing it during render would freeze the BUILD date into the HTML.
+  const [today, setToday] = useState('');
+  useEffect(() => { setToday(todayIso()); }, []);
+  const [draft, setDraft] = useState<{ body: string; subject: string } | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
   const [tripName, setTripName] = useState(defaultTrip ?? trips[0].name);
   const [guests, setGuests] = useState(2);
@@ -48,7 +56,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
   const trip = trips.find((t) => t.name === tripName) ?? trips[0];
   const cap = trip.capacity ?? (trip.boat ? CAPACITY_BY_NAME[trip.boat] : undefined) ?? 6;
   const capErr = guests > cap ? `${trip.name} carries up to ${cap} guests. Choose ${cap} or fewer, or pick a Willy Predator trip for larger groups.` : '';
-  const dateErr = date && date < todayIso() ? 'Pick today or a later date, or leave it blank if you are flexible.' : '';
+  const dateErr = date && today && date < today ? 'Pick today or a later date, or leave it blank if you are flexible.' : '';
   const errs = { name: validators.name(name), phone: validators.phone(phone), email: validators.email(mail) };
   const touch = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
   const show = (k: keyof typeof errs) => (touched[k] && errs[k] ? errs[k] : '');
@@ -90,19 +98,54 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
     const company = (new FormData(e.currentTarget).get('company') as string) || '';
     if (company) return; // honeypot
     const data = { name: name.trim(), phone: phone.trim(), email: mail.trim(), trip: tripName, guests: String(guests), date, message: message.trim() };
+    // A mailto: URL has practical length limits, so the request is capped; the full text is still shown for copying.
     const body = `Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email}\nTrip: ${data.trip}\nGuests: ${data.guests}\nPreferred date: ${data.date || 'flexible'}\n\n${data.message || ''}`;
     if (!ENDPOINT) {
-      window.location.href = `mailto:${email}?subject=${encodeURIComponent('Trip request: ' + data.trip)}&body=${encodeURIComponent(body)}`;
-      setStatus('sent');
+      setDraft({ body, subject: 'Trip request: ' + data.trip });
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent('Trip request: ' + data.trip)}&body=${encodeURIComponent(body.slice(0, 1800))}`;
+      setStatus('draft');
       return;
     }
+    if (submitting.current) return; // ignore double submits fired in the same tick
+    submitting.current = true;
     setStatus('sending');
     try {
       const res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
       setStatus(res.ok ? 'sent' : 'error');
     } catch {
       setStatus('error');
+    } finally {
+      submitting.current = false;
     }
+  }
+
+  if (status === 'draft' && draft) {
+    // Nothing has been delivered: the visitor still has to press send in their mail app.
+    const href = `mailto:${email}?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(draft.body)}`;
+    const copy = async () => {
+      try { await navigator.clipboard.writeText(`To: ${email}\nSubject: ${draft.subject}\n\n${draft.body}`); setCopied(true); } catch { setCopied(false); }
+    };
+    return (
+      <div className="tp-form tp-done tp-done--draft" role="status">
+        <span className="tp-done__mark tp-done__mark--draft" aria-hidden="true"><Icon name="mail" size={36} /></span>
+        <h3 ref={headRef} tabIndex={-1}>Your request is not sent yet</h3>
+        <p>
+          Your email app should be opening with the request filled in. <strong>Press send there</strong> to finish. If nothing
+          opened, copy the request and email it to {email}, or call <a href={SITE.phoneHref}>{SITE.phone}</a>.
+        </p>
+        <div className="tp-done__actions">
+          <a className="btn btn--primary btn--sm" href={href}>Open email again</a>
+          <button type="button" className="btn btn--ghost btn--sm" onClick={copy}>{copied ? 'Copied' : 'Copy request'}</button>
+          <button type="button" className="btn btn--ghost btn--sm" onClick={() => { setStatus('idle'); setCopied(false); }}>Edit request</button>
+        </div>
+        <dl className="tp-done__sum">
+          <div><dt>Trip</dt><dd>{tripName}</dd></div>
+          <div><dt>Guests</dt><dd>{guests}</dd></div>
+          <div><dt>Date</dt><dd>{fmtDate(date)}</dd></div>
+          <div><dt>Estimate</dt><dd>{money(trip.price * guests)}</dd></div>
+        </dl>
+      </div>
+    );
   }
 
   if (status === 'sent') {
@@ -111,13 +154,8 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
         <span className="tp-done__mark" aria-hidden="true">
           <svg viewBox="0 0 48 48" width="48" height="48"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" strokeWidth="2.5" pathLength="1" className="tp-done__ring" /><path d="M14 25l7 7 13-15" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" pathLength="1" className="tp-done__tick" /></svg>
         </span>
-        <h3 ref={headRef} tabIndex={-1}>{ENDPOINT ? 'Request sent' : 'Your request is ready'}</h3>
-        <p>
-          {ENDPOINT
-            ? 'Captain Clinton will reply as soon as he is off the water.'
-            : `Your email app is opening with this request filled in. Press send there. If nothing opens, write to ${email}.`}{' '}
-          For a faster answer, call (503) 826-7294.
-        </p>
+        <h3 ref={headRef} tabIndex={-1}>Request sent</h3>
+        <p>Captain Clinton will reply as soon as he is off the water. For a faster answer, call <a href={SITE.phoneHref}>{SITE.phone}</a>.</p>
         <dl className="tp-done__sum">
           <div><dt>Trip</dt><dd>{tripName}</dd></div>
           <div><dt>Guests</dt><dd>{guests}</dd></div>
@@ -129,7 +167,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
   }
 
   return (
-    <Form className="tp-form" onSubmit={onSubmit} validationBehavior="aria" ref={formRef} noValidate>
+    <Form className="tp-form" onSubmit={onSubmit} validationBehavior="aria" ref={formRef}>
       <ol className="tp-steps" aria-label="Progress">
         <li data-on={step === 1 ? '' : undefined} data-done={step > 1 ? '' : undefined} aria-current={step === 1 ? 'step' : undefined}><span>1</span>Your trip</li>
         <li data-on={step === 2 ? '' : undefined} aria-current={step === 2 ? 'step' : undefined}><span>2</span>Your details</li>
@@ -164,7 +202,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
             </div>
 
             <div className="tp-fl tp-fl--date" data-invalid={dateErr ? '' : undefined}>
-              <input id="tp-date" type="date" name="date" value={date} min={todayIso()} onChange={(e) => setDate(e.target.value)} onBlur={() => touch('date')} aria-invalid={dateErr ? true : undefined} aria-describedby={dateErr ? 'tp-date-e' : 'tp-date-h'} />
+              <input id="tp-date" type="date" name="date" value={date} min={today || undefined} onChange={(e) => setDate(e.target.value)} onBlur={() => touch('date')} aria-invalid={dateErr ? true : undefined} aria-describedby={dateErr ? 'tp-date-e' : 'tp-date-h'} />
               <label htmlFor="tp-date">Preferred date</label>
               {dateErr ? <p className="tp-err" id="tp-date-e" role="alert">{dateErr}</p> : <p className="tp-help" id="tp-date-h">Optional. Captain Clinton confirms what is running.</p>}
             </div>
@@ -188,24 +226,24 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
             <strong>{tripName}</strong>, {guests} guests, {date ? fmtDate(date) : 'flexible date'}.{' '}
             <button type="button" className="tp-link" onClick={() => setStep(1)}>Change</button>
           </p>
-          <TextField className="tp-fl" name="name" isRequired autoComplete="name" value={name} onChange={setName} onBlur={() => touch('name')} isInvalid={!!show('name')}>
+          <TextField className="tp-fl" name="name" maxLength={80} isRequired autoComplete="name" value={name} onChange={setName} onBlur={() => touch('name')} isInvalid={!!show('name')}>
             <Input placeholder=" " />
             <Label>Your name</Label>
             <FieldError className="tp-err">{errs.name}</FieldError>
           </TextField>
           <div className="tp-row">
-            <TextField className="tp-fl" name="phone" type="tel" inputMode="tel" isRequired autoComplete="tel" value={phone} onChange={setPhone} onBlur={() => touch('phone')} isInvalid={!!show('phone')}>
+            <TextField className="tp-fl" name="phone" maxLength={30} type="tel" inputMode="tel" isRequired autoComplete="tel" value={phone} onChange={setPhone} onBlur={() => touch('phone')} isInvalid={!!show('phone')}>
               <Input placeholder=" " />
               <Label>Phone</Label>
               <FieldError className="tp-err">{errs.phone}</FieldError>
             </TextField>
-            <TextField className="tp-fl" name="email" type="email" inputMode="email" isRequired autoComplete="email" value={mail} onChange={setMail} onBlur={() => touch('email')} isInvalid={!!show('email')}>
+            <TextField className="tp-fl" name="email" maxLength={254} type="email" inputMode="email" isRequired autoComplete="email" value={mail} onChange={setMail} onBlur={() => touch('email')} isInvalid={!!show('email')}>
               <Input placeholder=" " />
               <Label>Email</Label>
               <FieldError className="tp-err">{errs.email}</FieldError>
             </TextField>
           </div>
-          <TextField className="tp-fl tp-fl--area" name="message" value={message} onChange={setMessage}>
+          <TextField className="tp-fl tp-fl--area" name="message" maxLength={1500} value={message} onChange={setMessage}>
             <TextArea placeholder=" " rows={3} />
             <Label>Anything we should know?</Label>
           </TextField>
@@ -215,7 +253,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
             <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
           </div>
 
-          {status === 'error' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Something went wrong sending that. Please call (503) 826-7294 or email {email}.</p>}
+          {status === 'error' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Something went wrong sending that. Please call {SITE.phone} or email {email}.</p>}
 
           <div className="tp-actions">
             <button type="button" className="tp-back" onClick={() => setStep(1)}>Back</button>

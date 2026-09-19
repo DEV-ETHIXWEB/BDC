@@ -1,4 +1,5 @@
 ---
+import type { IconName } from '../../components/icons/paths';
 import { Picture } from 'astro:assets';
 import Icon from '../Icon.astro';
 import { ICONS } from '../../components/icons/paths';
@@ -32,7 +33,7 @@ const alts: Record<string, string> = {
       <div class="hm-tabs" role="tablist" aria-label="Choose a species" aria-orientation="vertical" data-reveal="up">
         {SPECIES.map((s, i) => (
           <button type="button" role="tab" class="hm-tab" id={`hm-tab-${s.slug}`} aria-controls={`hm-panel-${s.slug}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
-            <Icon name={bigIcon[s.slug] as any} size={30} />
+            <Icon name={bigIcon[s.slug] as IconName} size={30} />
             <span><strong>{short[s.slug]}</strong><em>{s.latin}</em></span>
           </button>
         ))}
@@ -40,29 +41,31 @@ const alts: Record<string, string> = {
 
       <div class="hm-plates" data-reveal="scale">
         {SPECIES.map((s, i) => {
-          const [lo, hi] = parse(s.length);
+          const [lo, hi] = s.length ? parse(s.length) : [0, 0];
           return (
             <div class="hm-plate" role="tabpanel" id={`hm-panel-${s.slug}`} aria-labelledby={`hm-tab-${s.slug}`} tabindex="0" hidden={false} data-active={i === 0 ? 'true' : undefined}>
               <div class="hm-plate__art" aria-hidden="true">
-                <Icon name={bigIcon[s.slug] as any} size={240} class="hm-plate__icon" />
+                <Icon name={bigIcon[s.slug] as IconName} size={240} class="hm-plate__icon" />
                 <span class="hm-plate__fig">Fig. {i + 1}</span>
               </div>
               <div class="hm-plate__body">
                 <h3>{s.name}</h3>
                 <p class="hm-plate__latin"><em>{s.latin}</em>, family {s.family}</p>
 
+                {s.length && (
                 <div class="hm-ruler" role="img" aria-label={`Typical length ${s.length}`}>
                   <div class="hm-ruler__bar"><span style={`left:${(lo / scaleMax) * 100}%;width:${Math.max(((hi - lo) / scaleMax) * 100, 3)}%`}></span></div>
                   <div class="hm-ruler__ticks">{[0, 10, 20, 30, 40, 50, 60].map((t) => (<i style={`left:${(t / scaleMax) * 100}%`}>{t}</i>))}</div>
                   <p class="hm-ruler__cap">Length {s.length} <span>·</span> Weight {s.weight}</p>
                 </div>
+                )}
 
                 <dl class="hm-spec">
                   <div><dt>Season</dt><dd>{s.season}</dd></div>
                   <div><dt>Technique</dt><dd>{s.technique}</dd></div>
-                  <div><dt>Habitat</dt><dd>{s.habitat}</dd></div>
+                  {s.habitat && <div><dt>Habitat</dt><dd>{s.habitat}</dd></div>}
                 </dl>
-                <p class="hm-plate__tip"><Icon name="sparkle" size={20} /><span><strong>Guide's tip.</strong> {s.tip}</span></p>
+                {s.tip && <p class="hm-plate__tip"><Icon name="sparkle" size={20} /><span><strong>Good to know.</strong> {s.tip}</span></p>}
               </div>
               <figure class="hm-plate__photo">
                 <Picture src={PHOTOS[s.photo as keyof typeof PHOTOS]} alt={alts[s.slug]} formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[220, 440, 660, 880, 1320]} sizes="220px" loading="lazy" />

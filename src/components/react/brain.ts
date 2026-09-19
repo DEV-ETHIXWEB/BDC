@@ -2,6 +2,7 @@ import { TRIPS, type Trip } from '../../data/trips';
 import { FAQS, SPECIES } from '../../data/content';
 import { SITE, RIVERS } from '../../data/site';
 import { COUPONS } from '../../data/coupons';
+import { BOOKING_TERMS as BT, REGULATIONS } from '../../data/policies';
 
 /*
  * Deterministic, offline "brain". Every fact below is read from src/data (trips, FAQS, SPECIES,
@@ -55,7 +56,7 @@ interface Intent {
 }
 interface Ask { e: Entity; ctx: Ctx; page?: string; tokens: string[] }
 
-const cardOf = (t: Trip): Card => ({ slug: t.slug, name: t.name, price: t.price, hours: t.hours, boat: t.boatSpec, capacity: t.capacity, href: `/trips/${t.slug}` });
+const cardOf = (t: Trip): Card => ({ slug: t.slug, name: t.name, price: t.price, hours: t.hours, boat: t.boatSpec, capacity: t.capacity, href: `/oregon-fishing-charter-rates/${t.slug}` });
 const hasSp = (t: Trip, re: RegExp) => t.species.some((s) => re.test(s));
 
 function pick(e: Entity): Trip[] {
@@ -108,7 +109,7 @@ const INTENTS: Intent[] = [
     follow: ['Trip prices', 'What should I bring?', 'Where do you meet?'],
     fn: ({ e }) => {
       const ts = pick(e);
-      const target = ts.length === 1 ? `Open [${ts[0].name}](/trips/${ts[0].slug}) and use the booking form, or ` : `Pick a trip on ${tripsLink}, send a request from [Contact](/contact-us), or `;
+      const target = ts.length === 1 ? `Open [${ts[0].name}](/oregon-fishing-charter-rates/${ts[0].slug}) and use the booking form, or ` : `Pick a trip on ${tripsLink}, send a request from [Contact](/contact-us), or `;
       return { text: `${target}call Captain Clinton at [${SITE.phone}](${SITE.phoneHref}). Trips are scheduled from the 3rd week of September, and he confirms the date, launch time and target fish with you.`, actions: ['book', 'call'], cards: ts.length && ts.length <= 3 ? ts.map(cardOf) : undefined };
     },
   },
@@ -122,14 +123,14 @@ const INTENTS: Intent[] = [
     follow: ['How much is crabbing?', 'Can kids come crabbing?', 'How do I book?'],
     fn: ({ tokens }) => {
       const ts = TRIPS.filter((t) => t.kind === 'crab');
-      if (SIZE_Q(tokens)) return { text: `Dungeness crab typically weigh ${sp('dungeness-crab').weight} and measure ${sp('dungeness-crab').length}. On crab trips guests sort keepers and take home fresh crab.` };
+      if (SIZE_Q(tokens)) return { text: `${REGULATIONS.keeperSize} I don't have typical crab weights on file.` };
       return { text: `Crabbing charters run ${ts[0].season}: ${ts[0].hours} hours, $${ts[0].price} per person, on the Willy Predator (up to ${ts[0].capacity} guests) or the Alumaweld (up to ${ts[1].capacity}). ${sp('dungeness-crab').tip}`, cards: ts.map(cardOf) };
     },
   },
   {
     id: 'steelhead', kw: [['steelhead', 1.5], ['winter fish', 2]],
     follow: ['Which boat for steelhead?', 'How much is a drift boat trip?', 'Do I need a license?'],
-    fn: ({ tokens }) => SIZE_Q(tokens) ? { text: `Steelhead typically run ${sp('steelhead-trout').weight} and ${sp('steelhead-trout').length}.` } : ({ text: `${sp('steelhead-trout').season} ${sp('steelhead-trout').technique} You can fish steelhead from the low-profile [Alumaweld drift boat](/trips/full-day-drift-boat) or aboard the Willy Predator.`, cards: TRIPS.filter((t) => hasSp(t, /steelhead/i)).map(cardOf) }),
+    fn: ({ tokens }) => SIZE_Q(tokens) ? { text: `Steelhead typically run ${sp('steelhead-trout').weight} and ${sp('steelhead-trout').length}.` } : ({ text: `${sp('steelhead-trout').season} ${sp('steelhead-trout').technique} You can fish steelhead from the low-profile [Alumaweld drift boat](/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip) or aboard the Willy Predator.`, cards: TRIPS.filter((t) => hasSp(t, /steelhead/i)).map(cardOf) }),
   },
   {
     id: 'salmon', kw: [['salmon', 1.5], ['chinook', 1.5], ['king', 1]],
@@ -139,7 +140,7 @@ const INTENTS: Intent[] = [
   {
     id: 'license', kw: ['license', 'licence', 'permit', 'odfw', 'endorsement', 'fish and wildlife'],
     follow: ['How do I book?', 'Can kids come along?'],
-    fn: () => ({ text: `${faq('state fishing license?')} ${faq('where do i get')} Our [license guide](/oregon-fishing-license) has the details.`, actions: ['license'] }),
+    fn: () => ({ text: `${faq('state fishing license?')} ${faq('where do i get')} Our [license guide](/article/get-your-valid-oregon-fishing-license) has the details.`, actions: ['license'] }),
   },
   { id: 'tip', kw: [['tip', 3], ['gratuity', 3]], follow: ['Trip prices', "What's included?"], fn: () => ({ text: faq('tip') }) },
   {
@@ -150,7 +151,7 @@ const INTENTS: Intent[] = [
   {
     id: 'prep', kw: ['bring', 'wear', 'lunch', 'food', 'snack', 'drink', 'cooler', 'clothes', 'clothing', 'pack', 'jacket', 'water', 'eat', 'what to bring', 'prepare'],
     follow: ["What's included?", 'Do I need a license?', 'How early do trips start?'],
-    fn: () => ({ text: `I don't have a food or packing list on file. What I do know: standard gear such as rods and reels is provided, a valid Oregon fishing license is required for anglers 12 and older, and for crabbing you should bring a cooler and a hungry family. Ask Captain Clinton what to wear or pack for your date.`, actions: ['call'] }),
+    fn: () => ({ text: `What to bring: ${BT.bring.join('; ').toLowerCase()}. Rods, reels and tackle are provided (${BT.includes[1].toLowerCase()}), and you may bring your own gear if you prefer. For anything else, ask Captain Clinton.`, actions: ['call'] }),
   },
   {
     id: 'where', kw: ['meet', 'address', 'location', 'direction', 'launch', 'depart', 'located', 'parking', 'find you', 'happy valley', 'map', ['where', 0.6]],
@@ -193,7 +194,7 @@ const INTENTS: Intent[] = [
   {
     id: 'kids', kw: ['kid', 'child', 'children', 'family', 'families', 'son', 'daughter', 'teen', 'young', 'youth', 'beginner', 'first time', 'first-time', 'novice', 'inexperienced', 'never fished', 'age', ['old', 0.5], 'toddler', 'baby', 'grandkid', 'grandpa', 'senior'],
     follow: ['Which trip is best for kids?', 'Do I need a license?', 'Trip prices'],
-    fn: () => ({ text: `Yes, we are a family-friendly service. The [half day trip](/trips/half-day-willy-predator) is ideal for families and first-timers, and crabbing is a family favorite. Captain Clinton is patient with first-time anglers and tailors each trip to skill level. A fishing license is required for anglers 12 and older. I don't have a minimum age on file, so call to check for very young children.`, actions: ['call'], cards: [cardOf(TRIPS.find((t) => t.slug === 'half-day-willy-predator')!), cardOf(TRIPS.find((t) => t.slug === 'crabbing-charter-willy-predator')!)] }),
+    fn: () => ({ text: `Yes, we are a family-friendly service. The half day drift boat trip is described for beginners, families, or anglers with limited time, and the Willy Predator crabbing charter for families, beginners, and anyone who wants a fun day harvesting crab. Captain Clinton connects easily with anglers of all experience levels. A fishing license is required for anglers 12 and older. I don't have a minimum age on file, so call to check for very young children.`, actions: ['call'], cards: TRIPS.filter((t) => (t.kind === 'drift' && t.hours === 4) || (t.kind === 'crab' && t.boat === 'Willy Predator')).map(cardOf) }),
   },
   {
     id: 'boat', kw: ['boat', 'drift', 'willy', 'alumaweld', 'predator', 'vessel', 'yamaha', 'motor', 'engine'],
@@ -203,7 +204,7 @@ const INTENTS: Intent[] = [
   {
     id: 'captain', kw: ['captain', 'clinton', 'guide', 'mcculloch', 'owner', 'experience', 'who', 'bdc'],
     follow: ['Trip prices', 'How do I book?', 'How do I contact him?'],
-    fn: () => ({ text: `${SITE.captain} runs every trip. He keeps groups small so each guest gets personal attention, fishes responsibly, and is patient and down-to-earth with beginners and seasoned anglers alike. Read more on the [captain page](/captain-clinton-mcculloch-of-oregon).` }),
+    fn: () => ({ text: `${SITE.captain} is the owner and guide behind BDC Guide Service, with over 45 years fishing the waters of Oregon. He focuses on smaller group sizes, promotes responsible fishing practices, and is down-to-earth and patient with anglers of all experience levels. Read more on the [captain page](/captain-clinton-mcculloch-of-oregon).` }),
   },
   {
     id: 'contact', kw: ['contact', 'phone', 'call', 'email', 'text', 'reach', 'talk', 'speak', 'number', 'message', 'human', 'person', 'mail'],
@@ -221,12 +222,20 @@ const INTENTS: Intent[] = [
   {
     id: 'policy', kw: [['cancel', 2], ['refund', 2], ['deposit', 2], 'reschedule', 'policy', 'insurance', 'weather', 'rain', 'wind', 'payment', ['card', 2.5], 'cash', 'venmo', 'rebook', 'postpone', 'check', 'paypal', 'zelle'],
     follow: ['How do I book?', 'How do I contact him?'],
-    fn: ({ tokens }) => ({ text: `${tokens.some((t) => /^(weather|rain|wind)$/.test(t)) ? 'Trips are tailored to the season, river conditions and skill level, and Captain Clinton confirms details with you before your trip. ' : ''}I don't have deposit, cancellation or payment details in my trip info, and I won't guess. Please ask Captain Clinton directly.`, actions: ['call', 'email'] }),
+    fn: ({ tokens }) => {
+      const has = (re: RegExp) => tokens.some((t) => re.test(t));
+      const parts: string[] = [];
+      if (has(/^(deposit|payment|pay|card|cash|credit|venmo|paypal|zelle|check|balance)$/)) parts.push(`${BT.deposit} ${BT.balance}`);
+      if (has(/^(cancel|cancellation|refund|reschedule|rebook|postpone|policy)$/)) parts.push(BT.guestCancellation, BT.guideCancellation);
+      if (has(/^(weather|rain|wind|storm)$/)) parts.push(BT.guideCancellation);
+      if (!parts.length) parts.push(BT.deposit, BT.balance, BT.guestCancellation);
+      return { text: `${parts.join(' ')} I don't have the deposit amount on file, so please ask Captain Clinton for it.`, actions: ['call', 'email'] };
+    },
   },
   {
     id: 'keep', kw: [['keep', 3], ['keeper', 2], ['take home', 3], ['catch and release', 3], ['limit', 2], ['release', 2], ['fillet', 2], ['clean', 2], ['cook', 2], ['process', 1.5], ['freezer', 2], ['smoke', 2]],
     follow: ['Crabbing season', 'Do I need a license?', 'How do I contact him?'],
-    fn: ({ e }) => ({ text: `${e.kind === 'crab' ? 'On crab trips guests pull pots, sort keepers and take home fresh Dungeness crab. ' : ''}I don't have catch limits or keep-and-release rules for fish on file, and they depend on ODFW regulations, so please ask Captain Clinton.`, actions: ['call', 'license'] }),
+    fn: ({ e }) => ({ text: `${e.kind === 'crab' ? REGULATIONS.keeperSize + ' ' : ''}I don't have catch limits or keep-and-release rules for fish on file, and they depend on ODFW regulations, so please ask Captain Clinton.`, actions: ['call', 'license'] }),
   },
   {
     id: 'unknown', kw: [['dog', 3], ['pet', 3], ['bathroom', 3], ['restroom', 3], ['toilet', 3], ['heater', 3], ['alcohol', 3], ['beer', 3], ['wheelchair', 3], ['accessible', 3], ['disabled', 3], ['guarantee', 3], ['gift', 3], ['certificate', 3], ['private', 2], ['charge', 0], ['seasick', 3], ['nausea', 3], ['motion sickness', 3], ['pregnant', 3], ['swim', 3], ['life jacket', 3], ['lifejacket', 3], ['safety', 2], ['group rate', 3], ['corporate', 3], ['bachelor', 3], ['birthday', 3], ['wedding', 3]],
@@ -288,7 +297,7 @@ const ASPECTS = new Set(['price', 'time', 'group', 'includes', 'book', 'season']
 const SPECIES_INTENTS = new Set(['crab', 'steelhead', 'salmon']);
 
 function tripFromPath(path?: string): Trip | undefined {
-  const m = path?.match(/^\/trips\/([^/]+)/);
+  const m = path?.match(/^\/oregon-fishing-charter-rates\/([^/]+)/);
   return m ? TRIPS.find((t) => t.slug === m[1]) : undefined;
 }
 
@@ -338,7 +347,10 @@ export function reply(input: string, ctx: Ctx = {}, path?: string): Reply {
   const ids = chosen.map((x) => x.c.intent.id);
   if (ids.includes('unknown')) chosen = chosen.filter((x) => x.c.intent.id === 'unknown');
   else if (ids.includes('policy') && ids.includes('trips')) chosen = chosen.filter((x) => x.c.intent.id !== 'trips');
-  if (ids.includes('prep') && ids.length > 1) chosen = chosen.filter((x) => x.c.intent.id !== (ids.includes('includes') ? 'prep' : 'kids'));
+  if (ids.includes('prep') && ids.length > 1) {
+    const packing = tokens.some((t) => /^(wear|pack|clothes|clothing|jacket|sunscreen|hat|lunch|snack|food|drink|cooler|prepare)$/.test(t));
+    chosen = chosen.filter((x) => x.c.intent.id !== (ids.includes('includes') ? 'prep' : ids.includes('kids') && !packing ? 'prep' : 'kids'));
+  }
   // an ambiguous "when" alone shouldn't outrank a clear topic
   const followUp = /^(and|what about|how about|also|what if|then|or|for)\b/.test(input.trim().toLowerCase()) || content.length <= 3;
 

@@ -350,3 +350,7 @@ html[data-motion='reduce'] .tp-done__ring, html[data-motion='reduce'] .tp-done__
 .tp-nojs h3 { margin: 0 0 8px; font-size: 1.9rem; }
 .tp-nojs p { margin: 0; }
 .tp-nojs a { color: var(--pine-700); font-weight: 700; overflow-wrap: anywhere; }
+
+/* honest "not sent yet" state (mail-app fallback): neutral envelope, never a success tick */
+.tp-done__mark--draft { background: var(--cream-200); color: var(--navy-800); border: 2px dashed var(--navy-700); }
+.tp-done__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }

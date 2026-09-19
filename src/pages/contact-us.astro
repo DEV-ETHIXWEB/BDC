@@ -13,7 +13,7 @@ const a = SITE.address;
 const full = `${a.street}, ${a.city}, ${a.region} ${a.postal}`;
 const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(full)}`;
 ---
-<Base title="Contact BDC Guide Service" description="Contact Captain Clinton McCulloch at BDC Guide Service in Happy Valley, Oregon: call (503) 826-7294, email, or send a trip request." crumbs={crumbs}>
+<Base title="Contact BDC Guide Service" description={`Contact Captain Clinton McCulloch at BDC Guide Service in ${SITE.address.city}, Oregon: call ${SITE.phone}, email, or send a trip request.`} crumbs={crumbs}>
   <PageHero title="Contact us" lede="While we're often on the water delivering unforgettable fishing experiences, we do our best to respond quickly." crumbs={crumbs} tag="Talk to the captain" seed={16} />
   <section class="pg-contact">
     <div class="wrap pg-contact__grid">
