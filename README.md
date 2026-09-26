@@ -23,7 +23,7 @@ The domain is set in `astro.config.mjs` (`site`) and `src/data/site.ts`; canonic
 Every URL from the previous site's sitemap exists at the same address (trip pages, articles, the article index, the captain profile and all 16 photo pages), so search rankings carry over and no redirects are needed. `python qa/old_site_parity.py` checks it.
 
 ## What is in the site
-- Custom "river survey" design in the logo palette (deep navy, forest green, cream); custom 79-icon set in `src/components/icons/paths.ts`.
+- Custom "river survey" design in the logo palette (deep blue, chrome/cyan accent, cool cream); custom 79-icon set in `src/components/icons/paths.ts`.
 - Home: animated hero, offer tickets, trip board, captain story, river chart, fishing-season calendar, species field guide, gallery strip, FAQ.
 - Trips: `/oregon-fishing-charter-rates` (live-price trip planner) and six trip pages under `/oregon-fishing-charter-rates/<slug>`.
 - Species, captain, gallery (with lightbox) and 16 photo pages, reviews, reports, FAQ, contact, articles and the author profile, legal pages, 404.

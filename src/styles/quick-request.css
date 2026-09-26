@@ -1,10 +1,10 @@
 /* Home hero "Request a trip" ribbon (.qr). Glass bar on the navy hero. */
-.qr { display: grid; gap: 8px; padding: 10px; border-radius: 16px; background: rgba(250, 246, 232, 0.05); border: 1px solid rgba(250, 246, 232, 0.14); color: var(--on-deep); }
+.qr { display: grid; gap: 8px; padding: 10px; border-radius: 16px; background: rgba(243, 247, 251, 0.05); border: 1px solid rgba(243, 247, 251, 0.14); color: var(--on-deep); }
 .qr__title { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; margin: 0; font: 700 1.15rem/1 var(--font-display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--cream-50); }
 .qr__f { position: relative; min-width: 0; }
 .qr__f label { position: absolute; left: 12px; top: 5px; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); pointer-events: none; }
 .qr__f input, .qr__f select { display: block; width: 100%; min-height: 46px; padding: 19px 12px 5px; font: 600 0.95rem/1.2 var(--font-body); color: var(--ink); background: var(--cream-50); border: 1.5px solid transparent; border-radius: 12px; -webkit-appearance: none; appearance: none; text-overflow: ellipsis; }
-.qr__f select { padding-right: 34px; background: var(--cream-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d2e3b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center / 16px; }
+.qr__f select { padding-right: 34px; background: var(--cream-50) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230c2c52' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center / 16px; }
 .qr__f input:focus, .qr__f select:focus { outline: 3px solid var(--focus); outline-offset: 1px; }
 .qr__f [aria-invalid='true'] { border-color: #e5645b; }
 .qr__f--date input { text-align: left; }

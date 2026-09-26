@@ -6,16 +6,21 @@ specimen-tag trip tickets, a fishing-season calendar, blueprint boat drawings an
 for display type, Figtree for body. One bold moment per page; the rest stays disciplined. Adjacent sections never share a layout.
 
 ## Palette (taken from the logo)
+Updated 2026-09-27 for the new circular chrome-and-blue crest (was the flat navy/forest-green/cream shield). Same token
+names in `src/styles/global.css`, new values, so every component that referenced a token picked up the new hue automatically.
+
 | Token | Hex |
 | --- | --- |
-| navy-950 / 900 / 800 / 700 / 600 | #061a26 / #0b2434 / #0d2e3b / #153f52 / #1f5468 |
-| rim | #24457a |
-| pine-800 / 700 / 600 / 500 / 200 | #234a34 / #2c5a3f / #3a6f4f / #4f8a63 / #bfd6c5 |
-| cream-50 / 100 / 200 / 300 | #fdfbf3 / #faf6e8 / #f1ebd3 / #e3dbbc |
-| steel | #809296 |
+| navy-950 / 900 / 800 / 700 / 600 | #04101f / #071b33 / #0c2c52 / #123f74 / #1a56a0 |
+| rim | #2166c9 |
+| pine-800 / 700 / 600 / 500 / 200 | #0a3f52 / #0c5670 / #0e6f90 / #22a4cf / #bfe6f2 |
+| cream-50 / 100 / 200 / 300 | #fbfcfe / #f3f7fb / #e7eef5 / #d3e0ea |
+| steel | #7a8b9c |
+| brass (highlight on dark surfaces: coupon codes, "now booking" tag) | #7fe3ff |
+| focus ring | #357fdb |
 
-Tokens are CSS variables in `src/styles/global.css`. Header, offer tickets, footer and hero are deep navy; cream is the page paper.
-No other hues.
+`pine-*` is a cyan-teal accent (not green) that pairs with the navy family; it is the site's only other hue besides navy and
+the cream paper. Header, offer tickets, footer and hero are deep navy-blue; cream/near-white is the page paper.
 
 ## Content rules
 Business facts live in `src/data` (`site.ts`, `trips.ts`, `content.ts`, `coupons.ts`). Do not hard-code phone, email, address or
