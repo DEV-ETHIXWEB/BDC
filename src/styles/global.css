@@ -287,7 +287,7 @@ button { font-family: inherit; }
 }
 .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--cream-50); flex: none; min-height: 44px; }
 .brand:hover { color: #fff; }
-.brand img { height: calc(var(--hb) - 20px); width: auto; transition: height var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out); }
+.brand img { height: calc((var(--hb) - 20px) * 1.2); width: auto; transition: height var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out); } /* +20% so the new circular crest reads clearly next to the wordmark */
 @media (hover: hover) { .brand:hover img { transform: rotate(-4deg) scale(1.04); } }
 .brand__lock { display: none; flex-direction: column; gap: 3px; line-height: 1; }
 .brand__lock b { font: 800 1.9rem/0.8 var(--font-display); letter-spacing: 0.02em; }
@@ -488,7 +488,7 @@ button { font-family: inherit; }
 .footer__big { font-size: var(--fs-md); color: var(--cream-50) !important; font-weight: 700; }
 .footer__mark { display: block; font: 800 clamp(8rem, 30vw, 30rem)/0.8 var(--font-display); letter-spacing: -0.01em; color: transparent; -webkit-text-stroke: 1.5px rgba(243, 247, 251, 0.3); margin: 0 0 -0.02em -0.03em; user-select: none; white-space: nowrap; pointer-events: none; transition: -webkit-text-stroke-color var(--dur-4); }
 .footer__markrow { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-5); overflow: hidden; }
-.footer__crest { position: absolute; right: 0; bottom: 14%; width: clamp(64px, 11vw, 150px); height: auto; opacity: 0.95; filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.5)); }
+.footer__crest { position: absolute; right: 0; bottom: 14%; width: clamp(86px, 14.9vw, 204px); height: auto; opacity: 0.95; filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.5)); } /* +35% so the new circular crest is legible as a standalone watermark */
 .footer__bottom { position: relative; background: var(--navy-950); border-top: 1px solid var(--on-deep-line); padding-block: var(--s-4) calc(var(--s-4) + 76px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px var(--s-5); font-size: var(--fs-xs); }
 .footer__bottom ul { display: flex; flex-wrap: wrap; gap: 0 var(--s-4); }
 .footer__top { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; cursor: pointer; background: none; border: 0; color: var(--cream-50); font-size: var(--fs-xs); }
