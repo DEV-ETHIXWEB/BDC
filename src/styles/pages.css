@@ -245,6 +245,7 @@
 .pg-meet__body { padding: clamp(16px, 3vw, 24px) clamp(16px, 3vw, 24px) calc(clamp(16px, 3vw, 24px) + 12px); display: grid; gap: 10px; }
 .pg-meet h3 { margin: 0; font-size: 1.7rem; }
 .pg-meet address { font-style: normal; font-size: 1.08rem; line-height: 1.5; }
+.pg-meet__note { margin: 0; color: var(--ink-soft); font-size: 0.98rem; line-height: 1.5; }
 .pg-meet__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
 .pg-meet__actions .btn { min-height: 44px; }
 .pg-meet__actions .btn--ghost { color: var(--navy-800); }

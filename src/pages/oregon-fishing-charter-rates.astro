@@ -10,6 +10,7 @@ import TripPlanner from '../components/react/TripPlanner';
 import { PHOTOS } from '../data/photos';
 import { TRIPS } from '../data/trips';
 import { SITE } from '../data/site';
+import { MONTHS_FULL, monthsOf, rangeLabel, season, SEASON_START } from '../data/seasons';
 // Prices and lengths come from TRIPS so this board can never disagree with the trip cards.
 const halfDay = TRIPS.find((t) => t.hours === 4)!;
 const crab = TRIPS.find((t) => t.kind === 'crab')!;
@@ -17,12 +18,13 @@ const fullDay = TRIPS.find((t) => t.hours === 8)!;
 const crumbs = [{ name: 'Trips & Rates', path: '/oregon-fishing-charter-rates' }];
 const plannerTrips = TRIPS.map(({ slug, name, hours, price, boat, capacity, kind, species, season }) => ({ slug, name, hours, price, boat, capacity, kind, species, season }));
 const formTrips = TRIPS.map(({ slug, name, price, capacity, boat, hours }) => ({ slug, name, price, capacity, boat, hours }));
-const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const rows = [
-  { label: 'Winter steelhead', on: [0, 1, 2, 3], note: 'January to April' },
-  { label: 'Dungeness crab', on: [9, 10, 11], note: 'October to December' },
-];
+const months = MONTHS_FULL.map((m) => m[0]);
+const monthNames = [...MONTHS_FULL];
+// Built from src/data/seasons.ts so this board can never disagree with the homepage calendar.
+const rows = (['steelhead', 'chinook', 'fall', 'crab'] as const).map((k) => {
+  const x = season(k);
+  return { label: x.name.replace(' charters', ''), on: monthsOf(x), note: rangeLabel(x) };
+});
 ---
 <Base
   contact={false}
@@ -133,8 +135,8 @@ const rows = [
 
         <div class="tp-sched" data-reveal="up">
           <h3>2026 schedule</h3>
-          <p>Trips are scheduled from the 3rd week of September. Chinook salmon run in spring and early summer, with more in fall.</p>
-          <div class="tp-months" role="table" aria-label="Season months for steelhead and crabbing">
+          <p>The season opens {SEASON_START}. Spring and early Chinook run March through July, and fall salmon August through November, with fall Chinook strongest August through October.</p>
+          <div class="tp-months" role="table" aria-label="Season months for steelhead, salmon and crabbing">
             <div class="tp-months__head" role="row" aria-hidden="true">
               <span></span>
               {months.map((m) => <b>{m}</b>)}

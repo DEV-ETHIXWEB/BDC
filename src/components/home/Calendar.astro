@@ -2,10 +2,10 @@
 import type { IconName } from '../../components/icons/paths';
 import Icon from '../Icon.astro';
 import '../../styles/home-mid.css';
-import { MONTHS_FULL, SEASONS, SEASON_DISCLAIMER, TRIPS_START } from '../../data/seasons';
+import { MONTHS_FULL, SEASONS, SEASON_DISCLAIMER, SEASON_START } from '../../data/seasons';
 
 const months = MONTHS_FULL;
-const iconOf: Record<string, string> = { steelhead: 'fishJump', chinook: 'fish', fall: 'fish', crab: 'crab' };
+const iconOf: Record<string, string> = { steelhead: 'fishJump', chinook: 'fish', fall: 'fish', shad: 'salmon', sturgeon: 'steelhead', crab: 'crab' };
 const rows = SEASONS.map((x) => ({ key: x.key === 'steelhead' ? 'steel' : x.key, name: x.name, s: x.start, e: x.end, icon: iconOf[x.key], note: x.note, light: x.light, approximate: x.approximate }));
 const range = (st: number, en: number) => `${months[st - 1].slice(0, 3)} to ${months[en - 1].slice(0, 3)}`;
 const now = new Date();
@@ -15,12 +15,12 @@ const today = (now.getMonth() + (now.getDate() - 0.5) / new Date(now.getFullYear
   <div class="wrap">
     <div class="hm-cal__head">
       <h2 id="hm-cal-h" data-reveal="up">The fishing year at a glance</h2>
-      <p class="hm-cal__start" data-reveal="up"><Icon name="calendar" size={22} /><span>Trips are scheduled from the <strong>{TRIPS_START.replace('the ', '')}</strong>.</span></p>
+      <p class="hm-cal__start" data-reveal="up"><Icon name="calendar" size={22} /><span>The season opens <strong>{SEASON_START}</strong>.</span></p>
     </div>
 
     <div class="hm-cal__sheet" data-reveal="fade">
       <table class="hm-tbl">
-        <caption class="sr-only">Guided fishing seasons by month. Winter steelhead runs January to April, spring and early-summer Chinook about April to July, fall salmon about September to November, and crab charters October to December. Salmon months are approximate.</caption>
+        <caption class="sr-only">Guided fishing seasons by month. Winter steelhead runs January to April, spring and early Chinook March to July, fall salmon August to November, American shad about May to July, sturgeon catch and release all year, and crab charters October to December. The shad and sturgeon windows are not confirmed yet.</caption>
         <thead>
           <tr>
             <th scope="col"><span class="sr-only">Season</span></th>
@@ -47,7 +47,7 @@ const today = (now.getMonth() + (now.getDate() - 0.5) / new Date(now.getFullYear
         </tbody>
       </table>
     </div>
-    <p class="hm-cal__key"><span class="hm-key hm-key--solid"></span> Prime window <span class="hm-key hm-key--light"></span> Additional opportunity <span class="hm-cal__now" data-cal-now aria-live="polite"></span></p>
+    <p class="hm-cal__key"><span class="hm-key hm-key--solid"></span> Prime window <span class="hm-key hm-key--light"></span> Catch and release <span class="hm-cal__now" data-cal-now aria-live="polite"></span></p>
     <p class="hm-cal__key hm-cal__fine">{SEASON_DISCLAIMER}</p>
   </div>
 </section>

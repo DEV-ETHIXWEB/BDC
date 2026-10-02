@@ -9,6 +9,7 @@ import BoatWilly from '../components/art/BoatWilly.astro';
 import BoatDrift from '../components/art/BoatDrift.astro';
 import { PHOTOS } from '../data/photos';
 import { SITE, RIVERS } from '../data/site';
+import { SPECIES } from '../data/content';
 const crumbs = [{ name: 'Meet the Captain', path: '/captain-clinton-mcculloch-of-oregon' }];
 const person = {
   '@context': 'https://schema.org',
@@ -30,7 +31,7 @@ const facts = [
   { n: 45, s: '+', l: 'years fishing Oregon waters' },
   { n: RIVERS.length, s: '', l: 'rivers on our list' },
   { n: 2, s: '', l: 'boats: one for big water, one for shallow' },
-  { n: 3, s: '', l: 'targets: salmon, steelhead and Dungeness crab' },
+  { n: SPECIES.length, s: '', l: 'targets: salmon, steelhead, shad, sturgeon and crab' },
 ];
 const willy = [
   ['Main engine', '150 HP main engine, one of the twin Yamaha motors.'],

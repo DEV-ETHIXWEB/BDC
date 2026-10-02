@@ -1,6 +1,8 @@
-// Chinook and steelhead figures, seasons and tips are taken from the "Target Species" page of the previous
-// bdcguideservices.com. The crab entry uses only what the owner's crabbing pages state (no size/weight/habitat figures
-// are given there, so none are shown).
+// Species figures, seasons and tips. Chinook, steelhead and crab come from the previous bdcguideservices.com
+// "Target Species" page; the months were corrected by Captain Clinton on the 2026 review call (see
+// src/data/seasons.ts). American shad and sturgeon were added on that call: he gave no sizes and no months
+// for them, so no figures are shown and their season copy says the window is not confirmed yet.
+// `featured` marks the three species shown in the homepage field guide; the Target Species page shows all of them.
 export const SPECIES = [
   {
     slug: 'chinook-salmon',
@@ -11,12 +13,13 @@ export const SPECIES = [
     length: '30-59 in',
     habitat: 'Onshore, nearshore, river and lake environments',
     season:
-      'Spring and early summer bring strong Chinook runs on the Columbia and Willamette rivers, while fall can offer additional salmon opportunities.',
+      'Spring and early Chinook run March through July on the Columbia and Willamette rivers. Fall salmon follow from August through November, with fall Chinook strongest August through October.',
     technique:
       'Trolling with herring, spinners or plugs is highly effective for salmon, especially on the Columbia River.',
-    tip: 'Presentation and depth control are key.',
+    tip: 'Presentation and depth control are key. The spring run rolls almost straight into the fall run, with only about a three-week gap between them.',
     icon: 'fish',
     photo: 'chinookLake',
+    featured: true,
   },
   {
     slug: 'steelhead-trout',
@@ -32,6 +35,39 @@ export const SPECIES = [
     tip: 'Early mornings and tide-influenced windows often produce the best bites when river conditions align.',
     icon: 'fishJump',
     photo: 'winterSteelhead',
+    featured: true,
+  },
+  {
+    slug: 'american-shad',
+    name: 'American Shad',
+    latin: 'Alosa sapidissima',
+    family: 'Clupeidae',
+    weight: null,
+    length: null,
+    habitat: 'Runs up the Columbia and Willamette rivers from the ocean',
+    season:
+      'Shad push into the Columbia and Willamette in early summer. Captain Clinton has not set this year’s window yet, so call for current dates.',
+    technique: 'Light tackle with small darts, grubs and shad flies worked near the bottom in the current.',
+    tip: 'Shad come through in numbers, which makes them one of the best trips for kids and first-time anglers.',
+    icon: 'salmon',
+    photo: null,
+    featured: false,
+  },
+  {
+    slug: 'sturgeon',
+    name: 'Sturgeon',
+    latin: 'Acipenser transmontanus',
+    family: 'Acipenseridae',
+    weight: null,
+    length: null,
+    habitat: 'Columbia River and its lower tributaries',
+    season:
+      'Catch-and-release sturgeon trips run all year. Retention is only open for short announced periods, usually a two-day opener, so most sturgeon trips are catch and release.',
+    technique: 'Anchored up over deep water with bait on the bottom, heavy rods and a steady hand.',
+    tip: 'Catch and release is legal in Oregon all year, so a sturgeon trip is still on the table when retention is closed.',
+    icon: 'steelhead',
+    photo: null,
+    featured: false,
   },
   {
     slug: 'dungeness-crab',
@@ -43,21 +79,32 @@ export const SPECIES = [
     habitat: null,
     season: 'Our crabbing charters run October through December.',
     technique: 'Crab pots with fresh bait. Captain Clinton shows you how to bait a pot and how to tell legal keepers from the ones that go back.',
-    tip: 'Keepers are male Dungeness crab at least 5\u00be inches across the shell. Female crabs always go back.',
+    tip: 'Keepers are male Dungeness crab at least 5¾ inches across the shell. Female crabs always go back.',
     icon: 'crab',
     photo: 'dungenessCrab',
+    featured: true,
   },
 ] as const;
 
+export const FEATURED_SPECIES = SPECIES.filter((s) => s.featured);
+
 // The ten questions and answers from the previous site's FAQ page, wording unchanged except three obvious typos
 // ("Where in Oregon to we meet" -> "do we", "12 year" -> "12 years", "bring you own gear" -> "your own gear").
+// Two answers were updated on the 2026 review call: the target-fish list now covers every species he fishes, and
+// the meeting place no longer prints a street address because the one on the old site was not his.
 export const FAQS = [
   {
     q: 'Where does BDC Guide Service fish?',
     a: 'We fish the Oregon area, including Eagle Creek, Lithgow Creek, Clear Creek, Deep Creek, Clackamette Cove, Eda Creek, Van Zyl Reservoir.',
   },
-  { q: 'What are the target fish?', a: 'Target fish include Winter Steelhead, Spring Salmon' },
-  { q: 'Where in Oregon do we meet our guests?', a: 'We meet at 9018 Southeast Bridge Crk Ct, Happy Valley, OR 97015, USA' },
+  {
+    q: 'What are the target fish?',
+    a: 'Target fish include winter steelhead, spring and early Chinook salmon, fall salmon, American shad, sturgeon (catch and release) and Dungeness crab.',
+  },
+  {
+    q: 'Where in Oregon do we meet our guests?',
+    a: 'Captain Clinton gives you the exact meeting spot and launch time when you book, because it changes with the season and the river. Call or email and he will confirm it with you.',
+  },
   { q: 'Do I need a state fishing license?', a: 'Yes, a Fishing license is required' },
   {
     q: 'Where do I get a state fishing license?',
@@ -66,7 +113,7 @@ export const FAQS = [
   { q: 'How much should I tip?', a: 'It is customary to tip 20% of the trip total. We work tirelessly to make sure you have a guest experience!' },
   {
     q: 'Do I need to bring my own gear?',
-    a: "No, we provide standard gear such as rods and reels so you don\u2019t need to worry about anything. But please feel free to bring your own gear if you prefer.",
+    a: "No, we provide standard gear such as rods and reels so you don’t need to worry about anything. But please feel free to bring your own gear if you prefer.",
   },
   {
     q: 'What rivers do you fish in Oregon?',

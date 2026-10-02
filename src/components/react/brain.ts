@@ -119,6 +119,11 @@ const INTENTS: Intent[] = [
     fn: () => ({ text: `We run six guided trips on two boats: half day (4 hrs), full day (8 hrs), drift boat steelhead trips and October-to-December crabbing charters. Here they all are:`, cards: TRIPS.map(cardOf) }),
   },
   {
+    id: 'species', kw: [['target fish', 3], ['target species', 3], ['what fish', 2.5], ['which fish', 2.5], ['what do you catch', 2.5], ['what can i catch', 2.5], ['species', 1.2]],
+    follow: ['Salmon season', 'Steelhead season', 'Crabbing season'],
+    fn: () => ({ text: `${faq('target fish')} Each one, with sizes and seasons, is on the [target species guide](/oregon-fishing-species).` }),
+  },
+  {
     id: 'crab', kw: [['crab', 1.5], ['dungeness', 1.5], ['crabbing', 1.5]],
     follow: ['How much is crabbing?', 'Can kids come crabbing?', 'How do I book?'],
     fn: ({ tokens }) => {
@@ -136,6 +141,16 @@ const INTENTS: Intent[] = [
     id: 'salmon', kw: [['salmon', 1.5], ['chinook', 1.5], ['king', 1]],
     follow: ['How early do trips start?', 'How much is a full day?', 'Do I need a license?'],
     fn: ({ tokens }) => SIZE_Q(tokens) ? { text: `Chinook salmon typically run ${sp('chinook-salmon').weight} and ${sp('chinook-salmon').length}.` } : ({ text: `${sp('chinook-salmon').season} ${sp('chinook-salmon').technique} Most salmon trips run on the Willy Predator.`, cards: TRIPS.filter((t) => t.boat === 'Willy Predator' && t.kind === 'river').map(cardOf) }),
+  },
+  {
+    id: 'shad', kw: [['shad', 2], ['american shad', 2.5]],
+    follow: ['How much is a half day?', 'Can kids come along?', 'Do I need a license?'],
+    fn: () => ({ text: `${sp('american-shad').season} ${sp('american-shad').technique} ${sp('american-shad').tip}`, actions: ['call'], cards: TRIPS.filter((t) => t.kind === 'river').map(cardOf) }),
+  },
+  {
+    id: 'sturgeon', kw: [['sturgeon', 2]],
+    follow: ['How much is a full day?', 'Do I need a license?', 'How do I book?'],
+    fn: () => ({ text: `${sp('sturgeon').season} ${sp('sturgeon').technique} ${sp('sturgeon').tip}`, actions: ['call'], cards: TRIPS.filter((t) => t.kind === 'river').map(cardOf) }),
   },
   {
     id: 'license', kw: ['license', 'licence', 'permit', 'odfw', 'endorsement', 'fish and wildlife'],
@@ -156,7 +171,7 @@ const INTENTS: Intent[] = [
   {
     id: 'where', kw: ['meet', 'address', 'location', 'direction', 'launch', 'depart', 'located', 'parking', 'find you', 'happy valley', 'map', ['where', 0.6]],
     follow: ['How early do trips start?', 'Which rivers do you fish?', 'How do I book?'],
-    fn: () => ({ text: `${faq('meet our guests')} Captain Clinton confirms the launch spot and time when you book.`, actions: ['directions', 'call'] }),
+    fn: () => ({ text: `${faq('meet our guests')} We fish out of the ${SITE.address.city}, ${SITE.address.region} area and across the rivers on our list.`, actions: ['directions', 'call'] }),
   },
   {
     id: 'river', kw: ['river', 'creek', 'lake', 'reservoir', 'area', 'fish in', 'where do you fish', 'where you fish'],
@@ -173,7 +188,7 @@ const INTENTS: Intent[] = [
         : `Half day trips are 4 hours, full day trips 8 hours and crabbing charters 5 hours. ${faq('how early')}`),
   },
   {
-    id: 'season', kw: ['season', 'month', 'winter', 'spring', 'summer', 'fall', 'autumn', 'best time', 'when to fish', 'when do', ['when', 0.5], 'october', 'november', 'december', 'january', 'february', 'march', 'april', 'june', 'july', 'august', 'september'],
+    id: 'season', kw: ['season', 'month', 'winter', 'spring', 'summer', 'fall', 'autumn', 'best time', 'when to fish', 'when do', ['when', 0.5], 'october', 'november', 'december', 'january', 'february', 'march', 'april', 'june', 'july', 'august', 'september', 'opener'],
     follow: ['Steelhead season', 'Crabbing season', 'How do I book?'],
     fn: ({ e }) => {
       const lines: string[] = [];
@@ -181,7 +196,10 @@ const INTENTS: Intent[] = [
       if (!want || want === 'steelhead') lines.push(`Steelhead: ${sp('steelhead-trout').season}`);
       if (!want || want === 'salmon') lines.push(`Salmon: ${sp('chinook-salmon').season}`);
       if (!want || want === 'crab') lines.push(`Crab: ${sp('dungeness-crab').season}`);
-      return { text: `${lines.join('\n')}\nTrips are scheduled from the 3rd week of September. See the [fishing reports](/oregon-fishing-reports).` };
+      if (!want) lines.push(`Shad: ${sp('american-shad').season}`, `Sturgeon: ${sp('sturgeon').season}`);
+      // the August 1 opener belongs to the salmon season, so it is only added when salmon is in the answer
+      const opener = !want || want === 'salmon' ? 'The fall season opens August 1. ' : '';
+      return { text: `${lines.join('\n')}\n${opener}See the [fishing reports](/oregon-fishing-reports).` };
     },
   },
   {
@@ -294,7 +312,7 @@ function entityOf(tokens: string[], joined: string): Entity {
 const hasEntity = (e: Entity) => Object.keys(e).length > 0;
 
 const ASPECTS = new Set(['price', 'time', 'group', 'includes', 'book', 'season']);
-const SPECIES_INTENTS = new Set(['crab', 'steelhead', 'salmon']);
+const SPECIES_INTENTS = new Set(['crab', 'steelhead', 'salmon', 'shad', 'sturgeon']);
 
 function tripFromPath(path?: string): Trip | undefined {
   const m = path?.match(/^\/oregon-fishing-charter-rates\/([^/]+)/);
@@ -394,4 +412,4 @@ export function reply(input: string, ctx: Ctx = {}, path?: string): Reply {
 }
 
 export const SUGGESTIONS = suggestionsFor();
-export const DIRECTIONS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${SITE.address.street}, ${SITE.address.city}, ${SITE.address.region} ${SITE.address.postal}`)}`;
+export const DIRECTIONS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${SITE.address.city}, ${SITE.address.region} ${SITE.address.postal}`)}`;

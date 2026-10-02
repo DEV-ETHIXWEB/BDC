@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
-import { season, monthsOf } from '../data/seasons';
+import { season, monthsOf, SEASON_START } from '../data/seasons';
 const crumbs = [{ name: 'Reports', path: '/oregon-fishing-reports' }];
 const M = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
 const MN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -12,10 +12,13 @@ const MN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Aug
 const grid = (core: Parameters<typeof season>[0][], more: Parameters<typeof season>[0][] = []) => Array.from({ length: 12 }, (_, i) => (core.some((k) => monthsOf(season(k)).includes(i)) ? 2 : more.some((k) => monthsOf(season(k)).includes(i)) ? 1 : 0));
 const entries = [
   { icon: 'fishJump', title: 'Winter steelhead', when: 'January to April', months: grid(['steelhead']), where: 'Coastal and tributary rivers', body: 'Early mornings and tide-influenced windows often fish best.' },
-  { icon: 'fish', title: 'Spring salmon', when: 'Spring and early summer, more in fall', months: grid(['chinook'], ['fall']), where: 'Columbia and Willamette rivers', body: 'Strong Chinook runs in spring, with more chances again in fall.' },
+  { icon: 'fish', title: 'Spring and early Chinook', when: 'March to July', months: grid(['chinook']), where: 'Columbia and Willamette rivers', body: 'Strong Chinook runs from March into July. The spring run rolls almost straight into the fall run, with about a three-week gap between them.' },
+  { icon: 'fish', title: 'Fall salmon', when: 'August to November', months: grid(['fall']), where: 'Columbia and Willamette rivers', body: 'The season opens August 1. Fall Chinook fishes strongest August through October, with salmon into November.' },
+  { icon: 'salmon', title: 'American shad', when: 'Early summer, dates not confirmed yet', months: grid(['shad']), where: 'Columbia and Willamette rivers', body: 'Shad come through in big numbers on light tackle, which makes them a favorite with kids and first-time anglers. Call for this year\u2019s window.' },
+  { icon: 'steelhead', title: 'Sturgeon', when: 'Catch and release all year', months: grid([], ['sturgeon']), where: 'Catch-and-release trips on the Columbia', body: 'Retention is only open for short announced periods, usually a two-day opener, so most sturgeon trips are catch and release.' },
   { icon: 'crab', title: 'Dungeness crab', when: 'October to December', months: grid(['crab']), where: 'Family-friendly fall charters', body: 'Fall crabbing charters for fresh Dungeness crab and family fun.' },
 ] as const;
-const label = (m: readonly number[]) => MN.filter((_, i) => m[i] === 2).join(', ');
+const label = (m: readonly number[]) => (m.some((v) => v === 2) ? MN.filter((_, i) => m[i] === 2) : MN.filter((_, i) => m[i] === 1)).join(', ');
 ---
 <Base title="Oregon Fishing Reports" description="Seasonal Oregon fishing outlook: winter steelhead runs, spring salmon migrations and fall Dungeness crabbing, plus how to get the latest on-the-water report." crumbs={crumbs}>
   <PageHero title="Oregon fishing reports" lede="Seasonal outlook from BDC Guide Service, and how to get today's on-the-water report." crumbs={crumbs} />
@@ -25,7 +28,7 @@ const label = (m: readonly number[]) => MN.filter((_, i) => m[i] === 2).join(', 
         <h2>Today's report</h2>
         <p>Conditions change by the hour, so the freshest word comes straight from the boat. For current conditions, call or email Captain Clinton.</p>
         <a class="btn btn--cream" data-magnetic href={SITE.phoneHref}><Icon name="phone" size={18} />{SITE.phone}</a>
-        <p class="gb-log__stamp">Fall trips are being scheduled from the third week of September.</p>
+        <p class="gb-log__stamp">The season opens {SEASON_START}, and fall trips are being booked now.</p>
       </aside>
 
       <div class="gb-log__book">

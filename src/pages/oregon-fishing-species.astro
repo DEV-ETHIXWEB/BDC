@@ -12,13 +12,17 @@ import { season, monthsOf, MONTHS_FULL, SEASON_DISCLAIMER } from '../data/season
 const crumbs = [{ name: 'Target Species', path: '/oregon-fishing-species' }];
 const MONTHS = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
 const MONTH_NAMES = [...MONTHS_FULL];
-const CAL: Record<string, { main: number[]; alt?: number[]; mainLabel: string; altLabel?: string; rivers: string[]; short: string }> = {
-  'chinook-salmon': { main: monthsOf(season('chinook')), alt: monthsOf(season('fall')), mainLabel: 'Spring and early summer (approx.)', altLabel: 'Fall, more chances (approx.)', rivers: ['Columbia River', 'Willamette River'], short: 'Chinook' },
+// `approx` draws the season disclaimer under the bar: it is set only where Captain Clinton has not given
+// months yet (shad and sturgeon). Chinook, steelhead and crab months are his own.
+const CAL: Record<string, { main: number[]; alt?: number[]; mainLabel: string; altLabel?: string; rivers: string[]; short: string; approx?: boolean }> = {
+  'chinook-salmon': { main: monthsOf(season('chinook')), alt: monthsOf(season('fall')), mainLabel: 'Spring and early Chinook, March through July', altLabel: 'Fall salmon, August through November', rivers: ['Columbia River', 'Willamette River'], short: 'Chinook' },
   'steelhead-trout': { main: monthsOf(season('steelhead')), mainLabel: 'January through April', rivers: ['Wilson River', 'Trask River', 'Sandy River', 'Clackamas River', 'Nestucca River'], short: 'Steelhead' },
+  'american-shad': { main: monthsOf(season('shad')), mainLabel: 'Early summer, dates not confirmed yet', rivers: ['Columbia River', 'Willamette River'], short: 'Shad', approx: true },
+  'sturgeon': { main: monthsOf(season('sturgeon')), mainLabel: 'Catch and release all year', rivers: ['Columbia River'], short: 'Sturgeon', approx: true },
   'dungeness-crab': { main: monthsOf(season('crab')), mainLabel: 'October through December', rivers: [], short: 'Crab' },
 };
 ---
-<Base contactTitle="Pick your species, pick your trip" title="Oregon Fishing Species" description="Learn about the fish and shellfish we target in Oregon: Chinook salmon, winter steelhead and Dungeness crab. Sizes, seasons, best techniques and rivers." crumbs={crumbs}>
+<Base contactTitle="Pick your species, pick your trip" title="Oregon Fishing Species" description="Learn about the fish we target in Oregon: Chinook salmon, winter steelhead, American shad, sturgeon and Dungeness crab. Sizes, seasons, techniques and rivers." crumbs={crumbs}>
   <PageHero title="Oregon target species" lede="What's biting, when, and how we catch it." crumbs={crumbs} tag="Field guide" seed={12} edge="page">
     <div slot="art" class="pg-trio">
       <span class="pg-trio__a"><Icon name="fish" size={96} /></span>
@@ -64,12 +68,14 @@ const CAL: Record<string, { main: number[]; alt?: number[]; mainLabel: string; a
                   <p class="pg-season__key"><i class="k-on"></i>{c.mainLabel}{c.altLabel && <><i class="k-alt"></i>{c.altLabel}</>}</p>
                 </div>
                 <p class="pg-plate__season">{s.season}</p>
-                {c.altLabel && <p class="pg-plate__fine">{SEASON_DISCLAIMER}</p>}
+                {c.approx && <p class="pg-plate__fine">{SEASON_DISCLAIMER}</p>}
               </div>
               <div class="pg-plate__notes">
+                {s.photo && (
                 <div class="pg-plate__photo" data-reveal="up">
                   <Picture src={PHOTOS[s.photo]} alt={`${s.name}: angler with a catch`} formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[240, 360, 480, 720, 960, 1440]} sizes="(min-width: 900px) 240px, 46vw" loading="lazy" />
                 </div>
+                )}
                 <div class="pg-note">
                   <h3>Technique</h3>
                   <p>{s.technique}</p>

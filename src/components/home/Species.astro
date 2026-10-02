@@ -3,7 +3,8 @@ import type { IconName } from '../../components/icons/paths';
 import { Picture } from 'astro:assets';
 import Icon from '../Icon.astro';
 import { ICONS } from '../../components/icons/paths';
-import { SPECIES } from '../../data/content';
+// The homepage field guide shows the three headline species; /oregon-fishing-species lists all of them.
+import { FEATURED_SPECIES } from '../../data/content';
 import { PHOTOS } from '../../data/photos';
 import '../../styles/home-mid.css';
 
@@ -31,7 +32,7 @@ const alts: Record<string, string> = {
 
     <div class="hm-guide">
       <div class="hm-tabs" role="tablist" aria-label="Choose a species" aria-orientation="vertical" data-reveal="up">
-        {SPECIES.map((s, i) => (
+        {FEATURED_SPECIES.map((s, i) => (
           <button type="button" role="tab" class="hm-tab" id={`hm-tab-${s.slug}`} aria-controls={`hm-panel-${s.slug}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
             <Icon name={bigIcon[s.slug] as IconName} size={30} />
             <span><strong>{short[s.slug]}</strong><em>{s.latin}</em></span>
@@ -40,7 +41,7 @@ const alts: Record<string, string> = {
       </div>
 
       <div class="hm-plates" data-reveal="scale">
-        {SPECIES.map((s, i) => {
+        {FEATURED_SPECIES.map((s, i) => {
           const [lo, hi] = s.length ? parse(s.length) : [0, 0];
           return (
             <div class="hm-plate" role="tabpanel" id={`hm-panel-${s.slug}`} aria-labelledby={`hm-tab-${s.slug}`} tabindex="0" hidden={false} data-active={i === 0 ? 'true' : undefined}>

@@ -25,7 +25,7 @@ const salmon = trip.species.some((s) => /salmon/i.test(s));
 const boatIcon = isCrab ? 'crab' : trip.kind === 'drift' ? 'driftBoat' : 'boat';
 // The owner's own pages disagree on winter steelhead months (January-April vs December-March), so drift trips say no months.
 const seasonText = trip.season
-  ?? (trip.kind === 'drift' ? 'Winter steelhead season' : 'Steelhead in winter; salmon in spring and early summer, with fall opportunities');
+  ?? (trip.kind === 'drift' ? 'Winter steelhead season' : 'Steelhead January to April; spring Chinook March to July; fall salmon August to November');
 const launch = salmon ? 'As early as 4:00 AM for salmon' : 'Confirmed when you book';
 const sheet = [
   { k: 'Length', v: `${trip.hours} hours`, icon: 'clock' },

@@ -20,7 +20,7 @@ type Len = 'any' | '4' | '5' | '8';
 
 const TARGETS: { id: Target; label: string; when: string; icon: IconName }[] = [
   { id: 'steelhead', label: 'Steelhead', when: 'January to April', icon: 'fish' },
-  { id: 'salmon', label: 'Salmon', when: 'Spring, early summer and fall', icon: 'fishJump' },
+  { id: 'salmon', label: 'Salmon', when: 'March to November', icon: 'fishJump' },
   { id: 'crab', label: 'Dungeness crab', when: 'October to December', icon: 'crab' },
 ];
 const LENGTHS: { id: Len; label: string }[] = [
