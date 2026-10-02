@@ -5,6 +5,12 @@
 // delivered, so it opens the visitor's mail app and says plainly that the request is not sent yet.
 export const ENDPOINT = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
 
+// Cloudflare Turnstile. The SITE key is public by design and safe in the bundle; the SECRET key never appears
+// here and must live on the endpoint that verifies the token. Unset = Turnstile is off everywhere.
+export const TURNSTILE_SITE_KEY = (import.meta.env.PUBLIC_TURNSTILE_SITE_KEY as string | undefined)?.trim() || '';
+/** A configured Turnstile means a lead is only sent once the visitor has solved the challenge. */
+export const turnstileRequired = () => Boolean(TURNSTILE_SITE_KEY);
+
 export const validators = {
   name: (v: string) => (v.trim().length < 2 ? 'Enter your name so Captain Clinton knows who to call.' : ''),
   phone: (v: string) => (v.replace(/\D/g, '').length < 10 ? 'Enter a phone number with area code, like (503) 555-0123.' : ''),
@@ -15,9 +21,11 @@ export const validators = {
 export const mailtoHref = (to: string, subject: string, body: string, cap = 1800) =>
   `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.slice(0, cap))}`;
 
-export async function postLead(data: Record<string, string>): Promise<boolean> {
+export async function postLead(data: Record<string, string>, token = ''): Promise<boolean> {
+  // `cf-turnstile-response` is the field name Cloudflare's siteverify expects; the endpoint forwards it.
+  const body = token ? { ...data, 'cf-turnstile-response': token } : data;
   try {
-    const res = await fetch(ENDPOINT as string, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+    const res = await fetch(ENDPOINT as string, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
     return res.ok;
   } catch {
     return false;

@@ -49,3 +49,15 @@ Every URL from the previous site's sitemap exists at the same address (trip page
 2. Confirm the booking flow (existing booking link vs the form) and set the form endpoint.
 3. Add real reviews and any approved promo codes.
 4. Add analytics only after updating the privacy policy.
+
+## Spam protection (Cloudflare Turnstile)
+
+Built and dormant. Set `PUBLIC_TURNSTILE_SITE_KEY` and the widget appears in all three forms, the CSP opens to
+`challenges.cloudflare.com`, and no lead is sent until the challenge is solved. Leave it unset and nothing
+renders, no external script loads, and the policy stays closed.
+
+The token travels with the lead as `cf-turnstile-response`. **It proves nothing until the receiving endpoint
+posts it to `https://challenges.cloudflare.com/turnstile/v0/siteverify` with the secret key and rejects the
+lead when `success` is false.** The secret key must never use a `PUBLIC_` prefix: those are compiled into the
+browser bundle, and `scripts/check-env.mjs` fails the build if it finds one. Cloudflare's always-pass test keys
+are rejected on a production build (`REQUIRE_FORM_ENDPOINT=1`).

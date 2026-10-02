@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button, FieldError, Form, Input, Label, TextArea, TextField, ToggleButton, ToggleButtonGroup } from 'react-aria-components';
 import { Icon } from './Icon';
 import { SITE } from '../../data/site';
-import { ENDPOINT, mailtoHref, postLead, validators } from './form-shared';
+import { ENDPOINT, mailtoHref, postLead, turnstileRequired, validators } from './form-shared';
+import Turnstile from './Turnstile';
 
 interface Props {
   email: string;
@@ -20,7 +21,7 @@ const setToText = (k: Iterable<unknown>) => [...k].map(String);
 // you need are required. Same delivery rules as BookingForm: a confirmed 2xx from PUBLIC_FORM_ENDPOINT is "sent";
 // without an endpoint it opens the visitor's mail app and says plainly that nothing has been sent yet.
 export default function ContactForm({ email, defaultTrip }: Props) {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error' | 'unverified'>('idle');
   const [draft, setDraft] = useState<{ body: string; subject: string } | null>(null);
   const [copied, setCopied] = useState(false);
   const [name, setName] = useState('');
@@ -30,6 +31,7 @@ export default function ContactForm({ email, defaultTrip }: Props) {
   const [message, setMessage] = useState('');
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const submitting = useRef(false);
+  const [token, setToken] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const headRef = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
@@ -73,10 +75,11 @@ export default function ContactForm({ email, defaultTrip }: Props) {
       setStatus('draft');
       return;
     }
+    if (turnstileRequired() && !token) { setStatus('unverified'); return; }
     if (submitting.current) return; // ignore double submits fired in the same tick
     submitting.current = true;
     setStatus('sending');
-    setStatus((await postLead({ ...data, form: 'contact' })) ? 'sent' : 'error');
+    setStatus((await postLead({ ...data, form: 'contact' }, token)) ? 'sent' : 'error');
     submitting.current = false;
   }
 
@@ -156,6 +159,8 @@ export default function ContactForm({ email, defaultTrip }: Props) {
         <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
       </div>
 
+      <Turnstile onToken={setToken} />
+      {status === 'unverified' && <p className="cb-err cb-err--box" role="alert"><Icon name="close" size={16} />Please complete the security check above, then send again.</p>}
       {status === 'error' && <p className="cb-err cb-err--box" role="alert"><Icon name="close" size={16} />Something went wrong sending that. Please call {SITE.phone} or email {email}.</p>}
 
       <div className="cb-actions">

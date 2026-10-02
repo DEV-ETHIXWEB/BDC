@@ -37,5 +37,3 @@ export const PHOTO_PAGES: PhotoPage[] = [
   { slug: 'clackamas-chinook-salmon-catch-2495', key: 'salmonTeal', title: 'Chinook Salmon Caught Fishing in Clackamas Oregon', sub: 'Chinook Salmon Fishing in Clackamas - What to Expect', metaTitle: 'Chinook Salmon Fishing in Clackamas - Book Now', metaDescription: 'Experience Chinook salmon fishing on the Clackamas River with Captain Clinton Mcculloch. Join BDC Guide Service for an unforgettable fishing charter. Book online today.', published: '2026-07-10', alt: 'Angler in a teal shirt and sunglasses holding a large fish on the water', cat: 'Catches' },
 ];
 
-export const photoPageBySlug = (slug: string) => PHOTO_PAGES.find((p) => p.slug === slug);
-export const photoPageByKey = (key: string) => PHOTO_PAGES.find((p) => p.key === key);

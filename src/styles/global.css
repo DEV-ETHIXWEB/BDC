@@ -626,3 +626,10 @@ html[data-motion='reduce']::view-transition-group(*), html[data-motion='reduce']
    compete with the LCP image for bandwidth on first load. `auto` remembers the real height after first render. */
 main > :nth-child(n + 4) { content-visibility: auto; contain-intrinsic-size: auto 720px; }
 @media print { main > :nth-child(n + 4) { content-visibility: visible; } }
+
+/* ───────── Cloudflare Turnstile (only rendered when PUBLIC_TURNSTILE_SITE_KEY is set) ───────── */
+.ts-box { margin: 4px 0 0; min-height: 65px; }
+.ts-box:empty { display: none; min-height: 0; }      /* before the widget mounts, take no space */
+.ts-box iframe { max-width: 100%; }
+.qr .ts-box { grid-column: 1 / -1; }                  /* the hero bar is a grid: span the full row */
+@media (max-width: 400px) { .ts-box { transform: scale(0.92); transform-origin: left top; } }

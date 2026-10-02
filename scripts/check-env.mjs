@@ -18,3 +18,26 @@ if (endpoint) {
 } else {
   console.warn('\n\x1b[33m!! WARNING: PUBLIC_FORM_ENDPOINT is not set. The booking form will fall back to the visitor\'s mail app and cannot confirm delivery.\n!! Not launch-ready until it is set. Set REQUIRE_FORM_ENDPOINT=1 on the production host to make this fatal.\x1b[0m\n');
 }
+
+// --- Cloudflare Turnstile -----------------------------------------------------------------
+// The site key is public and belongs in PUBLIC_TURNSTILE_SITE_KEY. The SECRET key must never be set here:
+// it belongs on the endpoint that calls siteverify, and a PUBLIC_ name would compile it into the bundle.
+const siteKey = process.env.PUBLIC_TURNSTILE_SITE_KEY?.trim();
+const TEST_KEYS = ['1x00000000000000000000AA', '2x00000000000000000000AB', '3x00000000000000000000FF'];
+if (Object.keys(process.env).some((k) => k.startsWith('PUBLIC_') && /turnstile/i.test(k) && /secret/i.test(k))) {
+  console.error('\nBUILD FAILED: a Turnstile SECRET key is exposed through a PUBLIC_ variable.\nPUBLIC_* values are compiled into the browser bundle. Move it to a server-side variable.\n');
+  process.exit(1);
+}
+if (siteKey) {
+  if (TEST_KEYS.includes(siteKey)) {
+    if (require) {
+      console.error(`\nBUILD FAILED: PUBLIC_TURNSTILE_SITE_KEY is a Cloudflare TEST key (${siteKey}).\nIt always passes and protects nothing. Use the real site key for production.\n`);
+      process.exit(1);
+    }
+    console.warn(`\n\x1b[33m!! WARNING: PUBLIC_TURNSTILE_SITE_KEY is a Cloudflare test key (${siteKey}). It always passes.\x1b[0m\n`);
+  } else {
+    console.log('env ok: Turnstile site key set (verify the token server-side with the secret key)');
+  }
+} else {
+  console.warn('\n\x1b[33m!! NOTE: PUBLIC_TURNSTILE_SITE_KEY is not set, so the forms ship without a captcha (honeypot only).\x1b[0m\n');
+}

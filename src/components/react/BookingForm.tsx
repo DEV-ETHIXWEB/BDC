@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button, FieldError, Form, Input, Label, Radio, RadioGroup, TextArea, TextField } from 'react-aria-components';
 import { Icon } from './Icon';
 import { SITE } from '../../data/site';
-import { ENDPOINT, validators } from './form-shared';
+import { ENDPOINT, postLead, turnstileRequired, validators } from './form-shared';
+import Turnstile from './Turnstile';
 
 interface Props {
   trips: { slug: string; name: string; price: number; capacity?: number; boat?: string; hours?: number }[];
@@ -23,9 +24,10 @@ const fmtDate = (iso: string) => {
 };
 
 export default function BookingForm({ trips, email, defaultTrip }: Props) {
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error' | 'unverified'>('idle');
   const [copied, setCopied] = useState(false);
   const submitting = useRef(false);
+  const [token, setToken] = useState('');
   // Computed after mount: on a static site, doing it during render would freeze the BUILD date into the HTML.
   const [today, setToday] = useState('');
   useEffect(() => { setToday(todayIso()); }, []);
@@ -96,17 +98,13 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
       setStatus('draft');
       return;
     }
+    if (turnstileRequired() && !token) { setStatus('unverified'); return; }
     if (submitting.current) return; // ignore double submits fired in the same tick
     submitting.current = true;
     setStatus('sending');
-    try {
-      const res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
-      setStatus(res.ok ? 'sent' : 'error');
-    } catch {
-      setStatus('error');
-    } finally {
-      submitting.current = false;
-    }
+    const ok = await postLead(data, token);
+    setStatus(ok ? 'sent' : 'error');
+    submitting.current = false;
   }
 
   if (status === 'draft' && draft) {
@@ -243,6 +241,8 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
             <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
           </div>
 
+          <Turnstile onToken={setToken} />
+          {status === 'unverified' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Please complete the security check above, then send again.</p>}
           {status === 'error' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Something went wrong sending that. Please call {SITE.phone} or email {email}.</p>}
 
           <div className="tp-actions">

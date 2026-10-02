@@ -411,4 +411,3 @@ export function reply(input: string, ctx: Ctx = {}, path?: string): Reply {
   };
 }
 
-export const SUGGESTIONS = suggestionsFor();

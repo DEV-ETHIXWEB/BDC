@@ -29,9 +29,17 @@ let connect = "'self'";
 const endpoint = process.env.PUBLIC_FORM_ENDPOINT?.trim();
 if (endpoint) { try { connect += ` ${new URL(endpoint).origin}`; } catch { /* validated by check-env.mjs */ } }
 
+// Cloudflare Turnstile loads a script and renders an iframe. Those origins are added ONLY when a site key is
+// set, so an unconfigured build keeps the tight default policy. Without this the widget is blocked silently.
+const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
+const turnstile = Boolean(process.env.PUBLIC_TURNSTILE_SITE_KEY?.trim());
+const script = `'self' ${[...hashes].sort().join(' ')}${turnstile ? ` ${TURNSTILE_ORIGIN}` : ''}`;
+const frame = turnstile ? `frame-src ${TURNSTILE_ORIGIN}` : "frame-src 'none'";
+
 const base = [
   "default-src 'self'",
-  `script-src 'self' ${[...hashes].sort().join(' ')}`,
+  `script-src ${script}`,
+  frame,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data:",
   "font-src 'self'",

@@ -143,5 +143,3 @@ export const TRIPS: Trip[] = [
   },
 ];
 
-export const tripBySlug = (slug: string) => TRIPS.find((t) => t.slug === slug)!;
-export const priceLabel = (n: number) => `$${n}`;

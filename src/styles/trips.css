@@ -27,7 +27,7 @@
 .tp-hero__lede { font-size: clamp(1.1rem, 2vw, 1.35rem); color: var(--on-deep-soft); max-width: 44ch; margin: 0 0 1.5em; }
 .tp-hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .tp-crumbs { font-size: 0.9rem; color: var(--on-deep-soft); margin-bottom: 20px; }
-.tp-crumbs a { color: var(--on-deep-soft); }
+.tp-crumbs a { color: var(--on-deep-soft); display: inline-block; min-height: 24px; padding-block: 3px; } /* WCAG 2.5.8: 24px target */
 .tp-chip { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px; padding: 7px 14px 7px 10px; border-radius: 999px; background: rgba(243, 247, 251, 0.1); border: 1px solid rgba(243, 247, 251, 0.22); font-weight: 700; font-size: 0.92rem; color: var(--cream-50); }
 .tp-chip .ic { color: var(--pine-200); }
 .tp-hero__price { display: flex; align-items: center; gap: 14px; margin: 0 0 1.5em; color: var(--on-deep-soft); font-weight: 700; line-height: 1.25; }

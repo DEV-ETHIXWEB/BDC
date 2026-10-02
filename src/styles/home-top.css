@@ -150,8 +150,8 @@ html[data-motion='reduce'] .ht-spec { transition: none; }
 .ht-ticket__body { margin: 0; color: var(--on-deep-soft); font-size: 1rem; max-width: 42ch; }
 .ht-ticket__stub { position: relative; z-index: 1; display: grid; align-content: center; justify-items: center; gap: 12px; padding: 22px 20px; text-align: center; background: rgba(243, 247, 251, 0.05); }
 .ht-ticket__stub::before { content: ''; position: absolute; left: 0; top: calc(var(--n) + 8px); bottom: calc(var(--n) + 8px); border-left: 2px dotted rgba(243, 247, 251, 0.4); }
-.ht-ticket__big { margin: 0; display: grid; gap: 2px; justify-items: center; }
-.ht-ticket__big span { font: 800 clamp(3.2rem, 5vw, 4.4rem)/0.85 var(--font-display); color: #7fe3ff; letter-spacing: 0.01em; }
+.ht-ticket__big { margin: 0; display: grid; gap: 8px; justify-items: center; }
+.ht-ticket__big span { font: 800 clamp(3.2rem, 5vw, 4.4rem)/1.12 var(--font-display); color: #7fe3ff; letter-spacing: 0.01em; }
 .ht-ticket__big small { font-size: 0.85rem; color: var(--on-deep-soft); font-weight: 600; }
 .ht-ticket__code { font: 800 1.5rem/1 var(--font-display); letter-spacing: 0.12em; color: #7fe3ff; }
 .ht-ticket__bars { width: 118px; height: 26px; fill: rgba(243, 247, 251, 0.55); }

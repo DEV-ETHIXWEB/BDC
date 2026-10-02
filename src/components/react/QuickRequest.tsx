@@ -1,7 +1,8 @@
 import { useId, useRef, useState, type FormEvent } from 'react';
 import { Icon } from './Icon';
 import { SITE } from '../../data/site';
-import { ENDPOINT, mailtoHref, postLead, validators } from './form-shared';
+import { ENDPOINT, mailtoHref, postLead, turnstileRequired, validators } from './form-shared';
+import Turnstile from './Turnstile';
 
 interface Props {
   trips: { slug: string; name: string; price: number }[];
@@ -14,7 +15,7 @@ const NOT_SURE = 'Not sure yet';
 // PUBLIC_FORM_ENDPOINT is "sent"; without an endpoint it opens the visitor's mail app and says nothing was sent yet.
 export default function QuickRequest({ trips, email }: Props) {
   const uid = useId();
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error' | 'unverified'>('idle');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [trip, setTrip] = useState(NOT_SURE);
@@ -22,6 +23,7 @@ export default function QuickRequest({ trips, email }: Props) {
   const [problem, setProblem] = useState('');
   const [draftHref, setDraftHref] = useState('');
   const submitting = useRef(false);
+  const [token, setToken] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -44,10 +46,11 @@ export default function QuickRequest({ trips, email }: Props) {
       setStatus('draft');
       return;
     }
+    if (turnstileRequired() && !token) { setStatus('unverified'); setProblem('Please complete the security check, then send again.'); return; }
     if (submitting.current) return;
     submitting.current = true;
     setStatus('sending');
-    setStatus((await postLead({ ...data, form: 'quick-request' })) ? 'sent' : 'error');
+    setStatus((await postLead({ ...data, form: 'quick-request' }, token)) ? 'sent' : 'error');
     submitting.current = false;
   }
 
@@ -86,6 +89,7 @@ export default function QuickRequest({ trips, email }: Props) {
         <input id={`${uid}p`} name="phone" type="tel" inputMode="tel" maxLength={30} autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} aria-invalid={problem && validators.phone(phone) ? true : undefined} />
       </div>
       <div aria-hidden="true" className="qr__hp"><label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label></div>
+      <Turnstile onToken={setToken} />
       <button type="submit" className="btn btn--cream qr__go" disabled={status === 'sending'}>{status === 'sending' ? 'Sending' : 'Request'}<Icon name="arrowRight" size={18} /></button>
       <p className="qr__msg" role="alert" aria-live="polite">{problem || (status === 'error' ? `Something went wrong. Please call ${SITE.phone}.` : '')}</p>
     </form>
