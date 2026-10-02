@@ -1,0 +1,25 @@
+NEW TRIP REQUEST - BDC Guide Service
+
+{{name}} wants to book.
+
+Trip:           {{trip}}
+Name:           {{name}}
+Phone:          {{phone}}
+{{#if email}}Email:          {{email}}
+{{/if}}{{#if topics}}Asking about:   {{topics}}
+{{/if}}{{#if guests}}Guests:         {{guests}}
+{{/if}}Preferred date: {{#if date}}{{date}}{{else}}Flexible{{/if}}
+{{#if page}}Sent from:      {{page}}
+{{/if}}
+{{#if message}}
+THEIR MESSAGE
+-------------
+{{message}}
+{{/if}}
+
+Call them: {{phone}}
+{{#if email}}Email them: {{email}}
+{{/if}}
+---
+Sent by the booking form on bdcguideservices.com.
+This is an internal notification. Reply straight to the guest, not to this message.
