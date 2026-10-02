@@ -74,7 +74,11 @@ export default async function handler(req, res) {
 
       // 1. it passed, 2. it came from our widget action, 3. it came from a hostname we expect.
       // Without 2 and 3 a token minted on any other site or form could be replayed here.
-      const hosts = list(process.env.TURNSTILE_ALLOWED_HOSTNAMES, ['www.bdcguideservices.com', 'bdcguideservices.com']);
+      // The host this request actually arrived on is always allowed, so preview and *.vercel.app URLs work
+      // without configuration while a token minted on someone else's site still fails. Add extra hosts with
+      // TURNSTILE_ALLOWED_HOSTNAMES.
+      const self = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(':')[0];
+      const hosts = [...list(process.env.TURNSTILE_ALLOWED_HOSTNAMES), self].filter(Boolean);
       if (!v.success) {
         console.warn('lead: turnstile rejected', v['error-codes']);
         return res.status(400).json({ error: 'Security check failed, please try again' });
