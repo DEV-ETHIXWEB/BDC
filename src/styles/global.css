@@ -492,6 +492,13 @@ button { font-family: inherit; }
 .footer__bottom { position: relative; background: var(--navy-950); border-top: 1px solid var(--on-deep-line); padding-block: var(--s-4) calc(var(--s-4) + 76px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px var(--s-5); font-size: var(--fs-xs); }
 .footer__bottom ul { display: flex; flex-wrap: wrap; gap: 0 var(--s-4); }
 .footer__top { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; cursor: pointer; background: none; border: 0; color: var(--cream-50); font-size: var(--fs-xs); }
+/* Phone: the crest is a centred lockup sitting above the outlined BDC wordmark, not a small
+   watermark pinned to the right edge. Desktop keeps the pinned watermark. */
+@media (max-width: 719px) {
+  .footer__markrow { flex-direction: column; align-items: center; justify-content: center; gap: var(--s-3); overflow: visible; padding-bottom: var(--s-4); }
+  .footer__crest { order: -1; position: static; right: auto; bottom: auto; width: clamp(150px, 44vw, 210px); }
+  .footer__mark { font-size: clamp(7rem, 32vw, 12rem); margin: 0; }
+}
 @media (min-width: 720px) {
   .footer__lead { grid-template-columns: 1fr auto; }
   .footer__grid { grid-template-columns: 1.5fr 1fr 1fr; }
