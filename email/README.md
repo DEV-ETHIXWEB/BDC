@@ -40,13 +40,13 @@ against a full payload and a minimal one; neither leaves a stray placeholder on 
 ## Suggested subject lines
 
 - Guest: `We have your request, {{name}}`
-- Captain: `New trip request: {{name}} — {{trip}}`
+- Captain: `New trip request: {{name}}, {{trip}}`
 
 ## Wiring up SMTP2GO later
 
 1. **Verify the sending domain.** In SMTP2GO add `bdcguideservices.com` as a sender domain and
    publish the CNAME records it gives you for DKIM, plus an SPF record. Do not send from
-   `clinton.mcculloch5150@gmail.com` as the `From` address — Gmail's DMARC policy will have it
+   `clinton.mcculloch5150@gmail.com` as the `From` address. Gmail's DMARC policy will have it
    rejected or binned. Send from something like `bookings@bdcguideservices.com` and set
    `reply_to` to his Gmail so replies still land in his inbox.
 2. **Add both templates** under *Templates* in the SMTP2GO dashboard, pasting the HTML part and
@@ -85,7 +85,7 @@ node email/preview.mjs                              # writes rendered samples ne
 ## If the season copy changes
 
 The guest email prints the fishing year. Those months are mirrored from
-`src/data/seasons.ts` — if the captain revises a season there, update the table in
+`src/data/seasons.ts`. If the captain revises a season there, update the table in
 `confirmation-to-guest.html` and `confirmation-to-guest.txt` to match. Everything else in the
 emails (phone, prices, links) is mirrored from `src/data/site.ts` and `src/data/trips.ts`.
 
@@ -95,4 +95,4 @@ Table-based layout, inline styles, 600px wide, no web fonts, bulletproof VML but
 Outlook, a hidden preheader line, and `@media` rules that stack the columns under 620px.
 Both files are well under Gmail's 102 KB clipping limit. The crest is loaded from
 `https://www.bdcguideservices.com/icon-512.png`, so **the site must be deployed for the logo
-to appear** — the file is served from `public/icon-512.png`.
+to appear**. The file is served from `public/icon-512.png`.
