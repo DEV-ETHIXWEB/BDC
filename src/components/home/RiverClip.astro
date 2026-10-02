@@ -1,0 +1,78 @@
+---
+import Icon from '../Icon.astro';
+import { SITE } from '../../data/site';
+import '../../styles/river-clip.css';
+
+// A clip the captain filmed from the boat. It is a 320x568 phone video, so it is shown at phone size and never
+// stretched: blown up it would only look soft. Nothing downloads until the section scrolls into view (preload="none"
+// plus a src swapped in by the observer below), so a 2.4 MB file never touches first paint or the LCP.
+const CLIP = '/media/river-drift-loop.mp4';
+const POSTER = '/media/river-drift-poster.webp';
+---
+<section class="rc" aria-labelledby="rc-h">
+  <div class="wrap rc__grid">
+    <div class="rc__copy">
+      <p class="rc__tag" data-reveal="fade"><Icon name="wave" size={18} />From the boat</p>
+      <h2 id="rc-h" data-reveal="up">This is the quiet part.</h2>
+      <p class="rc__lede" data-reveal="up">
+        No engine, no hurry: just the current doing the work while the rods are out. Most of a drift-boat day
+        looks exactly like this, and it is the part guests remember long after the photo.
+      </p>
+      <ul class="rc__facts" data-stagger>
+        <li data-reveal="up"><Icon name="boat" size={20} /><span>Filmed aboard the Alumaweld drift boat</span></li>
+        <li data-reveal="up"><Icon name="users" size={20} /><span>Small groups, up to 3 in the drift boat</span></li>
+        <li data-reveal="up"><Icon name="phone" size={20} /><span>Ask Captain Clinton what is running: <a href={SITE.phoneHref}>{SITE.phone}</a></span></li>
+      </ul>
+      <a class="btn btn--primary rc__cta" href="/oregon-fishing-charter-rates" data-magnetic>See the trips<Icon name="arrowRight" size={18} /></a>
+    </div>
+
+    <figure class="rc__media" data-reveal="scale">
+      <div class="rc__phone">
+        <video
+          class="rc__video"
+          data-clip={CLIP}
+          poster={POSTER}
+          width="320" height="568"
+          muted loop playsinline preload="none"
+          aria-label="A short silent clip filmed from the drift boat: the river running past a forested bank, with the boat's gunwale in view."
+        ></video>
+        <button type="button" class="rc__play" data-clip-play hidden>
+          <Icon name="play" size={22} /><span>Play clip</span>
+        </button>
+      </div>
+      <figcaption class="rc__cap">A real drift, filmed from the boat. Sound off, on a loop.</figcaption>
+    </figure>
+  </div>
+
+</section>
+
+<script>
+  // Load and play only when the clip is actually on screen, and only if the visitor has not asked for less motion.
+  function initClip() {
+    document.querySelectorAll<HTMLVideoElement>('video[data-clip]').forEach((v) => {
+      if (v.dataset.ready) return;
+      v.dataset.ready = '1';
+      const btn = v.parentElement?.querySelector<HTMLButtonElement>('[data-clip-play]');
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'reduce';
+      const load = () => { if (!v.src) v.src = v.dataset.clip!; };
+
+      if (reduce) {               // poster only, with a button for anyone who does want it
+        if (btn) {
+          btn.hidden = false;
+          btn.addEventListener('click', () => { load(); v.play().then(() => { btn.hidden = true; }).catch(() => {}); });
+        }
+        return;
+      }
+      if (!('IntersectionObserver' in window)) { load(); return; }
+      const io = new IntersectionObserver((es) => {
+        for (const e of es) {
+          if (e.isIntersecting) { load(); v.play().catch(() => {}); }
+          else if (!v.paused) v.pause();            // stop decoding once it scrolls away
+        }
+      }, { threshold: 0.25 });
+      io.observe(v);
+    });
+  }
+  initClip();
+  document.addEventListener('astro:page-load', initClip);
+</script>

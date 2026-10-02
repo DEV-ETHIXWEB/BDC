@@ -20,6 +20,22 @@ import fishfinder from '../assets/photos/fishfinder.webp';
 import channelBuoy from '../assets/photos/channel-buoy.webp';
 import oregonCoast from '../assets/photos/oregon-coast.webp';
 import logo from '../assets/photos/logo.webp';
+// Photos the captain sent in October 2026. The six .jpeg originals are used at full resolution; the eight that
+// arrived as phone screenshots were cropped to remove the letterbox bars and the iOS edit chrome before encoding.
+import riverDriftBoatPair from '../assets/photos/river-drift-boat-pair.webp';
+import anglerHoodieCatch from '../assets/photos/angler-hoodie-catch.webp';
+import twoAnglersSledCatch from '../assets/photos/two-anglers-sled-catch.webp';
+import sledDeckArchBridge from '../assets/photos/sled-deck-arch-bridge.webp';
+import youngAnglerCatch from '../assets/photos/young-angler-catch.webp';
+import anglerBrightCatch from '../assets/photos/angler-bright-catch.webp';
+import winterSteelheadAngler from '../assets/photos/winter-steelhead-angler.webp';
+import alumaweldDriftPair from '../assets/photos/alumaweld-drift-pair.webp';
+import catchWithCargoShip from '../assets/photos/catch-with-cargo-ship.webp';
+import threeAnglersCatch from '../assets/photos/three-anglers-catch.webp';
+import twoAnglersVestsCatch from '../assets/photos/two-anglers-vests-catch.webp';
+import twoAnglersSmilingCatch from '../assets/photos/two-anglers-smiling-catch.webp';
+import bdcBoatOnWater from '../assets/photos/bdc-boat-on-water.webp';
+import bdcBoatTrailerCatch from '../assets/photos/bdc-boat-trailer-catch.webp';
 import { PHOTO_PAGES } from './photo-pages';
 
 export const PHOTOS = {
@@ -45,6 +61,20 @@ export const PHOTOS = {
   channelBuoy,
   oregonCoast,
   logo,
+  riverDriftBoatPair,
+  anglerHoodieCatch,
+  twoAnglersSledCatch,
+  sledDeckArchBridge,
+  youngAnglerCatch,
+  anglerBrightCatch,
+  winterSteelheadAngler,
+  alumaweldDriftPair,
+  catchWithCargoShip,
+  threeAnglersCatch,
+  twoAnglersVestsCatch,
+  twoAnglersSmilingCatch,
+  bdcBoatOnWater,
+  bdcBoatTrailerCatch,
 };
 
 export type PhotoKey = keyof typeof PHOTOS;
@@ -80,6 +110,20 @@ export const GALLERY: { key: PhotoKey; alt: string; caption: string; href?: stri
   { key: 'oregonCoast', alt: 'Rugged Oregon coastline framed by a windswept tree', caption: 'The Oregon coast', cat: 'On the water' },
   { key: 'channelBuoy', alt: 'Red channel marker buoy on the water', caption: 'Channel marker', cat: 'On the water' },
   { key: 'fishfinder', alt: 'Fish finder sonar screen on a boat', caption: 'Sonar on board', cat: 'On the water' },
+  { key: 'bdcBoatOnWater', alt: 'The BDC Guide Service sled under way on open water with other boats behind it', caption: 'The BDC boat at work', cat: 'Boats' },
+  { key: 'riverDriftBoatPair', alt: 'Two anglers standing in an Alumaweld drift boat on a wide river, one holding a fish', caption: 'Drift boat on the river', cat: 'Boats' },
+  { key: 'bdcBoatTrailerCatch', alt: 'Two anglers standing in the BDC Guide Service boat on its trailer, each holding a fish', caption: 'Back at the ramp', cat: 'Boats' },
+  { key: 'alumaweldDriftPair', alt: 'Two anglers fishing from an Alumaweld drift boat along a brushy bank', caption: 'Working the drift', cat: 'Boats' },
+  { key: 'sledDeckArchBridge', alt: 'Angler seated on the open deck of a sled boat passing under a steel arch bridge', caption: 'Under the bridge', cat: 'Boats' },
+  { key: 'threeAnglersCatch', alt: 'Three anglers in life jackets on a boat holding one large fish between them', caption: 'Three anglers, one fish', cat: 'Catches' },
+  { key: 'anglerHoodieCatch', alt: 'Angler in a blue hoodie on a boat holding a large fish and giving a thumbs up', caption: 'Thumbs up on the water', cat: 'Catches' },
+  { key: 'catchWithCargoShip', alt: 'Angler in green rain gear holding a large fish, with a cargo ship on the water behind', caption: 'Big water, big ships', cat: 'Catches' },
+  { key: 'anglerBrightCatch', alt: 'Angler in a blue shirt and life vest holding a bright silver fish under a clear sky', caption: 'Blue sky, bright fish', cat: 'Catches' },
+  { key: 'youngAnglerCatch', alt: 'Young angler in camo and waders holding a large fish on the boat', caption: 'A fine morning', cat: 'Catches' },
+  { key: 'twoAnglersSledCatch', alt: 'Two anglers on the deck of a sled boat holding a fish between them', caption: 'A good morning on the sled', cat: 'Catches' },
+  { key: 'twoAnglersVestsCatch', alt: 'Two anglers in inflatable life vests on a boat, one holding a fish', caption: 'Life jackets on', cat: 'Catches' },
+  { key: 'twoAnglersSmilingCatch', alt: 'Two anglers in rain gear smiling on the boat, one holding a fish', caption: 'All smiles', cat: 'Catches' },
+  { key: 'winterSteelheadAngler', alt: 'Angler in a camo cap holding a fish, bare winter trees behind', caption: 'Winter on the river', cat: 'Catches' },
 ];
 
 // Largest CSS px width each image can be shown at (1x-2x) without visible softness. Source-limited, not file-limited:
@@ -107,4 +151,18 @@ export const PHOTO_META: Record<string, { w: number; h: number; maxDisplay: numb
   salmonSeated: { w: 1772, h: 2380, maxDisplay: 664, focal: '50% 45%', note: 'Full-frame original from the previous site, 443px wide, upscaled 4x' },
   dungenessCrab: { w: 1784, h: 2400, maxDisplay: 900, focal: '50% 55%', note: 'Full-frame original from the previous site, 600px wide, upscaled 4x' },
   salmonTeal: { w: 1799, h: 2400, maxDisplay: 930, focal: '50% 45%', note: 'Full-frame original from the previous site, 620px wide, upscaled 4x' },
+  riverDriftBoatPair: { w: 2400, h: 1800, maxDisplay: 2016, focal: '50% 45%', note: 'Captain supplied, Oct 2026. 5712x4284 original, never upscaled' },
+  anglerHoodieCatch: { w: 1800, h: 2400, maxDisplay: 1512, focal: '50% 40%', note: 'Captain supplied, Oct 2026. 4032x3024 original' },
+  twoAnglersSledCatch: { w: 1800, h: 2400, maxDisplay: 1512, focal: '50% 40%', note: 'Captain supplied, Oct 2026. 4032x3024 original' },
+  sledDeckArchBridge: { w: 1800, h: 2400, maxDisplay: 1512, focal: '40% 40%', note: 'Captain supplied, Oct 2026. 4032x3024 original' },
+  youngAnglerCatch: { w: 1800, h: 2400, maxDisplay: 1512, focal: '50% 40%', note: 'Captain supplied, Oct 2026. 4032x3024 original' },
+  anglerBrightCatch: { w: 1800, h: 2400, maxDisplay: 1512, focal: '50% 40%', note: 'Captain supplied, Oct 2026. 4032x3024 original' },
+  winterSteelheadAngler: { w: 1198, h: 2400, maxDisplay: 1006, focal: '50% 40%', note: 'Captain supplied, Oct 2026. Phone screenshot, bars and iOS chrome cropped' },
+  alumaweldDriftPair: { w: 1284, h: 1647, maxDisplay: 1078, focal: '50% 50%', note: 'Captain supplied, Oct 2026. Phone screenshot, letterbox cropped' },
+  catchWithCargoShip: { w: 1249, h: 2400, maxDisplay: 1049, focal: '50% 40%', note: 'Captain supplied, Oct 2026. Phone screenshot, letterbox cropped' },
+  threeAnglersCatch: { w: 1284, h: 2280, maxDisplay: 1078, focal: '50% 35%', note: 'Captain supplied, Oct 2026. Phone screenshot, letterbox cropped' },
+  twoAnglersVestsCatch: { w: 1284, h: 1442, maxDisplay: 1078, focal: '50% 45%', note: 'Captain supplied, Oct 2026. Phone screenshot, letterbox cropped' },
+  twoAnglersSmilingCatch: { w: 1284, h: 1712, maxDisplay: 1078, focal: '50% 40%', note: 'Captain supplied, Oct 2026. Phone screenshot, letterbox cropped' },
+  bdcBoatOnWater: { w: 1284, h: 998, maxDisplay: 1078, focal: '50% 50%', note: 'Captain supplied, Oct 2026. Phone screenshot, letterbox cropped. Hull branding readable' },
+  bdcBoatTrailerCatch: { w: 1284, h: 2200, maxDisplay: 1078, focal: '50% 45%', note: 'Captain supplied, Oct 2026. Phone screenshot, letterbox cropped. Hull branding readable' },
 };

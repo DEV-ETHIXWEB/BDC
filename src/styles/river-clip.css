@@ -1,0 +1,26 @@
+/* ───────── "From the boat" clip band ───────── */
+.rc { position: relative; background: var(--navy-900); color: var(--on-deep); padding-block: clamp(48px, 7vw, 96px); overflow: hidden; }
+.rc__grid { display: grid; gap: clamp(28px, 5vw, 56px); align-items: center; }
+.rc__tag { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 10px; color: var(--pine-200); font-weight: 700; font-size: 0.95rem; }
+.rc h2 { margin: 0; color: var(--cream-50); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.02; text-wrap: balance; }
+.rc__lede { margin: 14px 0 0; color: var(--on-deep-soft); font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); line-height: 1.6; max-width: 46ch; }
+.rc__facts { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+.rc__facts li { display: flex; gap: 12px; align-items: flex-start; color: var(--on-deep-soft); font-size: 1rem; }
+.rc__facts .ic { color: var(--pine-200); flex: none; margin-top: 2px; }
+.rc__facts a { color: var(--cream-50); font-weight: 700; }
+.rc__cta { margin-top: 26px; }
+
+.rc__media { margin: 0; display: grid; justify-items: center; gap: 12px; }
+/* The clip is 320x568. It is never shown wider than its own pixels, so it stays sharp instead of soft. */
+.rc__phone { position: relative; width: min(320px, 78vw); aspect-ratio: 320 / 568; border-radius: 22px; overflow: hidden; background: var(--navy-950); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.7), 0 0 0 8px rgba(243, 247, 251, 0.06), 0 0 0 9px rgba(243, 247, 251, 0.14); }
+.rc__video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.rc__play { position: absolute; inset: auto 0 16px; margin-inline: auto; width: max-content; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 0; border-radius: var(--r-pill); background: var(--cream-50); color: var(--navy-900); font: 700 0.95rem/1 var(--font-body); cursor: pointer; }
+.rc__play[hidden] { display: none; }   /* display:inline-flex above would otherwise beat the UA [hidden] rule */
+.rc__cap { color: var(--on-deep-soft); font-size: 0.92rem; text-align: center; }
+
+
+@media (min-width: 900px) {
+  .rc__grid { grid-template-columns: minmax(0, 1fr) auto; }
+  .rc__media { justify-items: end; }
+}
+@media (prefers-reduced-motion: reduce) { .rc__phone { box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.7); } }
