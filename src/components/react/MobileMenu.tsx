@@ -69,7 +69,7 @@ export default function MobileMenu({ nav, phone, phoneHref }: Props) {
                   <a className="wd-menu__book" href="/oregon-fishing-charter-rates" onClick={close}>Book a trip</a>
                   <p className="wd-menu__addr">
                     <a href={`mailto:${SITE.email}`}><G name="mail" size={16} />{SITE.email}</a>
-                    <span><G name="pin" size={16} />{SITE.address.city}, {SITE.address.region}</span>
+                    <span><G name="pin" size={16} />{SITE.regionName} rivers and coast</span>
                   </p>
                 </div>
               </>

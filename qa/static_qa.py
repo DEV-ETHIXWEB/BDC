@@ -72,5 +72,6 @@ print("robots.txt:",open(D+"/robots.txt").read().replace("\n"," | "))
 home=real["/"][1]
 ld=[json.loads(m.group(1)) for m in re.finditer(r'<script type="application/ld\+json">(.*?)</script>',home,re.S)]
 biz=[j for j in ld if isinstance(j.get("@type"),list) and "LocalBusiness" in j["@type"]][0]
-print("business schema:",biz["name"],"|",biz["telephone"],"|",biz["email"],"|",biz["address"]["addressLocality"],biz["address"]["postalCode"],"| priceRange",biz["priceRange"])
-print("street address published:",biz["address"].get("streetAddress","no (by the captain's request)"))
+print("business schema:",biz["name"],"|",biz["telephone"],"|",biz["email"],"|",biz["address"]["addressRegion"],biz["address"]["addressCountry"],"| priceRange",biz["priceRange"])
+leaked=[k for k in ("streetAddress","addressLocality","postalCode") if k in biz["address"]]
+print("address published:","REGRESSION "+str(leaked) if leaked else "region only, by the captain's request")

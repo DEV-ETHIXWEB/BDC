@@ -62,12 +62,11 @@ const business = {
   logo: new URL('/icon-512.png', SITE.url).href,
   priceRange: `$${Math.min(...TRIPS.map((t) => t.price))}-$${Math.max(...TRIPS.map((t) => t.price))}`,
   founder: { '@type': 'Person', name: SITE.captain },
+  // No street, locality or postcode: the captain publishes no address (src/data/site.ts).
   address: {
     '@type': 'PostalAddress',
-    addressLocality: SITE.address.city,
-    addressRegion: SITE.address.region,
-    postalCode: SITE.address.postal,
-    addressCountry: SITE.address.country,
+    addressRegion: SITE.region,
+    addressCountry: SITE.country,
   },
   areaServed: ['Columbia River', 'Willamette River', 'Wilson River', 'Trask River', 'Sandy River', 'Clackamas River', 'Nestucca River'].map((n) => ({ '@type': 'Place', name: `${n}, Oregon` })),
   hasOfferCatalog: {
@@ -125,7 +124,7 @@ const graph = [path === '/' ? business : null, path === '/' ? website : null, br
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="geo.region" content="US-OR" />
-    <meta name="geo.placename" content="Happy Valley, Oregon" />
+    <meta name="geo.placename" content="Oregon" />
     {graph.map((g) => <script type="application/ld+json" set:html={JSON.stringify(g).replace(/</g, '\\u003c')} />)}
     <ClientRouter />
     <script is:inline>

@@ -8,7 +8,6 @@ const {
   title = 'Questions before you book?',
   body = 'Ask Captain Clinton anything: what to bring, which trip fits your group, kids, licenses. He replies as soon as he is off the water.',
 } = Astro.props;
-const a = SITE.address;
 ---
 <section class="cb section" id="message" aria-labelledby="cb-h">
   <div class="wrap cb__grid">
@@ -32,7 +31,7 @@ const a = SITE.address;
         <li>
           <a class="cb__way" href="/contact-us">
             <span class="cb__ic"><Icon name="pin" size={22} /></span>
-            <span><small>Where we meet</small><strong>{a.city}, {a.region} {a.postal}</strong></span>
+            <span><small>Where we meet</small><strong>Confirmed when you book</strong></span>
           </a>
         </li>
       </ul>

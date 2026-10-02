@@ -11,7 +11,7 @@ import { BOOKING_TERMS as BT, REGULATIONS } from '../../data/policies';
  * Links use [label](href).
  */
 
-export type ActionId = 'call' | 'email' | 'book' | 'license' | 'directions';
+export type ActionId = 'call' | 'email' | 'book' | 'license';
 export interface Card { slug: string; name: string; price: number; hours: number; boat: string; capacity: number; href: string; note?: string }
 export interface Ctx { intent?: string; entity?: Entity }
 export interface Reply { text: string; cards?: Card[]; actions?: ActionId[]; followups: string[]; ctx: Ctx; fallback?: boolean }
@@ -171,7 +171,7 @@ const INTENTS: Intent[] = [
   {
     id: 'where', kw: ['meet', 'address', 'location', 'direction', 'launch', 'depart', 'located', 'parking', 'find you', 'happy valley', 'map', ['where', 0.6]],
     follow: ['How early do trips start?', 'Which rivers do you fish?', 'How do I book?'],
-    fn: () => ({ text: `${faq('meet our guests')} We fish out of the ${SITE.address.city}, ${SITE.address.region} area and across the rivers on our list.`, actions: ['directions', 'call'] }),
+    fn: () => ({ text: `${faq('meet our guests')} We fish across ${SITE.regionName}: the rivers on our list are the Columbia, Willamette, Wilson, Trask, Sandy, Clackamas and Nestucca.`, actions: ['call', 'email'] }),
   },
   {
     id: 'river', kw: ['river', 'creek', 'lake', 'reservoir', 'area', 'fish in', 'where do you fish', 'where you fish'],
@@ -412,4 +412,3 @@ export function reply(input: string, ctx: Ctx = {}, path?: string): Reply {
 }
 
 export const SUGGESTIONS = suggestionsFor();
-export const DIRECTIONS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${SITE.address.city}, ${SITE.address.region} ${SITE.address.postal}`)}`;

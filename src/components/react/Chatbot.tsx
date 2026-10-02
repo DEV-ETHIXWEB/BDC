@@ -2,7 +2,7 @@ import { Fragment, useCallback, useEffect, useRef, useState, type SubmitEvent, t
 import '../../styles/widgets.css';
 import { Icon } from './Icon';
 import { Crest, G, useDragDismiss, useFocusTrap, useOpenFlag, useSheetMode, useVisualViewport } from './wd-shared';
-import { DIRECTIONS_URL, reply, suggestionsFor, type ActionId, type Card, type Ctx } from './brain';
+import { reply, suggestionsFor, type ActionId, type Card, type Ctx } from './brain';
 import { TRIPS } from '../../data/trips';
 import { SITE } from '../../data/site';
 
@@ -40,7 +40,6 @@ const ACTIONS: Record<ActionId, { label: string; href: string; icon: 'call' | 'm
   email: { label: 'Email', href: `mailto:${SITE.email}`, icon: 'mail' },
   book: { label: 'See trips', href: '/oregon-fishing-charter-rates', icon: 'ticket' },
   license: { label: 'License guide', href: '/article/get-your-valid-oregon-fishing-license', icon: 'ticket' },
-  directions: { label: 'Directions', href: DIRECTIONS_URL, icon: 'pin', ext: true },
 };
 
 function TripCard({ c, onNav }: { c: Card; onNav: () => void }) {

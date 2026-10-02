@@ -10,15 +10,12 @@ export const SITE = {
   phoneHref: 'tel:+15038267294',
   email: 'clinton.mcculloch5150@gmail.com',
   captain: 'Captain Clinton McCulloch',
-  // No street address is published. The one on the old site (9018 Southeast Bridge Crk Ct) was not the
-  // captain's, and he asked for it to come off: the phone number and email are the way to reach him, and he
-  // gives the real meeting spot when you book. City and region stay as the service area.
-  address: {
-    city: 'Happy Valley',
-    region: 'OR',
-    postal: '97015',
-    country: 'US',
-  },
+  // No address is published at all. The one on the old site (9018 Southeast Bridge Crk Ct, Happy Valley)
+  // was not the captain's, and he asked for it to come off the site: the phone number and the email are how
+  // guests reach him, and he gives the real meeting spot when they book. Only the service region is stated.
+  region: 'OR',
+  regionName: 'Oregon',
+  country: 'US',
   licenseUrl: 'https://myodfw.com/fishing/licensing-info',
   year: 2026,
 } as const;
