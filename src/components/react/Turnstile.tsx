@@ -35,8 +35,11 @@ function loadScript(): Promise<void> {
 /**
  * `onToken` receives the solved token, or '' whenever the challenge expires, errors or is reset.
  * Treat '' as "not verified yet" and keep the submit button blocked.
+ *
+ * A Turnstile token is single use: once it has been sent to siteverify it cannot be sent again. Bump
+ * `resetKey` after every submit attempt so a retry gets a fresh challenge instead of a duplicate-token error.
  */
-export default function Turnstile({ onToken, theme = 'auto' }: { onToken: (t: string) => void; theme?: 'auto' | 'light' | 'dark' }) {
+export default function Turnstile({ onToken, resetKey = 0, theme = 'auto' }: { onToken: (t: string) => void; resetKey?: number; theme?: 'auto' | 'light' | 'dark' }) {
   const host = useRef<HTMLDivElement>(null);
   const widget = useRef<string | null>(null);
   const uid = useId();
@@ -66,6 +69,14 @@ export default function Turnstile({ onToken, theme = 'auto' }: { onToken: (t: st
     // onToken is a stable setter from the parent; re-rendering the widget on every keystroke would reset the challenge
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
+
+  useEffect(() => {
+    if (!resetKey || !widget.current || !window.turnstile) return;
+    try { window.turnstile.reset(widget.current); } catch { /* widget already gone */ }
+    onToken('');
+    // onToken is a stable setter; depending on it would reset the widget on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetKey]);
 
   if (!TURNSTILE_SITE_KEY) return null;
   return <div className="ts-box" ref={host} id={`ts-${uid}`} aria-label="Security check" />;

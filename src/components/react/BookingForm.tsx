@@ -28,6 +28,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
   const [copied, setCopied] = useState(false);
   const submitting = useRef(false);
   const [token, setToken] = useState('');
+  const [tsReset, setTsReset] = useState(0);
   // Computed after mount: on a static site, doing it during render would freeze the BUILD date into the HTML.
   const [today, setToday] = useState('');
   useEffect(() => { setToday(todayIso()); }, []);
@@ -105,6 +106,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
     const ok = await postLead(data, token);
     setStatus(ok ? 'sent' : 'error');
     submitting.current = false;
+    if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way
   }
 
   if (status === 'draft' && draft) {
@@ -241,7 +243,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
             <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
           </div>
 
-          <Turnstile onToken={setToken} />
+          <Turnstile onToken={setToken} resetKey={tsReset} />
           {status === 'unverified' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Please complete the security check above, then send again.</p>}
           {status === 'error' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Something went wrong sending that. Please call {SITE.phone} or email {email}.</p>}
 

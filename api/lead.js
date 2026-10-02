@@ -61,12 +61,30 @@ export default async function handler(req, res) {
     const token = clip(d['cf-turnstile-response'], 2048);
     if (!token) return res.status(400).json({ error: 'Please complete the security check' });
     try {
+      // Cloudflare's documented flow: form-encoded, with a timeout, and three checks on the result.
+      const form = new URLSearchParams({ secret, response: token });
+      const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim();
+      if (ip) form.set('remoteip', ip);
       const v = await fetch(TURNSTILE_VERIFY, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ secret, response: token, remoteip: req.headers['x-forwarded-for']?.split(',')[0]?.trim() }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: form,
+        signal: AbortSignal.timeout(10_000),
       }).then((r) => r.json());
+
+      // 1. it passed, 2. it came from our widget action, 3. it came from a hostname we expect.
+      // Without 2 and 3 a token minted on any other site or form could be replayed here.
+      const hosts = list(process.env.TURNSTILE_ALLOWED_HOSTNAMES, ['www.bdcguideservices.com', 'bdcguideservices.com']);
       if (!v.success) {
         console.warn('lead: turnstile rejected', v['error-codes']);
+        return res.status(400).json({ error: 'Security check failed, please try again' });
+      }
+      if (v.action && v.action !== 'lead') {
+        console.warn('lead: turnstile action mismatch', v.action);
+        return res.status(400).json({ error: 'Security check failed, please try again' });
+      }
+      if (v.hostname && !hosts.includes(v.hostname)) {
+        console.warn('lead: turnstile hostname not allowed', v.hostname);
         return res.status(400).json({ error: 'Security check failed, please try again' });
       }
     } catch (e) {

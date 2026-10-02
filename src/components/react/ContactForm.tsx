@@ -32,6 +32,7 @@ export default function ContactForm({ email, defaultTrip }: Props) {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const submitting = useRef(false);
   const [token, setToken] = useState('');
+  const [tsReset, setTsReset] = useState(0);
   const formRef = useRef<HTMLFormElement>(null);
   const headRef = useRef<HTMLHeadingElement>(null);
   const first = useRef(true);
@@ -81,6 +82,7 @@ export default function ContactForm({ email, defaultTrip }: Props) {
     setStatus('sending');
     setStatus((await postLead({ ...data, form: 'contact' }, token)) ? 'sent' : 'error');
     submitting.current = false;
+    if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way
   }
 
   if (status === 'draft' && draft) {
@@ -159,7 +161,7 @@ export default function ContactForm({ email, defaultTrip }: Props) {
         <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
       </div>
 
-      <Turnstile onToken={setToken} />
+      <Turnstile onToken={setToken} resetKey={tsReset} />
       {status === 'unverified' && <p className="cb-err cb-err--box" role="alert"><Icon name="close" size={16} />Please complete the security check above, then send again.</p>}
       {status === 'error' && <p className="cb-err cb-err--box" role="alert"><Icon name="close" size={16} />Something went wrong sending that. Please call {SITE.phone} or email {email}.</p>}
 

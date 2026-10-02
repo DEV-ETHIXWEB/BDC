@@ -24,6 +24,7 @@ export default function QuickRequest({ trips, email }: Props) {
   const [draftHref, setDraftHref] = useState('');
   const submitting = useRef(false);
   const [token, setToken] = useState('');
+  const [tsReset, setTsReset] = useState(0);
   const formRef = useRef<HTMLFormElement>(null);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -52,6 +53,7 @@ export default function QuickRequest({ trips, email }: Props) {
     setStatus('sending');
     setStatus((await postLead({ ...data, form: 'quick-request' }, token)) ? 'sent' : 'error');
     submitting.current = false;
+    if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way
   }
 
   if (status === 'sent') {
@@ -89,7 +91,7 @@ export default function QuickRequest({ trips, email }: Props) {
         <input id={`${uid}p`} name="phone" type="tel" inputMode="tel" maxLength={30} autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} aria-invalid={problem && validators.phone(phone) ? true : undefined} />
       </div>
       <div aria-hidden="true" className="qr__hp"><label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label></div>
-      <Turnstile onToken={setToken} />
+      <Turnstile onToken={setToken} resetKey={tsReset} />
       <button type="submit" className="btn btn--cream qr__go" disabled={status === 'sending'}>{status === 'sending' ? 'Sending' : 'Request'}<Icon name="arrowRight" size={18} /></button>
       <p className="qr__msg" role="alert" aria-live="polite">{problem || (status === 'error' ? `Something went wrong. Please call ${SITE.phone}.` : '')}</p>
     </form>
