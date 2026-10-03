@@ -6,8 +6,12 @@ const esc = (v) =>
   String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const nl2br = (v) => esc(v).replace(/\r?\n/g, '<br />');
 
-const SITE = 'https://www.bdcguideservices.com';
-const LOGO = `${SITE}/icon-512.png`;
+// The origin is passed in per request (api/lead.js reads it from the request host) so the logo and links
+// always point at the domain the site is actually served from. Hardcoding one meant the logo 404'd the moment
+// the site moved to bestdayscatching.com.
+const DEFAULT_SITE = 'https://www.bestdayscatching.com';
+const siteOf = (d) => (d && d.site) || DEFAULT_SITE;
+const hostOf = (site) => site.replace(/^https?:\/\//, '').replace(/\/$/, '');
 const PHONE = '(503) 826-7294';
 const PHONE_HREF = 'tel:+15038267294';
 
@@ -44,6 +48,9 @@ const row = (label, value, strong) => `
 
 /** Internal notification: everything the captain needs to call the lead back. */
 export function leadEmail(d) {
+  const SITE = siteOf(d);
+  const LOGO = `${SITE}/icon-512.png`;
+  const HOST = hostOf(SITE);
   const subject = `New trip request: ${d.name}${d.trip ? ` - ${d.trip}` : ''}`;
   const rows = [
     d.trip && row('Trip', esc(d.trip), true),
@@ -53,7 +60,7 @@ export function leadEmail(d) {
     d.topics && row('Asking about', esc(d.topics)),
     d.guests && row('Guests', esc(d.guests)),
     row('Preferred date', esc(d.date || 'Flexible'), true),
-    d.page && row('Sent from', esc(d.page)),
+    d.source && row('Came from', esc(d.source), true),
   ].filter(Boolean).join('');
 
   const html = `${head(subject, `${d.name} wants ${d.trip || 'a trip'}. Call ${d.phone}.`)}
@@ -81,7 +88,7 @@ export function leadEmail(d) {
       <!--<![endif]-->
     </td></tr>
     <tr><td class="px" style="background-color:#071b33;border-radius:0 0 10px 10px;padding:24px 36px;">
-      <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:21px;color:#9fb3c8;">Sent by the booking form on <a href="${SITE}" style="color:#bfe6f2;text-decoration:none;">bdcguideservices.com</a>.<br />Internal notification: reply straight to the guest, not to this message.</p>
+      <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:21px;color:#9fb3c8;">Sent by the booking form on <a href="${SITE}" style="color:#bfe6f2;text-decoration:none;">${HOST}</a>.<br />Internal notification: reply straight to the guest, not to this message.</p>
     </td></tr>${foot}`;
 
   const text = `NEW TRIP REQUEST - BDC Guide Service
@@ -92,17 +99,20 @@ Trip:           ${d.trip || '-'}
 Name:           ${d.name}
 Phone:          ${d.phone}
 ${d.email ? `Email:          ${d.email}\n` : ''}${d.topics ? `Asking about:   ${d.topics}\n` : ''}${d.guests ? `Guests:         ${d.guests}\n` : ''}Preferred date: ${d.date || 'Flexible'}
-${d.page ? `Sent from:      ${d.page}\n` : ''}${d.message ? `\nTHEIR MESSAGE\n-------------\n${d.message}\n` : ''}
+${d.source ? `Came from:      ${d.source}\n` : ''}${d.message ? `\nTHEIR MESSAGE\n-------------\n${d.message}\n` : ''}
 Call them: ${d.phone}
 ${d.email ? `Email them: ${d.email}\n` : ''}
 ---
-Sent by the booking form on bdcguideservices.com.`;
+Sent by the booking form on ${HOST}.`;
 
   return { subject, html, text };
 }
 
 /** Auto-reply to the visitor. Only sent when the form collected an email address. */
 export function confirmEmail(d) {
+  const SITE = siteOf(d);
+  const LOGO = `${SITE}/icon-512.png`;
+  const HOST = hostOf(SITE);
   const subject = `We have your request, ${d.name}`;
   const season = [
     ['Winter steelhead', 'Jan to Apr'], ['Spring &amp; early Chinook', 'Mar to Jul'],
@@ -174,9 +184,9 @@ export function confirmEmail(d) {
     <tr><td align="center" class="px" style="background-color:#071b33;border-radius:0 0 10px 10px;padding:30px 36px;">
       <div style="font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:24px;color:#ffffff;font-weight:bold;letter-spacing:1px;">BDC GUIDE SERVICE</div>
       <div style="height:10px;line-height:10px;font-size:10px;">&nbsp;</div>
-      <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:23px;color:#9fb3c8;"><a href="${PHONE_HREF}" style="color:#bfe6f2;text-decoration:none;">${PHONE}</a><br /><a href="${SITE}" style="color:#bfe6f2;text-decoration:none;">bdcguideservices.com</a></p>
+      <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:23px;color:#9fb3c8;"><a href="${PHONE_HREF}" style="color:#bfe6f2;text-decoration:none;">${PHONE}</a><br /><a href="${SITE}" style="color:#bfe6f2;text-decoration:none;">${HOST}</a></p>
       <div style="height:14px;line-height:14px;font-size:14px;">&nbsp;</div>
-      <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:19px;color:#8da2b8;">You are getting this because you sent a request on bdcguideservices.com.<br />Nothing is booked until Captain Clinton confirms it with you.</p>
+      <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:19px;color:#8da2b8;">You are getting this because you sent a request on ${HOST}.<br />Nothing is booked until Captain Clinton confirms it with you.</p>
     </td></tr>${foot}`;
 
   const text = `BDC GUIDE SERVICE
@@ -217,7 +227,7 @@ Target species: ${SITE}/oregon-fishing-species
 BDC GUIDE SERVICE - Captain Clinton McCulloch
 ${PHONE} - ${SITE}
 
-You are getting this because you sent a request on bdcguideservices.com.
+You are getting this because you sent a request on ${HOST}.
 Nothing is booked until Captain Clinton confirms it with you.`;
 
   return { subject, html, text };

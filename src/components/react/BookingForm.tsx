@@ -90,7 +90,8 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
     }
     const company = (new FormData(e.currentTarget).get('company') as string) || '';
     if (company) return; // honeypot
-    const data = { name: name.trim(), phone: phone.trim(), email: mail.trim(), trip: tripName, guests: String(guests), date, message: message.trim() };
+    const data = { name: name.trim(), phone: phone.trim(), email: mail.trim(), trip: tripName, guests: String(guests), date, message: message.trim(),
+      page: window.location.pathname, form: 'Booking form', title: document.title.split('|')[0].trim() };
     // A mailto: URL has practical length limits, so the request is capped; the full text is still shown for copying.
     const body = `Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email}\nTrip: ${data.trip}\nGuests: ${data.guests}\nPreferred date: ${data.date || 'flexible'}\n\n${data.message || ''}`;
     if (!ENDPOINT) {

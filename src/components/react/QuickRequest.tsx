@@ -18,6 +18,7 @@ export default function QuickRequest({ trips, email }: Props) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'draft' | 'error' | 'unverified'>('idle');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [mail, setMail] = useState('');
   const [trip, setTrip] = useState(NOT_SURE);
   const [date, setDate] = useState('');
   const [problem, setProblem] = useState('');
@@ -35,11 +36,15 @@ export default function QuickRequest({ trips, email }: Props) {
       (formRef.current?.elements.namedItem(nErr ? 'name' : 'phone') as HTMLElement | null)?.focus();
       return;
     }
+    const mErr = mail.trim() ? validators.email(mail) : '';
+    if (mErr) { setProblem(mErr); (formRef.current?.elements.namedItem('email') as HTMLElement | null)?.focus(); return; }
     setProblem('');
     if (((new FormData(e.currentTarget).get('company') as string) || '')) return; // honeypot
-    const data = { name: name.trim(), phone: phone.trim(), trip, date, page: window.location.pathname };
+    // `form` and `title` tell the captain which form on which page produced the lead; a bare path did not.
+    const data = { name: name.trim(), phone: phone.trim(), email: mail.trim(), trip, date,
+      page: window.location.pathname, form: 'Quick request bar', title: document.title.split('|')[0].trim() };
     const subject = trip === NOT_SURE ? 'Trip request from the home page' : `Trip request: ${trip}`;
-    const body = `Name: ${data.name}\nPhone: ${data.phone}\nTrip: ${trip}\nPreferred date: ${date || 'flexible'}\n\nPlease call me back about this trip.`;
+    const body = `Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email || 'not given'}\nTrip: ${trip}\nPreferred date: ${date || 'flexible'}\n\nPlease call me back about this trip.`;
     if (!ENDPOINT) {
       const href = mailtoHref(email, subject, body);
       setDraftHref(href);
@@ -89,6 +94,10 @@ export default function QuickRequest({ trips, email }: Props) {
       <div className="qr__f">
         <label htmlFor={`${uid}p`}>Phone</label>
         <input id={`${uid}p`} name="phone" type="tel" inputMode="tel" maxLength={30} autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} aria-invalid={problem && validators.phone(phone) ? true : undefined} />
+      </div>
+      <div className="qr__f">
+        <label htmlFor={`${uid}e`}>Email</label>
+        <input id={`${uid}e`} name="email" type="email" inputMode="email" maxLength={254} autoComplete="email" value={mail} onChange={(e) => setMail(e.target.value)} aria-invalid={problem && mail.trim() && validators.email(mail) ? true : undefined} />
       </div>
       <div aria-hidden="true" className="qr__hp"><label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label></div>
       <Turnstile onToken={setToken} resetKey={tsReset} />

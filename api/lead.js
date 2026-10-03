@@ -50,7 +50,12 @@ export default async function handler(req, res) {
     name: clip(d.name, 80), phone: clip(d.phone, 30), email: clip(d.email, 254),
     trip: clip(d.trip, 120), guests: clip(d.guests, 10), date: clip(d.date, 60),
     message: clip(d.message, 1500), topics: clip(d.topics, 200), page: clip(d.page, 200),
+    form: clip(d.form, 60), title: clip(d.title, 120),
   };
+  // Where the lead came from, spelled out: which form, on which page. "/" told the captain nothing.
+  const host = String(req.headers['x-forwarded-host'] || req.headers.host || '').split(':')[0];
+  data.site = host ? `https://${host}` : undefined;
+  data.source = [data.form, data.title && `"${data.title}"`, data.page].filter(Boolean).join('  -  ') || undefined;
   if (data.name.length < 2) return res.status(400).json({ error: 'Name is required' });
   if (!data.phone && !data.email) return res.status(400).json({ error: 'A phone number or an email is required' });
   if (data.email && !EMAIL_RE.test(data.email)) return res.status(400).json({ error: 'That email address is not valid' });

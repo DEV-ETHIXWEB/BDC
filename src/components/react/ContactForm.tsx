@@ -64,6 +64,7 @@ export default function ContactForm({ email, defaultTrip }: Props) {
     const data = {
       name: name.trim(), email: mail.trim(), phone: phone.trim(), topics: topics.join(', '), trip: defaultTrip ?? NOT_SURE,
       message: message.trim(), page: window.location.pathname,
+      form: 'Contact form', title: document.title.split('|')[0].trim(),
     };
     const subject = topics.length ? `Question: ${topics[0]}` : 'Question from the website';
     const body = [

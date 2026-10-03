@@ -30,7 +30,7 @@
 }
 /* desktop: one row */
 @media (min-width: 900px) {
-  .qr { grid-template-columns: minmax(0, 1.35fr) minmax(150px, 1.05fr) minmax(0, 1fr) minmax(0, 1fr) auto; align-items: center; padding: 6px; border-radius: 999px; gap: 6px; }
+  .qr { grid-template-columns: minmax(0, 1.2fr) minmax(140px, 0.95fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.05fr) auto; align-items: center; padding: 6px; border-radius: 999px; gap: 6px; }
   /* minimal: no visible heading on desktop (the form keeps its accessible name) */
   .qr__title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .qr__go { width: auto; padding-inline: 1.4rem; border-radius: 999px; }
