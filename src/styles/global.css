@@ -628,8 +628,17 @@ main > :nth-child(n + 4) { content-visibility: auto; contain-intrinsic-size: aut
 @media print { main > :nth-child(n + 4) { content-visibility: visible; } }
 
 /* ───────── Cloudflare Turnstile (only rendered when PUBLIC_TURNSTILE_SITE_KEY is set) ───────── */
-.ts-box { margin: 4px 0 0; min-height: 65px; }
-.ts-box:empty { display: none; min-height: 0; }      /* before the widget mounts, take no space */
+.ts-box { margin: 0; }
+/* With appearance:interaction-only the widget usually renders nothing, so the box must take no space at all:
+   a reserved height left a blank gap in the middle of the hero bar. It only occupies space once a challenge
+   is actually drawn. */
+.ts-box:empty { display: none; }
+.ts-box:not(:empty) { margin: 6px 0 0; }
 .ts-box iframe { max-width: 100%; }
-.qr .ts-box { grid-column: 1 / -1; }                  /* the hero bar is a grid: span the full row */
-@media (max-width: 400px) { .ts-box { transform: scale(0.92); transform-origin: left top; } }
+.qr .ts-box { grid-column: 1 / -1; }                  /* phone: the challenge gets its own row in the card */
+/* Desktop bar: the box is a grid item even when it draws nothing, which pushed the Request button onto a
+   second row. Taking it out of flow keeps the bar one clean row; a real challenge floats just beneath it. */
+@media (min-width: 900px) {
+  .qr { position: relative; }
+  .qr .ts-box { position: absolute; left: 6px; top: calc(100% + 8px); width: min(320px, 100%); z-index: 5; }
+}

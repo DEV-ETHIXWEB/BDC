@@ -54,6 +54,11 @@ export default function Turnstile({ onToken, resetKey = 0, theme = 'auto' }: { o
           sitekey: TURNSTILE_SITE_KEY,
           theme,
           action: 'lead',
+          // The bar is one slim row. 'interaction-only' keeps the widget out of the layout entirely for the
+          // visitors Cloudflare clears silently, which is nearly all of them, and only draws a box when someone
+          // actually has to solve something. 'flexible' makes that box fit the row instead of a fixed 300px.
+          appearance: 'interaction-only',
+          size: 'flexible',
           callback: (t: string) => onToken(t),
           'expired-callback': () => onToken(''),
           'timeout-callback': () => onToken(''),
