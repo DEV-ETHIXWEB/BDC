@@ -44,7 +44,9 @@ export default async function handler(req, res) {
   if (typeof d === 'string') { try { d = JSON.parse(d); } catch { d = null; } }
   if (!d || typeof d !== 'object') return res.status(400).json({ error: 'Bad request' });
 
-  if (clip(d.company, 50)) return res.status(200).json({ ok: true });   // honeypot: look successful, send nothing
+  // Honeypot. The field is named so Chrome will not autofill it: a browser filling a field called "company"
+  // used to drop a real person's enquiry with no feedback at all.
+  if (clip(d.bdc_hp, 50) || clip(d.company, 50)) return res.status(200).json({ ok: true });
 
   const data = {
     name: clip(d.name, 80), phone: clip(d.phone, 30), email: clip(d.email, 254),

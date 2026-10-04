@@ -59,6 +59,10 @@ export default function Turnstile({ onToken, resetKey = 0, theme = 'auto' }: { o
           // actually has to solve something. 'flexible' makes that box fit the row instead of a fixed 300px.
           appearance: 'interaction-only',
           size: 'flexible',
+          // Turnstile tells us when it is about to show something a human must actually do. Only then does
+          // the box take space and become visible; the rest of the time it must not occupy the row at all.
+          'before-interactive-callback': () => host.current?.classList.add('is-live'),
+          'after-interactive-callback': () => host.current?.classList.remove('is-live'),
           callback: (t: string) => onToken(t),
           'expired-callback': () => onToken(''),
           'timeout-callback': () => onToken(''),

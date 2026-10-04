@@ -88,10 +88,9 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
       requestAnimationFrame(() => (formRef.current?.elements.namedItem(bad) as HTMLElement | null)?.focus());
       return;
     }
-    const company = (new FormData(e.currentTarget).get('company') as string) || '';
-    if (company) return; // honeypot
     const data = { name: name.trim(), phone: phone.trim(), email: mail.trim(), trip: tripName, guests: String(guests), date, message: message.trim(),
-      page: window.location.pathname, form: 'Booking form', title: document.title.split('|')[0].trim() };
+      page: window.location.pathname, bdc_hp: (new FormData(e.currentTarget).get('bdc_hp') as string) || '',
+      form: 'Booking form', title: document.title.split('|')[0].trim() };
     // A mailto: URL has practical length limits, so the request is capped; the full text is still shown for copying.
     const body = `Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email}\nTrip: ${data.trip}\nGuests: ${data.guests}\nPreferred date: ${data.date || 'flexible'}\n\n${data.message || ''}`;
     if (!ENDPOINT) {
@@ -241,7 +240,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
           <p className="tp-help">Beginners, kids, target fish, early start. All welcome.</p>
 
           <div aria-hidden="true" className="tp-hp">
-            <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
+            <label>Leave this field empty<input name="bdc_hp" tabIndex={-1} autoComplete="off" /></label>
           </div>
 
           <Turnstile onToken={setToken} resetKey={tsReset} />

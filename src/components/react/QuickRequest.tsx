@@ -39,10 +39,9 @@ export default function QuickRequest({ trips, email }: Props) {
     const mErr = mail.trim() ? validators.email(mail) : '';
     if (mErr) { setProblem(mErr); (formRef.current?.elements.namedItem('email') as HTMLElement | null)?.focus(); return; }
     setProblem('');
-    if (((new FormData(e.currentTarget).get('company') as string) || '')) return; // honeypot
     // `form` and `title` tell the captain which form on which page produced the lead; a bare path did not.
     const data = { name: name.trim(), phone: phone.trim(), email: mail.trim(), trip, date,
-      page: window.location.pathname, form: 'Quick request bar', title: document.title.split('|')[0].trim() };
+      page: window.location.pathname, bdc_hp: (new FormData(e.currentTarget).get('bdc_hp') as string) || '', form: 'Quick request bar', title: document.title.split('|')[0].trim() };
     const subject = trip === NOT_SURE ? 'Trip request from the home page' : `Trip request: ${trip}`;
     const body = `Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email || 'not given'}\nTrip: ${trip}\nPreferred date: ${date || 'flexible'}\n\nPlease call me back about this trip.`;
     if (!ENDPOINT) {
@@ -99,7 +98,7 @@ export default function QuickRequest({ trips, email }: Props) {
         <label htmlFor={`${uid}e`}>Email</label>
         <input id={`${uid}e`} name="email" type="email" inputMode="email" maxLength={254} autoComplete="email" value={mail} onChange={(e) => setMail(e.target.value)} aria-invalid={problem && mail.trim() && validators.email(mail) ? true : undefined} />
       </div>
-      <div aria-hidden="true" className="qr__hp"><label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label></div>
+      <div aria-hidden="true" className="qr__hp"><label>Leave this field empty<input name="bdc_hp" tabIndex={-1} autoComplete="off" /></label></div>
       <Turnstile onToken={setToken} resetKey={tsReset} />
       <button type="submit" className="btn btn--cream qr__go" disabled={status === 'sending'}>{status === 'sending' ? 'Sending' : 'Request'}<Icon name="arrowRight" size={18} /></button>
       <p className="qr__msg" role="alert" aria-live="polite">{problem || (status === 'error' ? `Something went wrong. Please call ${SITE.phone}.` : '')}</p>

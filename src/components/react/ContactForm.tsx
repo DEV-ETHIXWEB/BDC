@@ -60,10 +60,10 @@ export default function ContactForm({ email, defaultTrip }: Props) {
       requestAnimationFrame(() => (formRef.current?.elements.namedItem(bad) as HTMLElement | null)?.focus());
       return;
     }
-    if (((new FormData(e.currentTarget).get('company') as string) || '')) return; // honeypot
     const data = {
       name: name.trim(), email: mail.trim(), phone: phone.trim(), topics: topics.join(', '), trip: defaultTrip ?? NOT_SURE,
       message: message.trim(), page: window.location.pathname,
+      bdc_hp: (new FormData(e.currentTarget).get('bdc_hp') as string) || '',
       form: 'Contact form', title: document.title.split('|')[0].trim(),
     };
     const subject = topics.length ? `Question: ${topics[0]}` : 'Question from the website';
@@ -159,7 +159,7 @@ export default function ContactForm({ email, defaultTrip }: Props) {
       </TextField>
 
       <div aria-hidden="true" className="cb-hp">
-        <label>Company<input name="company" tabIndex={-1} autoComplete="off" /></label>
+        <label>Leave this field empty<input name="bdc_hp" tabIndex={-1} autoComplete="off" /></label>
       </div>
 
       <Turnstile onToken={setToken} resetKey={tsReset} />
