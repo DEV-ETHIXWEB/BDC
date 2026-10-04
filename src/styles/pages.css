@@ -361,3 +361,14 @@
 .pg-faq__plain dt { font: 700 1.6rem/1.1 var(--font-display); margin-top: 22px; color: var(--navy-800); }
 .pg-faq__plain dd { margin: 6px 0 0; }
 .pg-byline__by a { color: inherit; text-decoration: underline; text-decoration-color: var(--pine-500); text-underline-offset: 4px; }
+
+/* ───────── hero lead strip: tap-to-call + the short request bar, on every page hero ───────── */
+.pg-lead { grid-column: 1 / -1; margin-top: clamp(18px, 2.4vw, 26px); display: grid; gap: 14px; }
+.pg-lead__call { display: inline-flex; align-items: center; gap: 12px; width: max-content; max-width: 100%; min-height: 52px; padding: 8px 22px 8px 10px; border-radius: var(--r-pill); background: rgba(243, 247, 251, 0.08); border: 1px solid rgba(243, 247, 251, 0.22); color: var(--on-deep); text-decoration: none; transition: background var(--dur-2), border-color var(--dur-2); }
+.pg-lead__call:hover { background: rgba(243, 247, 251, 0.14); border-color: rgba(243, 247, 251, 0.4); color: #fff; }
+.pg-lead__ic { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--pine-600); color: #fff; }
+.pg-lead__call small { display: block; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pine-200); font-weight: 700; }
+.pg-lead__call strong { display: block; font: 700 1.2rem/1.15 var(--font-body); }
+.pg-lead__form { max-width: 760px; }
+@media (min-width: 1150px) { .pg-lead { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 20px; } }
+.pg-lead__form { max-width: none; }

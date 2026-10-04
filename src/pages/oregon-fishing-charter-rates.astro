@@ -1,8 +1,10 @@
 ---
 import { Picture } from 'astro:assets';
 import '../styles/trips.css';
+import '../styles/quick-request.css';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import QuickRequest from '../components/react/QuickRequest';
 import Wave from '../components/Wave.astro';
 import CtaBand from '../components/CtaBand.astro';
 import BookingForm from '../components/react/BookingForm';
@@ -25,6 +27,7 @@ const rows = (['steelhead', 'chinook', 'fall', 'crab'] as const).map((k) => {
   const x = season(k);
   return { label: x.name.replace(' charters', ''), on: monthsOf(x), note: rangeLabel(x) };
 });
+const quickTrips = TRIPS.map(({ slug, name, price }) => ({ slug, name, price }));
 ---
 <Base
   contact={false}
@@ -51,6 +54,9 @@ const rows = (['steelhead', 'chinook', 'fall', 'crab'] as const).map((k) => {
           <div><dt>Full day<small>{fullDay.hours} hours</small></dt><dd><i aria-hidden="true"></i>${fullDay.price}</dd></div>
         </dl>
         <p class="tp-board__foot">Minimum 2 guests. 20% tip is customary.</p>
+      </div>
+      <div class="tp-hero__lead" data-reveal="up">
+        <QuickRequest client:idle trips={quickTrips} email={SITE.email} />
       </div>
     </div>
     <Wave />

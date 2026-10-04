@@ -2,7 +2,8 @@ import os
 import re,glob,json,os,html,sys
 from urllib.parse import urlparse,unquote
 D=os.environ.get("QA_DIST",os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","dist"))
-SITE="https://www.bdcguideservices.com"
+# Must match astro.config.mjs / src/data/site.ts, or every sitemap URL looks foreign to this check.
+SITE=os.environ.get("PUBLIC_SITE_URL","https://www.bestdayscatching.com")
 def is_redirect(t): return 'http-equiv="refresh"' in t[:600].lower() or "redirecting" in t[:300].lower()
 pages={}
 for f in glob.glob(D+"/**/*.html",recursive=True):

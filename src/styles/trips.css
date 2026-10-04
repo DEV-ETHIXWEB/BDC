@@ -355,3 +355,7 @@ html[data-motion='reduce'] .tp-done__ring, html[data-motion='reduce'] .tp-done__
 /* honest "not sent yet" state (mail-app fallback): neutral envelope, never a success tick */
 .tp-done__mark--draft { background: var(--cream-200); color: var(--navy-800); border: 2px dashed var(--navy-700); }
 .tp-done__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+
+/* Hero request bar: full width under the copy and the board, so the fields keep their size. */
+.tp-hero__lead { grid-column: 1 / -1; margin-top: clamp(16px, 2.2vw, 24px); }
+@media (min-width: 900px) { .tp-hero__grid:has(.tp-hero__lead) { align-items: start; } }

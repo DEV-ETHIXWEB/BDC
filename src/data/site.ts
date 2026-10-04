@@ -2,7 +2,9 @@
 // live bdcguideservices.com site; nothing is invented.
 export const SITE = {
   name: 'BDC Guide Service',
-  url: 'https://www.bdcguideservices.com',
+  // One source for the public origin: canonicals, og:url, JSON-LD and robots.txt all read this, and
+  // astro.config.mjs uses the same PUBLIC_SITE_URL so the sitemap cannot disagree with them.
+  url: import.meta.env.PUBLIC_SITE_URL || 'https://www.bestdayscatching.com',
   title: 'Oregon Fishing Guide Service | BDC Guide Service',
   description:
     'Family-friendly Oregon fishing charters for salmon, steelhead, shad, sturgeon and crab on the Columbia, Willamette and coastal rivers with Captain Clinton McCulloch.',

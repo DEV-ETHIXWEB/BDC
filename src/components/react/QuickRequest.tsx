@@ -95,7 +95,7 @@ export default function QuickRequest({ trips, email }: Props) {
         <label htmlFor={`${uid}p`}>Phone</label>
         <input id={`${uid}p`} name="phone" type="tel" inputMode="tel" maxLength={30} autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} aria-invalid={problem && validators.phone(phone) ? true : undefined} />
       </div>
-      <div className="qr__f">
+      <div className="qr__f qr__f--email">
         <label htmlFor={`${uid}e`}>Email</label>
         <input id={`${uid}e`} name="email" type="email" inputMode="email" maxLength={254} autoComplete="email" value={mail} onChange={(e) => setMail(e.target.value)} aria-invalid={problem && mail.trim() && validators.email(mail) ? true : undefined} />
       </div>

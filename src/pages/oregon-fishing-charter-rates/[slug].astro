@@ -2,8 +2,10 @@
 import type { IconName } from '../../components/icons/paths';
 import { Picture } from 'astro:assets';
 import '../../styles/trips.css';
+import '../../styles/quick-request.css';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
+import QuickRequest from '../../components/react/QuickRequest';
 import Wave from '../../components/Wave.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import BookingForm from '../../components/react/BookingForm';
@@ -57,6 +59,7 @@ const schema = [{
   offers: { '@type': 'Offer', price: trip.price, priceCurrency: 'USD', url },
 }];
 const formTrips = TRIPS.map(({ slug, name, price, capacity, boat, hours }) => ({ slug, name, price, capacity, boat, hours }));
+const quickTrips = TRIPS.map(({ slug, name, price }) => ({ slug, name, price }));
 ---
 <Base contact={false} title={trip.seoTitle} description={trip.metaDescription} crumbs={crumbs} schema={schema} image="/og-image.jpg">
   <section class="tp-hero tp-hero--trip">
@@ -76,6 +79,9 @@ const formTrips = TRIPS.map(({ slug, name, price, capacity, boat, hours }) => ({
         <Picture src={PHOTOS[trip.photo]} alt={`${trip.name} with BDC Guide Service in Oregon`} formats={['avif', 'webp']} fallbackFormat="webp" quality={72} widths={[400, 560, 1120, 1680, 2240, 3360]} sizes="(min-width: 900px) 520px, min(92vw, 560px)" loading="eager" fetchpriority="high" />
         <figcaption>{trip.species[0]}<span aria-hidden="true"> · </span>{trip.hours} hours</figcaption>
       </figure>
+      <div class="tp-hero__lead" data-reveal="up">
+        <QuickRequest client:idle trips={quickTrips} email={SITE.email} />
+      </div>
     </div>
     <Wave />
   </section>

@@ -14,7 +14,10 @@ const lateDirective = {
 export default defineConfig({
   // Static fallback (meta-refresh pages). Hosts also get real 301s from vercel.json / public/_redirects.
   redirects: Object.fromEntries(REDIRECTS),
-  site: 'https://www.bdcguideservices.com',
+  // The live domain. Canonicals, og:url, JSON-LD and the sitemap all derive from this, so it must match the
+  // domain the site is actually served from or Search Console rejects the sitemap as cross-domain.
+  // Override with PUBLIC_SITE_URL if the site moves (e.g. back to bdcguideservices.com).
+  site: process.env.PUBLIC_SITE_URL || 'https://www.bestdayscatching.com',
   trailingSlash: 'never',
   build: { format: 'file', inlineStylesheets: 'auto' },
   integrations: [react(), lateDirective, sitemap({ filter: (p) => !p.endsWith('/404') && !p.endsWith('/sitemap') && !p.includes('/dev/') })],

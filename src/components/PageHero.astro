@@ -1,6 +1,11 @@
 ---
 import '../styles/pages.css';
+import '../styles/quick-request.css';
 import ContourPattern from './art/ContourPattern.astro';
+import Icon from './Icon.astro';
+import QuickRequest from './react/QuickRequest';
+import { SITE } from '../data/site';
+import { TRIPS } from '../data/trips';
 interface Props {
   title: string;
   lede?: string;
@@ -14,8 +19,11 @@ interface Props {
   artOnMobile?: boolean;
   /** smaller headline for long titles (photo pages) */
   compact?: boolean;
+  /** the call button + short request bar under the headline. Off on pages where a form would be noise. */
+  lead?: boolean;
 }
-const { title, lede, crumbs = [], edge = 'page', tag, seed = 4, artOnMobile = false, compact = false } = Astro.props;
+const { title, lede, crumbs = [], edge = 'page', tag, seed = 4, artOnMobile = false, compact = false, lead = true } = Astro.props;
+const quickTrips = TRIPS.map(({ slug, name, price }) => ({ slug, name, price }));
 const hasArt = Astro.slots.has('art');
 const ripple = 'M0 40' + 'q90-26 180 0t180 0'.repeat(1) + Array.from({ length: 15 }, () => 't180 0').join('');
 ---
@@ -39,6 +47,15 @@ const ripple = 'M0 40' + 'q90-26 180 0t180 0'.repeat(1) + Array.from({ length: 1
       <slot name="actions" />
     </div>
     {hasArt && <div class:list={['pg-hero__art', artOnMobile && 'is-mobile']} data-reveal="scale"><slot name="art" /></div>}
+    {lead && (
+      <div class="pg-lead" data-reveal="up">
+        <a class="pg-lead__call" href={SITE.phoneHref} aria-label={`Call ${SITE.phone}`}>
+          <span class="pg-lead__ic"><Icon name="phoneCall" size={22} /></span>
+          <span><small>Call Captain Clinton</small><strong>{SITE.phone}</strong></span>
+        </a>
+        <div class="pg-lead__form"><QuickRequest client:idle trips={quickTrips} email={SITE.email} /></div>
+      </div>
+    )}
   </div>
   <div class="pg-edge" aria-hidden="true">
     <svg class="pg-edge__b" viewBox="0 0 2880 80" preserveAspectRatio="none"><path d={ripple + 'V80H0Z'} fill="currentColor" opacity=".35" /></svg>

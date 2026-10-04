@@ -21,8 +21,9 @@
   .qr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .qr { gap: 8px; padding: 12px; }
   .qr__f--trip { grid-column: 1 / -1; }
-  /* order: trip, name + phone, date + button, so the whole form is short and sits high on the phone */
-  .qr__title { order: 0; } .qr__f--trip { order: 1; } .qr__f:nth-of-type(3) { order: 2; } .qr__f:nth-of-type(4) { order: 3; } .qr__f--date { order: 4; } .qr__go { order: 5; } .qr__msg { order: 6; }
+  /* order: trip, name + phone, email, date + button, so the whole form is short and sits high on the phone */
+  .qr__title { order: 0; } .qr__f--trip { order: 1; } .qr__f:nth-of-type(3) { order: 2; } .qr__f:nth-of-type(4) { order: 3; } .qr__f--email { order: 4; } .qr__f--date { order: 5; } .qr__go { order: 6; } .qr__msg { order: 7; }
+  .qr__f--email { grid-column: 1 / -1; }   /* an address needs the full row to stay readable */
   .qr__title { font-size: 1.05rem; }
   .qr__title { font-size: 0.9rem; }
   /* the form replaces the "Customize trip" button on phones */
