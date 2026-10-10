@@ -4,9 +4,12 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import ReviewWall, { type Review } from '../components/ReviewWall.astro';
+import GoogleReviews from '../components/react/GoogleReviews';
 import { SITE } from '../data/site';
 const crumbs = [{ name: 'Reviews', path: '/oregon-fishing-charter-reviews' }];
-// Add real, permissioned guest reviews here: { name, trip, text, rating?, date?, where? }.
+// Reviews reach this page two ways. Anything added to this array is published by hand, with the guest's
+// permission. Google reviews arrive on their own through /api/reviews once a Place ID and key are set, and
+// the invitation below hides itself as soon as any turn up.
 // No AggregateRating markup is emitted until there are genuine, verifiable reviews on the page.
 const reviews: Review[] = [];
 const body = encodeURIComponent('Hi Captain Clinton,\n\nTrip I took (salmon, steelhead or crab):\nApproximate date:\nWhat stood out:\n\nMy name as I would like it shown:\nOK to publish this review on your website? (yes/no)\n');
@@ -15,8 +18,9 @@ const body = encodeURIComponent('Hi Captain Clinton,\n\nTrip I took (salmon, ste
   <PageHero title="Guest reviews" lede="Guest reviews of BDC Guide Service trips." crumbs={crumbs} />
   <section class="section gb-reviews" style="padding-top:0">
     <div class="wrap">
+      <GoogleReviews client:load />
       {reviews.length === 0 ? (
-        <div class="gb-invite">
+        <div class="gb-invite" id="gb-invite">
           <div class="gb-invite__copy">
             <h2 data-reveal="up">Been out with Captain Clinton?</h2>
             <p data-reveal="fade">There are no reviews on this page yet. If you have been out with Captain Clinton, send a few lines about your trip and, with your OK, we will post it here.</p>

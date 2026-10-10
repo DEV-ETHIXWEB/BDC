@@ -155,6 +155,7 @@
 
 /* ───────── Reviews ───────── */
 .gb-invite { display: grid; gap: clamp(32px, 6vw, 72px); align-items: center; }
+.gb-invite[hidden] { display: none; }   /* display:grid above would otherwise beat the UA [hidden] rule */
 .gb-invite h2 { font-size: clamp(2.8rem, 7vw, 5.2rem); }
 .gb-invite__copy p { color: var(--ink-soft); font-size: 1.15rem; }
 .gb-invite__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
@@ -216,3 +217,12 @@
 }
 .gb-lb__more { color: var(--pine-200); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 .gb-lb__more:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+
+/* ───────── Google reviews pulled live by /api/reviews ───────── */
+.gr { display: grid; gap: 18px; }
+.gr__summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 0; font-weight: 600; color: var(--ink-soft); }
+.gr__score { display: inline-flex; align-items: center; gap: 6px; font: 800 1.35rem/1 var(--font-display); color: var(--navy-800); }
+.gr__score .ic { color: #f0a500; }
+.gr__summary a { color: var(--pine-700); font-weight: 700; }
+.gr__attrib { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
+.gr__attrib a { color: var(--pine-700); font-weight: 600; }
