@@ -1,0 +1,36 @@
+---
+import Icon from '../Icon.astro';
+import GoogleReviews from '../react/GoogleReviews';
+import '../../styles/gallery.css';
+
+// Renders only when /api/reviews actually returns reviews. Until a Google Place ID and key are set the
+// island draws nothing, and this whole band collapses rather than showing an empty "what guests say".
+---
+<section class="hm-revs" aria-labelledby="hm-revs-h" data-revs hidden>
+  <div class="wrap">
+    <div class="hm-revs__head">
+      <p class="hm-revs__tag" data-reveal="fade"><Icon name="star" size={18} />What guests say</p>
+      <h2 id="hm-revs-h" data-reveal="up">Straight from the boat.</h2>
+      <a class="hm-revs__all" href="/oregon-fishing-charter-reviews">All reviews<Icon name="arrowRight" size={18} /></a>
+    </div>
+    <!-- client:idle, not client:visible: the band starts hidden, and a hidden parent means an
+         intersection observer never fires, so client:visible would deadlock the reveal below. -->
+    <GoogleReviews client:idle inviteId="" />
+  </div>
+</section>
+
+<script>
+  // The band is hidden until the island has actually rendered a review card into it.
+  function showIfReviews() {
+    document.querySelectorAll<HTMLElement>('[data-revs]').forEach((s) => {
+      const io = new MutationObserver(() => {
+        if (s.querySelector('.gb-rev')) { s.hidden = false; io.disconnect(); }
+      });
+      io.observe(s, { childList: true, subtree: true });
+      if (s.querySelector('.gb-rev')) { s.hidden = false; io.disconnect(); }
+      setTimeout(() => io.disconnect(), 15000);
+    });
+  }
+  showIfReviews();
+  document.addEventListener('astro:page-load', showIfReviews);
+</script>

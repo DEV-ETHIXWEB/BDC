@@ -1,0 +1,69 @@
+---
+import '../../styles/pages.css';
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import TocSpy from '../../components/pg/TocSpy.astro';
+import { SITE } from '../../data/site';
+import { longDate } from '../../data/articles';
+
+// Markdown posts from src/content/blog. The two original articles are static .astro files at
+// /article/<slug>, and a static route always beats this dynamic one, so their URLs stay as they were.
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const { title, description, published, updated, tag, draft } = post.data;
+
+const crumbs = [
+  { name: 'Articles', path: '/article' },
+  { name: title, path: `/article/${post.id}` },
+];
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished: published,
+  ...(updated ? { dateModified: updated } : {}),
+  author: { '@type': 'Person', name: 'Clinton McCulloch' },
+  publisher: { '@id': `${SITE.url}/#business` },
+  mainEntityOfPage: `${SITE.url}/article/${post.id}`,
+};
+// Only h2s get an "on this page" entry, and only when there are enough of them to be worth the space.
+const toc = headings.filter((h) => h.depth === 2 && h.slug);
+---
+<Base title={`${title} | BDC Guide Service`} description={description} crumbs={crumbs} schema={[schema]} type="article" noindex={draft}>
+  <PageHero title={title} lede={description} crumbs={crumbs} tag={tag} seed={11} />
+  <div class:list={['wrap', 'pg-article', toc.length > 2 ? 'pg-article--toc' : 'pg-article--solo']}>
+    {toc.length > 2 && (
+      <aside class="pg-toc" aria-label="On this page">
+        <details class="pg-toc__d" open>
+          <summary>On this page</summary>
+          <nav data-pg-spy>
+            <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+          </nav>
+        </details>
+      </aside>
+    )}
+    <article class="pg-prose pg-prose--md">
+      <p class="pg-byline">
+        <span class="pg-byline__by">By <a href="/profile/clinton-mcculloch">Clinton McCulloch</a></span>
+        <time datetime={published}>{longDate(published)}</time>
+        {updated && <span class="pg-byline__upd">Updated <time datetime={updated}>{longDate(updated)}</time></span>}
+      </p>
+      {draft && <p class="pg-draft" role="status">Draft. This post is not listed or indexed yet.</p>}
+      <Content />
+      <aside class="pg-callout" data-reveal="up">
+        <Icon name="boat" size={32} />
+        <div><h3>Plan a day on the water</h3><p>See the available trips and rates.</p></div>
+        <a class="btn btn--primary btn--sm" href="/oregon-fishing-charter-rates">See trips</a>
+      </aside>
+    </article>
+  </div>
+  <TocSpy />
+</Base>

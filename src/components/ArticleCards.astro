@@ -1,10 +1,18 @@
 ---
 import '../styles/content-pages.css';
 import Icon from './Icon.astro';
+import { getCollection } from 'astro:content';
 import { ARTICLES, shortDate } from '../data/articles';
+
+// The index lists the two original .astro articles alongside every Markdown post in
+// src/content/blog, newest first. Drafts are left out.
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).map((p) => ({
+  slug: p.id, title: p.data.title, description: p.data.description, published: p.data.published, icon: p.data.icon,
+}));
+const items = [...ARTICLES, ...posts].sort((a, b) => b.published.localeCompare(a.published));
 ---
 <ul class="cp-arts" data-stagger>
-  {ARTICLES.map((a) => (
+  {items.map((a) => (
     <li data-reveal="up">
       <a class="cp-art" href={`/article/${a.slug}`}>
         <span class="cp-art__ic"><Icon name={a.icon} size={26} /></span>

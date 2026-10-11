@@ -18,6 +18,14 @@ export const SITE = {
   region: 'OR',
   regionName: 'Oregon',
   country: 'US',
+  // Stated by Captain Clinton (Oct 2026). Shown on the captain page and the home page so it reads the same
+  // in both places. If he supplies the credential type and number (OUPV/"six-pack" or Master, plus the MMC
+  // number and his ODFW outfitter-guide registration), put them here: a number is far more persuasive than
+  // the claim alone, and some states expect guides to display it.
+  credentials: [
+    { label: 'US Coast Guard certified', note: 'Licensed and certified captain' },
+    { label: 'Fully licensed and insured', note: 'Oregon guided fishing' },
+  ],
   licenseUrl: 'https://myodfw.com/fishing/licensing-info',
   year: 2026,
 } as const;

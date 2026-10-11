@@ -42,8 +42,10 @@ export default function QuickRequest({ trips, email }: Props) {
     // `form` and `title` tell the captain which form on which page produced the lead; a bare path did not.
     const data = { name: name.trim(), phone: phone.trim(), email: mail.trim(), trip, date,
       page: window.location.pathname, bdc_hp: (new FormData(e.currentTarget).get('bdc_hp') as string) || '', form: 'Quick request bar', title: document.title.split('|')[0].trim() };
-    const subject = trip === NOT_SURE ? 'Trip request from the home page' : `Trip request: ${trip}`;
-    const body = `Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email || 'not given'}\nTrip: ${trip}\nPreferred date: ${date || 'flexible'}\n\nPlease call me back about this trip.`;
+    // This bar sits in the hero of every page now, not just the home page, so the subject and the
+    // mailto body both name the page the request actually came from.
+    const subject = trip === NOT_SURE ? `Trip request from ${data.title || 'the website'}` : `Trip request: ${trip}`;
+    const body = `Name: ${data.name}\nPhone: ${data.phone}\nEmail: ${data.email || 'not given'}\nTrip: ${trip}\nPreferred date: ${date || 'flexible'}\n\nPlease call me back about this trip.\n\nSent from: ${data.title || 'the website'} (${data.page})`;
     if (!ENDPOINT) {
       const href = mailtoHref(email, subject, body);
       setDraftHref(href);
@@ -55,7 +57,7 @@ export default function QuickRequest({ trips, email }: Props) {
     if (submitting.current) return;
     submitting.current = true;
     setStatus('sending');
-    setStatus((await postLead({ ...data, form: 'quick-request' }, token)) ? 'sent' : 'error');
+    setStatus((await postLead(data, token)) ? 'sent' : 'error');
     submitting.current = false;
     if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way
   }

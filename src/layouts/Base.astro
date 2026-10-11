@@ -61,7 +61,12 @@ const business = {
   image: ogImage,
   logo: new URL('/icon-512.png', SITE.url).href,
   priceRange: `$${Math.min(...TRIPS.map((t) => t.price))}-$${Math.max(...TRIPS.map((t) => t.price))}`,
-  founder: { '@type': 'Person', name: SITE.captain },
+  founder: {
+    '@type': 'Person',
+    name: SITE.captain,
+    // The captain's stated licensing, so the credential travels with the structured data too.
+    hasCredential: SITE.credentials.map((c) => ({ '@type': 'EducationalOccupationalCredential', name: c.label })),
+  },
   // No street, locality or postcode: the captain publishes no address (src/data/site.ts).
   address: {
     '@type': 'PostalAddress',

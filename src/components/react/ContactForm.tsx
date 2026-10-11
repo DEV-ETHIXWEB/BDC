@@ -81,7 +81,7 @@ export default function ContactForm({ email, defaultTrip }: Props) {
     if (submitting.current) return; // ignore double submits fired in the same tick
     submitting.current = true;
     setStatus('sending');
-    setStatus((await postLead({ ...data, form: 'contact' }, token)) ? 'sent' : 'error');
+    setStatus((await postLead(data, token)) ? 'sent' : 'error');
     submitting.current = false;
     if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way
   }

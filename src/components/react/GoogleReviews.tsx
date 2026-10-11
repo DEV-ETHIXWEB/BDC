@@ -24,6 +24,7 @@ export default function GoogleReviews({ inviteId = 'gb-invite' }: { inviteId?: s
 
   // The invitation is server-rendered so it is there with JavaScript off; hide it only once real reviews load.
   useEffect(() => {
+    if (!inviteId) return;
     const invite = document.getElementById(inviteId);
     if (invite) invite.hidden = reviews.length > 0;
   }, [reviews.length, inviteId]);

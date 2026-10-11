@@ -226,3 +226,13 @@
 .gr__summary a { color: var(--pine-700); font-weight: 700; }
 .gr__attrib { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
 .gr__attrib a { color: var(--pine-700); font-weight: 600; }
+
+/* ───────── home page reviews band ───────── */
+.hm-revs { padding-block: clamp(48px, 7vw, 88px); background: var(--cream-100); }
+.hm-revs[hidden] { display: none; }   /* a band with no reviews must take no space at all */
+.hm-revs__head { display: grid; gap: 6px; margin-bottom: clamp(22px, 3vw, 34px); }
+.hm-revs__tag { display: inline-flex; align-items: center; gap: 8px; margin: 0; color: var(--pine-700); font-weight: 700; font-size: 0.95rem; }
+.hm-revs__tag .ic { color: #f0a500; }
+.hm-revs h2 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.02; color: var(--navy-900); }
+.hm-revs__all { justify-self: start; display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; color: var(--pine-700); font-weight: 700; text-decoration: none; }
+.hm-revs__all:hover { text-decoration: underline; }

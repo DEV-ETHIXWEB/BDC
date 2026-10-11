@@ -79,6 +79,11 @@ const drift = [
           </div>
         ))}
       </dl>
+      <ul class="pg-creds" data-stagger aria-label="Licensing and certification">
+        {SITE.credentials.map((c) => (
+          <li data-reveal="up"><Icon name="shieldCheck" size={22} /><span><strong>{c.label}</strong><small>{c.note}</small></span></li>
+        ))}
+      </ul>
     </div>
   </section>
 
