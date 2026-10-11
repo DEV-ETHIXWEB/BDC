@@ -374,7 +374,7 @@
 .pg-lead__form { max-width: none; }
 
 /* ───────── licensing / certification row ───────── */
-.pg-creds { list-style: none; margin: clamp(18px, 3vw, 28px) 0 0; padding: 0; display: grid; gap: 12px; }
+.pg-creds { list-style: none; margin: clamp(18px, 3vw, 28px) 0 clamp(20px, 3vw, 32px); padding: 0; display: grid; gap: 12px; }
 .pg-creds li { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1.5px solid var(--line); border-radius: var(--r-s); background: var(--cream-50); }
 .pg-creds .ic { flex: none; color: var(--pine-600); }
 .pg-creds strong { display: block; font: 700 1.05rem/1.2 var(--font-body); color: var(--navy-900); }

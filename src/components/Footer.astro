@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logoMark from '../assets/photos/logo-mark.png';
-import { SITE, FOOTER_LINKS, LEGAL_LINKS, NAV } from '../data/site';
+import { SITE, FOOTER_LINKS, LEGAL_LINKS, NAV, SOCIAL } from '../data/site';
 import Icon from './Icon.astro';
 ---
 <footer class="footer">
@@ -14,6 +14,15 @@ import Icon from './Icon.astro';
           <li><Icon name="phone" size={20} /><a href={SITE.phoneHref}>{SITE.phone}</a></li>
           <li><Icon name="mail" size={20} /><a href={`mailto:${SITE.email}`}>{SITE.email}</a></li>
           <li><Icon name="pin" size={20} />Meeting spot confirmed when you book</li>
+        </ul>
+        <ul class="footer__social" aria-label="Follow BDC Guide Service">
+          {SOCIAL.map((s) => (
+            <li>
+              <a href={s.href} target="_blank" rel="me noopener noreferrer" aria-label={`${s.label}, opens in a new tab`}>
+                <Icon name={s.icon} size={20} /><span>{s.handle}</span>
+              </a>
+            </li>
+          ))}
         </ul>
       </div>
       <nav aria-labelledby="f-explore">

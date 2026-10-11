@@ -634,3 +634,9 @@ main > :nth-child(n + 4) { content-visibility: auto; contain-intrinsic-size: aut
 /* It must sit IN the layout. Absolutely positioning it put the challenge outside section.ht-hero, which is
    overflow:hidden, so a visitor who needed to solve one could never see it and the form silently refused. */
 .qr .ts-box.is-live { grid-column: 1 / -1; justify-self: start; max-width: 320px; }
+
+/* Social profiles in the footer: same rhythm as the contact list above it. */
+.footer__social { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.footer__social a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px 8px 12px; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 999px; color: inherit; text-decoration: none; font-weight: 600; transition: background-color 0.2s, border-color 0.2s; }
+.footer__social a:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.45); }
+.footer__social .ic { flex: none; }

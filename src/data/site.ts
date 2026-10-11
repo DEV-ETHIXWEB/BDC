@@ -30,6 +30,12 @@ export const SITE = {
   year: 2026,
 } as const;
 
+// Public social profiles. The link Clinton sent carried a ?stkn= share token, which is personal to
+// whoever copied it and does not belong in public markup, so only the canonical profile URL is stored.
+export const SOCIAL = [
+  { label: 'Instagram', handle: '@bdc_guide_service', href: 'https://www.instagram.com/bdc_guide_service', icon: 'instagram' },
+] as const;
+
 export const NAV = [
   { label: 'Trips & Rates', href: '/oregon-fishing-charter-rates' },
   { label: 'Target Species', href: '/oregon-fishing-species' },

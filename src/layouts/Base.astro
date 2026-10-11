@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
-import { SITE, NAV } from '../data/site';
+import { SITE, NAV, SOCIAL } from '../data/site';
 import { TRIPS } from '../data/trips';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -61,6 +61,7 @@ const business = {
   image: ogImage,
   logo: new URL('/icon-512.png', SITE.url).href,
   priceRange: `$${Math.min(...TRIPS.map((t) => t.price))}-$${Math.max(...TRIPS.map((t) => t.price))}`,
+  sameAs: SOCIAL.map((s) => s.href),
   founder: {
     '@type': 'Person',
     name: SITE.captain,
