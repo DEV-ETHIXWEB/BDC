@@ -1,0 +1,38 @@
+---
+import Icon from '../Icon.astro';
+import { getCollection } from 'astro:content';
+import { ARTICLES, shortDate } from '../../data/articles';
+
+// The three newest posts on the home page, from the same two sources as /article: the original
+// .astro articles and the Markdown posts in src/content/blog. Drafts are left out.
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).map((p) => ({
+  slug: p.id, title: p.data.title, description: p.data.description, published: p.data.published, icon: p.data.icon,
+}));
+const latest = [...ARTICLES, ...posts]
+  .sort((a, b) => b.published.localeCompare(a.published))
+  .slice(0, 3);
+---
+{latest.length > 0 && (
+  <section class="hm-arts" aria-labelledby="hm-arts-h">
+    <div class="wrap">
+      <div class="hm-arts__head">
+        <p class="hm-arts__tag" data-reveal="fade"><Icon name="report" size={18} />From the captain</p>
+        <h2 id="hm-arts-h" data-reveal="up">Before you book.</h2>
+        <a class="hm-arts__all" href="/article">All articles<Icon name="arrowRight" size={18} /></a>
+      </div>
+      <ul class="hm-arts__grid" data-stagger>
+        {latest.map((a) => (
+          <li data-reveal="up">
+            <a class="hm-art" href={`/article/${a.slug}`}>
+              <span class="hm-art__ic"><Icon name={a.icon} size={24} /></span>
+              <time class="hm-art__date" datetime={a.published}>{shortDate(a.published)}</time>
+              <h3 class="hm-art__t">{a.title}</h3>
+              <p class="hm-art__d">{a.description}</p>
+              <span class="hm-art__go">Read<Icon name="arrowUpRight" size={18} /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

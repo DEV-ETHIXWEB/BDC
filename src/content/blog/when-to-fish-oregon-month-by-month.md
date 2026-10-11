@@ -18,20 +18,19 @@ decides what you are fishing for far more than anything else you choose.
 
 ## Winter steelhead, January to April
 
-Winter steelhead run January through April on the coastal and tributary rivers. This is the
-[drift boat season](/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip). Cold mornings, moving water, and the fish a lot of people come to Oregon
-specifically to chase.
+Winter steelhead run January through April on the coastal and tributary rivers. The
+[drift boat](/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip) is set up for them.
+Cold mornings, moving water, and the fish a lot of people come to Oregon specifically to chase.
 
 ## Spring and early Chinook, March to July
 
 Spring and early Chinook runs March through July on the Columbia and Willamette. It overlaps
 the back half of steelhead season, so March and April can give you a choice.
 
-## American shad, around May to July
+## American shad
 
-Shad show up on the Columbia and Willamette in early summer. Captain Clinton targets them,
-but he has not pinned the months down, so treat May to July as a rough guide rather than a
-promise and ask him when you call.
+Shad are a target species on the Columbia and Willamette. Captain Clinton has not given the
+months for them yet, so rather than guess: ask him when you call.
 
 ## Fall salmon, August to November
 
@@ -42,8 +41,7 @@ into it with roughly a three week gap in between.
 ## Dungeness crab, October to December
 
 Crab charters run October through December. A [five hour trip](/oregon-fishing-charter-rates/oregon-crabbing-charter-bdc-guide-service) at $150 per person, and a
-completely different day out from a salmon trip: pots rather than rods, and something to show
-for it on the table.
+completely different day out from a salmon trip, with something to show for it on the table.
 
 ## Sturgeon, most of the year
 
@@ -53,6 +51,6 @@ about two days, so it is not something to plan a trip around.
 
 ## One thing to keep in mind
 
-Chinook, steelhead and crab months come straight from Captain Clinton. Shad and sturgeon
-windows are our reading until he confirms them. Runs shift with the river and the year, so
-call before you plan around a particular date.
+Chinook, steelhead and crab months come straight from Captain Clinton. The shad months are not
+confirmed yet, and sturgeon retention opens only for short announced periods. Runs shift with
+the river and the year, so call before you plan around a particular date.

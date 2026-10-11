@@ -27,8 +27,8 @@ their age, needs a valid angling tag and has to follow the rules on recording ha
 
 On top of that, every angler of any age must have a valid Columbia River Basin Endorsement in
 their possession when fishing for salmon, steelhead or sturgeon in the mainstem Columbia, and
-in every river and tributary that flows into it. That covers most of the water these trips
-run on.
+in every river and tributary that flows into it. Several of the rivers these trips run on are in
+that basin, so ask Captain Clinton whether your day needs one.
 
 Licenses come from the Oregon Department of Fish and Wildlife, and you can buy one online
 before you travel. Sort it out at home rather than at 4am on the way to the launch.
@@ -54,8 +54,7 @@ worth loading it into the car the night before rather than remembering it at 4am
 
 Group size depends on the boat. The Willy Predator takes up to 6 anglers, though it is often
 limited to 4 for comfort, and the Alumaweld drift boat takes up to 3 guests for a more
-personal trip. Worth confirming the number in your party when you book, because it decides
-which boat goes out.
+personal trip. Worth confirming the number in your party when you book.
 
 ## Where you will be fishing
 

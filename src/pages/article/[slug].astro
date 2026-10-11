@@ -30,7 +30,7 @@ const schema = {
   description,
   datePublished: published,
   ...(updated ? { dateModified: updated } : {}),
-  author: { '@type': 'Person', name: 'Clinton McCulloch' },
+  author: { '@type': 'Organization', name: SITE.name, '@id': `${SITE.url}/#business` },
   publisher: { '@id': `${SITE.url}/#business` },
   mainEntityOfPage: `${SITE.url}/article/${post.id}`,
 };
@@ -52,7 +52,7 @@ const toc = headings.filter((h) => h.depth === 2 && h.slug);
     )}
     <article class="pg-prose pg-prose--md">
       <p class="pg-byline">
-        <span class="pg-byline__by">By <a href="/profile/clinton-mcculloch">Clinton McCulloch</a></span>
+        <span class="pg-byline__by">By <a href="/captain-clinton-mcculloch-of-oregon">{SITE.name}</a></span>
         <time datetime={published}>{longDate(published)}</time>
         {updated && <span class="pg-byline__upd">Updated <time datetime={updated}>{longDate(updated)}</time></span>}
       </p>
