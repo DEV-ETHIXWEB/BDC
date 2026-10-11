@@ -9,7 +9,7 @@ interactive parts only. Design system: [docs/design-system.md](docs/design-syste
 ## Commands
 | Command | What it does |
 | --- | --- |
-| `npm install` | Install dependencies (Node 22.12+) |
+| `npm install` | Install dependencies (Node 24; `engines` pins `24.x`) |
 | `npm run dev` | Dev server at http://localhost:4321 (also serves `/dev/styleguide`) |
 | `npm run build` | Build to `dist/` (39 static pages, AVIF/WebP images) |
 | `npm run preview` | Serve the production build locally |

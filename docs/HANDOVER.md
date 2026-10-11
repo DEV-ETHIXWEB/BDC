@@ -98,7 +98,7 @@ Every one of the old site's 37 sitemap URLs is now a real page at the same URL, 
 
 Verified with Vercel's own CLI (`vercel build`, v59) on an earlier export of the repo, and `vercel.json` validated against Vercel's published schema (0 errors). The compiled config has no redirects (every old URL is a real page), clean URLs for all 39 pages (including the page-plus-folder pairs), all security headers, immutable caching for `/_astro/*`, and a real 404 for unknown URLs. The lockfile carries Linux x64 binaries for every native dependency Vercel needs.
 
-1. Import the GitHub repo in Vercel. Framework **Astro**, build command `npm run build`, output directory `dist`, Node.js 22 or newer (`engines` is `>=22.12.0`; the build was verified on Node 22 and Node 24; the Vercel project setting decides which one runs).
+1. Import the GitHub repo in Vercel. Framework **Astro**, build command `npm run build`, output directory `dist`. `engines` pins `24.x`, and that pin overrides the Node version in the Vercel project settings, so set the project to 24.x as well to keep the two in step and avoid a build warning. The build is verified on Node 22 and Node 24, and the two produce byte-identical output.
 2. Environment variables (Project Settings > Environment Variables):
 
 | Name | Production | Preview | Notes |
