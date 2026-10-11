@@ -19,7 +19,7 @@ decides what you are fishing for far more than anything else you choose.
 ## Winter steelhead, January to April
 
 Winter steelhead run January through April on the coastal and tributary rivers. This is the
-drift boat season. Cold mornings, moving water, and the fish a lot of people come to Oregon
+[drift boat season](/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip). Cold mornings, moving water, and the fish a lot of people come to Oregon
 specifically to chase.
 
 ## Spring and early Chinook, March to July
@@ -41,7 +41,7 @@ into it with roughly a three week gap in between.
 
 ## Dungeness crab, October to December
 
-Crab charters run October through December. A five hour trip at $150 per person, and a
+Crab charters run October through December. A [five hour trip](/oregon-fishing-charter-rates/oregon-crabbing-charter-bdc-guide-service) at $150 per person, and a
 completely different day out from a salmon trip: pots rather than rods, and something to show
 for it on the table.
 

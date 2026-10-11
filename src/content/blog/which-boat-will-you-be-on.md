@@ -21,17 +21,19 @@ The bigger of the two. It seats up to 6 anglers, though it is often limited to 4
 fishing elbow to elbow.
 
 This is the boat for Chinook salmon, steelhead and the seasonal species, on the larger water.
-Full day is 8 hours at $250 per person, half day is 4 hours at $150. Crabbing on the Predator
-is a 5 hour trip at $150 per person, booked for up to 5.
+[Full day](/oregon-fishing-charter-rates/full-day-oregon-river-fishing-charter) is 8 hours at $250 per person,
+[half day](/oregon-fishing-charter-rates/oregon-fishing-charter-half-day-trip) is 4 hours at $150.
+[Crabbing on the Predator](/oregon-fishing-charter-rates/oregon-crabbing-charter-bdc-guide-service) is a 5 hour trip at
+$150 per person, booked for up to 5.
 
 ## The 16 foot Alumaweld drift boat
 
-Smaller, and built for shallow water the Predator cannot reach. It takes up to 3 guests, which
-makes for a more personal trip.
+Smaller, and built for shallow water conditions. It takes up to 3 guests, which makes for a
+more personal trip.
 
-Winter steelhead is what the drift boat does best, on the river systems where it has the
-advantage. Full day is 8 hours at $250 per person, half day is 4 hours at $150, and crabbing
-runs 5 hours at $150 for up to 3.
+Winter steelhead is what the drift boat is set up for, on Oregon's river systems. [Full day](/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip) is 8 hours at $250 per person,
+[half day](/oregon-fishing-charter-rates/oregon-fishing-charter-half-day-drift-boat-trip) is 4 hours at $150, and
+[crabbing](/oregon-fishing-charter-rates/oregon-crabbing-charter-5-hour-adventure) runs 5 hours at $150 for up to 3.
 
 ## So which one
 

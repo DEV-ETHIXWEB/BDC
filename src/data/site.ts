@@ -36,6 +36,7 @@ export const NAV = [
   { label: 'Gallery', href: '/oregon-fishing-charter-photos' },
   { label: 'Reviews', href: '/oregon-fishing-charter-reviews' },
   { label: 'Reports', href: '/oregon-fishing-reports' },
+  { label: 'Articles', href: '/article' },
   { label: 'Meet the Captain', href: '/captain-clinton-mcculloch-of-oregon' },
 ] as const;
 

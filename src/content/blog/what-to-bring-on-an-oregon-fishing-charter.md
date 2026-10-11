@@ -8,7 +8,7 @@ tag: Trip prep
 
 <!--
 Provenance: every claim here is already published elsewhere on this site, so this post states no
-new policy. Gear and bait: src/data/trips.ts. Licence rules, early starts and group sizes:
+new policy. Gear and bait: src/data/trips.ts. License rules, early starts and group sizes:
 the FAQs in src/data/content.ts. Season months: src/data/seasons.ts. Weather, meals and
 cancellations are deliberately not mentioned, because the site does not state them yet.
 -->
@@ -20,9 +20,9 @@ equipment. You are welcome to bring your own rod if you would rather fish with i
 There is one thing nobody can bring for you, and it is the one thing that will stop your day
 before it starts.
 
-## Your Oregon fishing licence
+## Your Oregon fishing license
 
-An Oregon fishing licence is required for anyone aged 12 or older. Every angler, whatever
+An Oregon fishing license is required for anyone aged 12 or older. Every angler, whatever
 their age, needs a valid angling tag and has to follow the rules on recording harvest.
 
 On top of that, every angler of any age must have a valid Columbia River Basin Endorsement in
@@ -30,7 +30,7 @@ their possession when fishing for salmon, steelhead or sturgeon in the mainstem 
 in every river and tributary that flows into it. That covers most of the water these trips
 run on.
 
-Licences come from the Oregon Department of Fish and Wildlife, and you can buy one online
+Licenses come from the Oregon Department of Fish and Wildlife, and you can buy one online
 before you travel. Sort it out at home rather than at 4am on the way to the launch.
 
 ## Dress for an early start
@@ -47,8 +47,8 @@ coat.
 
 ## Something to carry your fish home in
 
-If you keep fish, you need a way to get it home. A cooler in the car is the simple answer,
-and it is worth putting it in the boot the night before.
+If you keep fish, you need a way to get it home. A cooler is the simple answer, and it is
+worth loading it into the car the night before rather than remembering it at 4am.
 
 ## Know your group size
 
