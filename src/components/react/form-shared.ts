@@ -21,13 +21,28 @@ export const validators = {
 export const mailtoHref = (to: string, subject: string, body: string, cap = 1800) =>
   `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.slice(0, cap))}`;
 
+// One network blip between the visitor's phone and the endpoint should not cost a booking, so a
+// request that never got an answer is tried once more. Only the no-answer case is repeated: a reply,
+// good or bad, is the server's decision and is left alone. The endpoint is safe to call twice,
+// because a lead it accepted returns 2xx and is never reached again.
+async function postOnce(body: unknown, timeout = 12000): Promise<Response | null> {
+  try {
+    return await fetch(ENDPOINT as string, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(timeout),
+    });
+  } catch {
+    return null;
+  }
+}
+
 export async function postLead(data: Record<string, string>, token = ''): Promise<boolean> {
   // `cf-turnstile-response` is the field name Cloudflare's siteverify expects; the endpoint forwards it.
   const body = token ? { ...data, 'cf-turnstile-response': token } : data;
-  try {
-    const res = await fetch(ENDPOINT as string, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
-    return res.ok;
-  } catch {
-    return false;
-  }
+  let res = await postOnce(body);
+  // A spent Turnstile token cannot be replayed, so only retry when the captcha is not in play.
+  if (res === null && !token) res = await postOnce(body, 8000);
+  return Boolean(res?.ok);
 }

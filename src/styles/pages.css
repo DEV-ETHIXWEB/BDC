@@ -370,7 +370,7 @@
 .pg-lead__call small { display: block; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--pine-200); font-weight: 700; }
 .pg-lead__call strong { display: block; font: 700 1.2rem/1.15 var(--font-body); }
 .pg-lead__form { max-width: 760px; }
-@media (min-width: 1150px) { .pg-lead { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 20px; } }
+@media (min-width: 1150px) { .pg-lead { grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 20px; } .pg-lead__call { margin-top: 6px; } }
 .pg-lead__form { max-width: none; }
 
 /* ───────── licensing / certification row ───────── */

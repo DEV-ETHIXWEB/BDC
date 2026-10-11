@@ -57,7 +57,10 @@ export default function QuickRequest({ trips, email }: Props) {
     if (submitting.current) return;
     submitting.current = true;
     setStatus('sending');
-    setStatus((await postLead(data, token)) ? 'sent' : 'error');
+    const ok = await postLead(data, token);
+    // keep the typed details in a mailto so a failure is a detour, not a dead end
+    if (!ok) setDraftHref(mailtoHref(email, subject, body));
+    setStatus(ok ? 'sent' : 'error');
     submitting.current = false;
     if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way
   }
@@ -103,7 +106,11 @@ export default function QuickRequest({ trips, email }: Props) {
       <div aria-hidden="true" className="qr__hp"><label>Leave this field empty<input name="bdc_hp" tabIndex={-1} autoComplete="off" /></label></div>
       <Turnstile onToken={setToken} resetKey={tsReset} />
       <button type="submit" className="btn btn--cream qr__go" disabled={status === 'sending'}>{status === 'sending' ? 'Sending' : 'Request'}<Icon name="arrowRight" size={18} /></button>
-      <p className="qr__msg" role="alert" aria-live="polite">{problem || (status === 'error' ? `Something went wrong. Please call ${SITE.phone}.` : '')}</p>
+      <p className="qr__msg" role="alert" aria-live="polite">
+        {problem || (status === 'error' ? (
+          <>Something went wrong sending that. Call <a href={SITE.phoneHref}>{SITE.phone}</a> or <a href={draftHref || mailtoHref(email, 'Trip request', '')}>send it by email</a> instead.</>
+        ) : '')}
+      </p>
     </form>
   );
 }

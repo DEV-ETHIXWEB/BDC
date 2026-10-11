@@ -21,6 +21,12 @@ with sync_playwright() as p:
             h1=pg.evaluate("document.querySelectorAll('h1').length")
             row={"w":w,"u":u,"ov":ov,"broken":broken,"h1":h1,"cls":round(cls,3),"errs":list(errs)}
             if w in (320,768,1280) and u!="/nope-404":
+                # axe reads an element background colour off what is actually painted. Run it
+                # before the photos have decoded and it compares a caption against the pale
+                # placeholder behind it, reporting contrast failures that vanish once the image
+                # appears. Let the images finish, then measure.
+                pg.evaluate('Promise.race([Promise.all([...document.images].filter(i=>i.src&&i.complete).map(i=>i.decode().catch(()=>{})).concat(document.getAnimations().map(a=>a.finished.catch(()=>{})))),new Promise(r=>setTimeout(r,4000))])')
+                pg.wait_for_timeout(400)
                 pg.evaluate(AXE); r=pg.evaluate("axe.run(document,{runOnly:['wcag2a','wcag2aa','wcag21aa','best-practice']})")
                 row["axe"]=[(v['id'],v['impact'],len(v['nodes'])) for v in r['violations']]
             res.append(row)

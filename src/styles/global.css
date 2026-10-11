@@ -634,6 +634,20 @@ main > :nth-child(n + 4) { content-visibility: auto; contain-intrinsic-size: aut
 /* It must sit IN the layout. Absolutely positioning it put the challenge outside section.ht-hero, which is
    overflow:hidden, so a visitor who needed to solve one could never see it and the form silently refused. */
 .qr .ts-box.is-live { grid-column: 1 / -1; justify-self: start; max-width: 320px; }
+/* When a challenge actually appears the bar cannot stay a single pill, and spanning the whole row
+   pushed the button down to a third line, leaving the call button, the captcha and Request on three
+   ragged rows. Drop the button's own column and let the challenge and the button share the second
+   row instead: fields above, challenge left, Request right under the email field. */
+@media (min-width: 900px) {
+  .qr:has(.ts-box.is-live) {
+    grid-template-columns: minmax(0, 1.2fr) minmax(140px, 0.95fr) minmax(0, 0.9fr) minmax(0, 0.9fr) minmax(0, 1.05fr);
+    border-radius: 22px;
+    padding: 8px;
+    row-gap: 10px;
+  }
+  .qr:has(.ts-box.is-live) .ts-box.is-live { grid-column: 1 / 4; margin: 0; align-self: center; }
+  .qr:has(.ts-box.is-live) .qr__go { grid-column: 5; width: 100%; }
+}
 
 /* Social profiles in the footer: same rhythm as the contact list above it. */
 .footer__social { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }

@@ -18,16 +18,44 @@ const list = (v, fallback = []) =>
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const clip = (v, n) => String(v ?? '').trim().slice(0, n);
 
-async function send(payload) {
+// The whole handler has to answer before the platform kills the function, so every network call
+// draws from one shared budget rather than carrying its own fixed timeout. Without this a slow
+// Turnstile check could eat the time the lead email needed, and the lead would be the thing lost.
+const BUDGET_MS = 8500;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function once(payload, timeout) {
   const res = await fetch(SMTP2GO, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify({ api_key: process.env.SMTP2GO_API_KEY, ...payload }),
+    signal: AbortSignal.timeout(timeout),
   });
   const body = await res.json().catch(() => ({}));
   // SMTP2GO answers 200 with data.succeeded = 0 when it accepted nothing, so status alone is not enough.
   const ok = res.ok && (body?.data?.succeeded ?? 0) > 0;
   return { ok, status: res.status, detail: body?.data?.error || body?.data?.failures?.[0]?.error || null };
+}
+
+// Retries only what is worth retrying. A 200 with succeeded = 0 is SMTP2GO refusing the message,
+// usually a bad address, and sending it again just fails again; a timeout, a dropped connection or
+// a 5xx is the kind of blip that a second attempt fixes.
+async function send(payload, left, { retry = false } = {}) {
+  let last = { ok: false, status: 0, detail: 'no time left' };
+  for (let attempt = 0; attempt < (retry ? 2 : 1); attempt++) {
+    const budget = left();
+    if (budget < 1200) break;
+    try {
+      last = await once(payload, Math.min(4500, budget));
+      if (last.ok) return last;
+      // a hard refusal: sending the identical message again would only fail the same way
+      if (last.status >= 400 && last.status < 500 && last.status !== 429) return last;
+    } catch (e) {
+      last = { ok: false, status: 0, detail: e?.name === 'TimeoutError' ? 'timeout' : String(e?.message || e) };
+    }
+    if (attempt === 0 && retry && left() > 2000) await sleep(250);
+  }
+  return last;
 }
 
 export default async function handler(req, res) {
@@ -39,6 +67,9 @@ export default async function handler(req, res) {
     console.error('lead: SMTP2GO_API_KEY is not set');
     return res.status(500).json({ error: 'Mail is not configured' });
   }
+
+  const started = Date.now();
+  const left = () => BUDGET_MS - (Date.now() - started);
 
   let d = req.body;
   if (typeof d === 'string') { try { d = JSON.parse(d); } catch { d = null; } }
@@ -76,7 +107,8 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: form,
-        signal: AbortSignal.timeout(10_000),
+        // capped so there is always room left for at least one attempt at the lead itself
+        signal: AbortSignal.timeout(Math.max(1500, Math.min(4000, left() - 3500))),
       }).then((r) => r.json());
 
       // 1. it passed, 2. it came from our widget action, 3. it came from a hostname we expect.
@@ -109,27 +141,43 @@ export default async function handler(req, res) {
   const cc = list(process.env.LEAD_CC);
   const lead = leadEmail(data);
 
-  const sent = await send({
-    sender: from, to, ...(cc.length ? { cc } : {}),
-    subject: lead.subject, html_body: lead.html, text_body: lead.text,
-    // replying to the notification should reach the guest, not the mailbox it was sent to
-    ...(data.email ? { custom_headers: [{ header: 'Reply-To', value: data.email }] } : {}),
-  });
+  let sent;
+  try {
+    sent = await send({
+      sender: from, to, ...(cc.length ? { cc } : {}),
+      subject: lead.subject, html_body: lead.html, text_body: lead.text,
+      // replying to the notification should reach the guest, not the mailbox it was sent to
+      ...(data.email ? { custom_headers: [{ header: 'Reply-To', value: data.email }] } : {}),
+    }, left, { retry: true });
+  } catch (e) {
+    // a throw here used to escape as a 500 with no record of who had just tried to book
+    sent = { ok: false, status: 0, detail: String(e?.message || e) };
+  }
 
   if (!sent.ok) {
-    console.error('lead: SMTP2GO rejected the lead', sent.status, sent.detail);
-    return res.status(502).json({ error: 'We could not send that right now' });
+    // The enquiry is not lost just because the mail provider is. One greppable line carries the whole
+    // lead into the function log, so it can be recovered and called back by hand:
+    //   vercel logs --since 1d | grep LEAD-UNDELIVERED
+    console.error('LEAD-UNDELIVERED', JSON.stringify({
+      at: new Date().toISOString(), reason: sent.detail, status: sent.status, ...data,
+    }));
+    // The visitor is given everything needed to reach the captain anyway, so a provider outage
+    // costs the captain a click, not a booking.
+    return res.status(502).json({
+      error: 'We could not send that right now',
+      fallback: { phone: process.env.LEAD_PHONE || '(503) 826-7294', email: to[0] },
+    });
   }
 
   // Best effort. The lead is already delivered, so a failure here must not tell the visitor it went wrong.
-  if (data.email) {
+  if (data.email && left() > 1500) {
     const confirm = confirmEmail(data);
     try {
       const c = await send({
         sender: from, to: [data.email],
         subject: confirm.subject, html_body: confirm.html, text_body: confirm.text,
         custom_headers: [{ header: 'Reply-To', value: process.env.REPLY_TO || to[0] }],
-      });
+      }, left);
       if (!c.ok) console.error('lead: confirmation not sent', c.status, c.detail);
     } catch (e) {
       console.error('lead: confirmation threw', e);

@@ -22,7 +22,11 @@
   .qr { gap: 8px; padding: 12px; }
   .qr__f--trip { grid-column: 1 / -1; }
   /* order: trip, name + phone, email, date + button, so the whole form is short and sits high on the phone */
-  .qr__title { order: 0; } .qr__f--trip { order: 1; } .qr__f:nth-of-type(3) { order: 2; } .qr__f:nth-of-type(4) { order: 3; } .qr__f--email { order: 4; } .qr__f--date { order: 5; } .qr__go { order: 6; } .qr__msg { order: 7; }
+  .qr__title { order: 0; } .qr__f--trip { order: 1; } .qr__f:nth-of-type(3) { order: 2; } .qr__f:nth-of-type(4) { order: 3; } .qr__f--email { order: 4; } .qr__f--date { order: 6; } .qr__go { order: 7; } .qr__msg { order: 8; }
+  /* The challenge has no order of its own, so it defaulted to 0 and appeared above the fields,
+     asking people to prove they are human before they had typed anything. It belongs after the
+     fields and before the button, leaving date and Request paired on the last row. */
+  .qr .ts-box.is-live { order: 5; grid-column: 1 / -1; }
   .qr__f--email { grid-column: 1 / -1; }   /* an address needs the full row to stay readable */
   .qr__title { font-size: 1.05rem; }
   .qr__title { font-size: 0.9rem; }

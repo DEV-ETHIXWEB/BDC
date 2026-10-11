@@ -245,7 +245,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
 
           <Turnstile onToken={setToken} resetKey={tsReset} />
           {status === 'unverified' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Please complete the security check above, then send again.</p>}
-          {status === 'error' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Something went wrong sending that. Please call {SITE.phone} or email {email}.</p>}
+          {status === 'error' && <p className="tp-err tp-err--box" role="alert"><Icon name="close" size={16} />Something went wrong sending that. Call <a href={SITE.phoneHref}>{SITE.phone}</a> or email <a href={`mailto:${email}`}>{email}</a> and it will reach Captain Clinton.</p>}
 
           <div className="tp-actions">
             <button type="button" className="tp-back" onClick={() => setStep(1)}>Back</button>
