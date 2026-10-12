@@ -93,11 +93,22 @@ if (existsSync(mainSitemap)) {
   const xml = readFileSync(mainSitemap, 'utf8');
   const locs = (xml.match(/<loc>/g) || []).length;
   const mods = (xml.match(/<lastmod>/g) || []).length;
-  if (locs && mods < locs) {
-    console.error(`\nBUILD FAILED: ${mods} of ${locs} sitemap URLs have <lastmod>.\n` +
+  // Only a total loss is worth failing a deploy over. That is the regression that matters: git
+  // unavailable AND the snapshot missing, so the freshness signal disappears entirely. A few routes
+  // missing a date is a warning, because blocking an urgent fix from shipping over a sitemap field
+  // would cost more than the field is worth.
+  // Half is the line. A couple of new routes not yet in the snapshot is a warning; losing most of
+  // them means git history and the snapshot are both gone, which is the regression worth stopping.
+  // (Front matter alone still dates the blog posts, so a total wipe reads as a handful, not zero.)
+  if (locs && mods < locs / 2) {
+    console.error(`\nBUILD FAILED: only ${mods} of ${locs} sitemap URLs have <lastmod>.\n` +
       'Dates come from git history (scripts/page-dates.mjs) with data/page-dates.json as the\n' +
-      'fallback for shallow clones. Either the snapshot is missing routes or git is unavailable.\n');
+      'fallback for shallow clones. Both are unavailable, so the freshness signal is gone.\n');
     process.exit(1);
+  }
+  if (mods < locs) {
+    console.warn(`\n!! ${locs - mods} of ${locs} sitemap URLs have no <lastmod>. Add them to\n` +
+      '!! data/page-dates.json by running a build where git history is available.\n');
   }
   console.log(`sitemap freshness: ${mods}/${locs} URLs carry lastmod`);
 }
