@@ -88,5 +88,5 @@ export default function Turnstile({ onToken, resetKey = 0, theme = 'auto' }: { o
   }, [resetKey]);
 
   if (!TURNSTILE_SITE_KEY) return null;
-  return <div className="ts-box" ref={host} id={`ts-${uid}`} aria-label="Security check" />;
+  return <div className="ts-box" ref={host} id={`ts-${uid}`} role="group" aria-label="Security check" />;
 }
