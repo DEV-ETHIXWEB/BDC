@@ -84,3 +84,20 @@ if (existsSync(idxPath)) {
   }
 }
 console.log(`image sitemap: ${entries.length} images, listed in sitemap-index.xml`);
+
+// Guard the lastmod work. It depends on git history, which a shallow CI clone may not have, and a
+// silent regression here is invisible: the sitemap still validates, it just stops telling Google
+// anything about freshness. Fail the build instead of shipping that.
+const mainSitemap = join(DIST, 'sitemap-0.xml');
+if (existsSync(mainSitemap)) {
+  const xml = readFileSync(mainSitemap, 'utf8');
+  const locs = (xml.match(/<loc>/g) || []).length;
+  const mods = (xml.match(/<lastmod>/g) || []).length;
+  if (locs && mods < locs) {
+    console.error(`\nBUILD FAILED: ${mods} of ${locs} sitemap URLs have <lastmod>.\n` +
+      'Dates come from git history (scripts/page-dates.mjs) with data/page-dates.json as the\n' +
+      'fallback for shallow clones. Either the snapshot is missing routes or git is unavailable.\n');
+    process.exit(1);
+  }
+  console.log(`sitemap freshness: ${mods}/${locs} URLs carry lastmod`);
+}

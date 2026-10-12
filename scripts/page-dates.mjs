@@ -5,8 +5,21 @@
 // page changed on every deploy, which is false and teaches Google to ignore the field. The honest
 // source is the last commit that touched the page's own source file.
 import { execSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+
+// Vercel builds from a shallow clone, so `git log` for a file touched before the clone depth
+// returns nothing and every date would quietly disappear in production, exactly where it matters.
+// Falling back to file mtime would be worse than nothing: on a fresh checkout that is the build
+// time, so the sitemap would claim every page changed on every deploy.
+//
+// So: whenever git history IS available (any local build), the computed dates are written to
+// data/page-dates.json and committed. The build prefers live git and falls back to that snapshot.
+// The snapshot is refreshed by the same builds that change the pages, so it cannot drift far.
+const CACHE = 'data/page-dates.json';
+const readCache = () => {
+  try { return JSON.parse(readFileSync(CACHE, 'utf8')); } catch { return {}; }
+};
 
 const gitDate = (file) => {
   try {
@@ -25,8 +38,9 @@ export function fileGitDate(file) {
 /** route path (no leading slash, '' for home) -> ISO date */
 export function pageDates() {
   const map = new Map();
+  const cache = readCache();
   const add = (route, file) => {
-    const d = gitDate(file);
+    const d = gitDate(file) || cache[route] || null;
     if (d) map.set(route, d);
   };
 
@@ -52,7 +66,7 @@ export function pageDates() {
       const slug = f.replace(/\.md$/, '');
       const src = readFileSync(join(blog, f), 'utf8');
       const stated = (src.match(/^updated:\s*"?(\d{4}-\d{2}-\d{2})/m) || src.match(/^published:\s*"?(\d{4}-\d{2}-\d{2})/m))?.[1];
-      const d = stated ? `${stated}T12:00:00Z` : gitDate(join(blog, f));
+      const d = stated ? `${stated}T12:00:00Z` : (gitDate(join(blog, f)) || cache[`article/${slug}`]);
       if (d) map.set(`article/${slug}`, d);
     }
   }
@@ -67,8 +81,16 @@ export function pageDates() {
     { prefix: 'oregon-fishing-charter-photos/', tpl: 'src/pages/oregon-fishing-charter-photos/[slug].astro', data: 'src/data/photos.ts' },
   ];
   for (const g of groups) {
-    const d = newest(g.tpl, g.data);
+    const d = newest(g.tpl, g.data) || cache[`group:${g.prefix}`];
     if (d) map.set(`group:${g.prefix}`, d);
+  }
+
+  // Refresh the snapshot whenever this build had real history to work from.
+  if (gitDate('package.json')) {
+    try {
+      mkdirSync(dirname(CACHE), { recursive: true });
+      writeFileSync(CACHE, `${JSON.stringify(Object.fromEntries([...map].sort()), null, 2)}\n`);
+    } catch { /* a read-only CI filesystem is fine: the committed snapshot is already in use */ }
   }
   return map;
 }
