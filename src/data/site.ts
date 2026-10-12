@@ -7,7 +7,7 @@ export const SITE = {
   url: import.meta.env.PUBLIC_SITE_URL || 'https://www.bestdayscatching.com',
   title: 'Oregon Fishing Guide Service | BDC Guide Service',
   description:
-    'Family-friendly Oregon fishing charters for salmon, steelhead, shad, sturgeon and crab on the Columbia, Willamette and coastal rivers with Captain Clinton McCulloch.',
+    'Family-friendly Oregon fishing charters for salmon, steelhead, shad, sturgeon and crab on the Columbia, Willamette and coastal rivers with Captain Clinton.',
   phone: '(503) 826-7294',
   phoneHref: 'tel:+15038267294',
   email: 'clinton.mcculloch5150@gmail.com',

@@ -1,7 +1,7 @@
 ---
 title: Which boat will you be on
 published: 2026-10-05
-description: BDC Guide Service runs two boats, a 22 foot Willy Predator and a 16 foot Alumaweld drift boat. Which one you get depends on your group size and what you are fishing for.
+description: BDC Guide Service runs a 22 foot Willy Predator and a 16 foot Alumaweld drift boat. Which one you get depends on your group size and your target fish.
 icon: driftBoat
 tag: Trip prep
 ---

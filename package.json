@@ -11,7 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "prebuild": "node scripts/check-env.mjs && node scripts/generate-host-config.mjs",
-    "postbuild": "node scripts/postbuild-csp.mjs",
+    "postbuild": "node scripts/postbuild-csp.mjs && node scripts/postbuild-image-sitemap.mjs",
     "check": "astro check",
     "lint": "eslint src"
   },

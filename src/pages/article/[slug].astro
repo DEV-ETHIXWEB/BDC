@@ -7,15 +7,23 @@ import Icon from '../../components/Icon.astro';
 import TocSpy from '../../components/pg/TocSpy.astro';
 import { SITE } from '../../data/site';
 import { longDate } from '../../data/articles';
+import { fileGitDate } from '../../../scripts/page-dates.mjs';
 
 // Markdown posts from src/content/blog. The two original articles are static .astro files at
 // /article/<slug>, and a static route always beats this dynamic one, so their URLs stay as they were.
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    // dateModified has to mean "when this text last changed", so it comes from the last commit that
+    // touched the file. The author's own `updated:` wins when they set one, because that is the
+    // claim the page itself makes. Recency is what AI answers and recrawl scheduling reward, and a
+    // date that quietly tracked the build would be a lie told on every deploy.
+    props: { post, modified: post.data.updated || fileGitDate(`src/content/blog/${post.id}.md`) },
+  }));
 }
 
-const { post } = Astro.props;
+const { post, modified } = Astro.props;
 const { Content, headings } = await render(post);
 const { title, description, published, updated, tag, draft } = post.data;
 
@@ -29,7 +37,7 @@ const schema = {
   headline: title,
   description,
   datePublished: published,
-  ...(updated ? { dateModified: updated } : {}),
+  ...(modified ? { dateModified: new Date(modified).toISOString() } : {}),
   author: { '@type': 'Organization', name: SITE.name, '@id': `${SITE.url}/#business` },
   publisher: { '@id': `${SITE.url}/#business` },
   mainEntityOfPage: `${SITE.url}/article/${post.id}`,
@@ -37,7 +45,7 @@ const schema = {
 // Only h2s get an "on this page" entry, and only when there are enough of them to be worth the space.
 const toc = headings.filter((h) => h.depth === 2 && h.slug);
 ---
-<Base title={`${title} | BDC Guide Service`} description={description} crumbs={crumbs} schema={[schema]} type="article" noindex={draft}>
+<Base title={title} description={description} crumbs={crumbs} schema={[schema]} type="article" noindex={draft}>
   <PageHero title={title} lede={description} crumbs={crumbs} tag={tag} seed={11} />
   <div class:list={['wrap', 'pg-article', toc.length > 2 ? 'pg-article--toc' : 'pg-article--solo']}>
     {toc.length > 2 && (

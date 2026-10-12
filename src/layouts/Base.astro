@@ -47,7 +47,7 @@ const ogImage = new URL(image, SITE.url).href;
 // Titles that already carry a '|' segment (indexed old-site titles) are used as-is; others get the brand suffix
 // only while the result stays within ~65 characters, so search results do not truncate it.
 const branded = `${title} | ${SITE.name}`;
-const fullTitle = title === SITE.title || title.includes('|') || branded.length > 65 ? title : branded;
+const fullTitle = title === SITE.title || title.includes('|') || branded.length > 60 ? title : branded;
 
 const business = {
   '@context': 'https://schema.org',
