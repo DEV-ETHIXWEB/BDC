@@ -101,6 +101,25 @@ for l in links:
 check(not dead, 'every llms.txt link resolves to a real page', f'{len(dead)} dead')
 check('licence' not in llms, 'llms.txt uses US spelling')
 
+# ---- a component must ship its own styles on every page that renders it ----
+# The review band shipped to four pages but its CSS lived in a stylesheet only two of them
+# imported, so it rendered as raw unstyled HTML on the other two. Nothing errored, nothing failed
+# to build, and it was only caught by eye. This checks the class of fault, not the one instance:
+# for each marker below, every page containing it must also be served a rule that styles it.
+def css_for(page_html):
+    """Every stylesheet byte a page actually loads, inline or linked."""
+    css = ''.join(re.findall(r'<style[^>]*>(.*?)</style>', page_html, re.S))
+    for href in re.findall(r'<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"', page_html):
+        try: css += open(DIST + href, encoding='utf8').read()
+        except OSError: pass
+    return css
+
+for marker, rule in (('rm__viewport', '.rm__track'), ('hm-art__t', '.hm-art'), ('cp-art__t', '.cp-art')):
+    pages_with = [f for f, h in html.items() if marker in h]
+    unstyled = [f for f in pages_with if rule not in css_for(html[f])]
+    check(not unstyled, f'every page using {marker} also loads {rule}',
+          f'{len(unstyled)} unstyled: {[f.split("/")[-1] for f in unstyled[:3]]}')
+
 # ---- things we must NOT be doing ----
 check('aggregateRating' not in home, 'no fabricated aggregateRating', 'there are no reviews yet')
 check('openingHoursSpecification' not in home, 'no invented opening hours')

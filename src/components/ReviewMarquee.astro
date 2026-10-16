@@ -1,4 +1,5 @@
 ---
+import '../styles/gallery.css';
 import Icon from './Icon.astro';
 import { MANUAL_REVIEWS, REVIEW_SUMMARY } from '../data/reviews';
 
@@ -16,7 +17,16 @@ const { title = 'What guests say.', tag = 'Guest reviews', link = true } = Astro
 // a short list feel generous: the same real words come round again, and nothing claims a count
 // that does not exist. The visible total below is the real one.
 const items = MANUAL_REVIEWS.filter((r) => r.text.trim());
-const loop = [...items, ...items];
+
+// The track is two identical halves and slides exactly one half, so the loop joins seamlessly.
+// Each half has to be at least as wide as the widest screen it will run on, or the content runs
+// out mid-travel and leaves a gap at the edge. Two cards is about 810px, which is narrower than a
+// laptop, so the list is repeated until one half comfortably covers a wide display. A card is
+// 390px plus a 16px gap, so this many cards clears 2600px.
+const PER_CARD = 406;
+const perHalf = Math.max(items.length, Math.ceil(2600 / PER_CARD));
+const half = Array.from({ length: perHalf }, (_, i) => items[i % items.length]);
+const loop = [...half, ...half];
 const stars = (n = 5) => Array.from({ length: n });
 ---
 {items.length > 0 && (
@@ -27,7 +37,7 @@ const stars = (n = 5) => Array.from({ length: n });
       <p class="rm__sum" data-reveal="fade">
         <span class="rm__stars" aria-hidden="true">{stars(5).map(() => <Icon name="star" size={18} />)}</span>
         <strong>{REVIEW_SUMMARY.rating.toFixed(1)}</strong>
-        <span>from {REVIEW_SUMMARY.total} Google {REVIEW_SUMMARY.total === 1 ? 'review' : 'reviews'}</span>
+        <span>from Google reviews</span>
       </p>
       {link && <a class="rm__all" href="/oregon-fishing-charter-reviews">Read the reviews<Icon name="arrowRight" size={18} /></a>}
     </div>

@@ -3,7 +3,7 @@ import '../styles/gallery.css';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import ReviewWall, { type Review } from '../components/ReviewWall.astro';
+import { type Review } from '../components/ReviewWall.astro';
 import GoogleReviews from '../components/react/GoogleReviews';
 import { SITE } from '../data/site';
 import ReviewMarquee from '../components/ReviewMarquee.astro';
@@ -48,7 +48,6 @@ const body = encodeURIComponent('Hi Captain Clinton,\n\nTrip I took (salmon, ste
   <section class="section gb-reviews" style="padding-top:0">
     <div class="wrap">
       <GoogleReviews client:load />
-      {reviews.length > 0 && <ReviewWall reviews={reviews} />}
       <div class="gb-invite" id="gb-invite">
           <div class="gb-invite__copy">
             <h2 data-reveal="up">Been out with Captain Clinton?</h2>
