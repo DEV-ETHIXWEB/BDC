@@ -274,7 +274,7 @@
 .rm__track { display: flex; gap: 16px; margin: 0; padding: 4px 0; list-style: none; width: max-content; }
 .rm__viewport.is-running .rm__track { animation: rm-slide var(--rm-dur, 36s) linear infinite; }
 .rm__viewport:hover .rm__track, .rm__viewport:focus-within .rm__track { animation-play-state: paused; }
-@keyframes rm-slide { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+@keyframes rm-slide { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
 
 .rm__item { flex: 0 0 auto; width: min(86vw, 390px); }
 .rm__card { display: grid; gap: 10px; height: 100%; margin: 0; padding: clamp(18px, 2.2vw, 24px); border: 1.5px solid var(--line); border-radius: var(--r-m); background: var(--cream-50); }
