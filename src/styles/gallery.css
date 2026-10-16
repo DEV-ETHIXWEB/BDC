@@ -254,3 +254,43 @@
 .hm-art__t { margin: 0; font-size: clamp(1.18rem, 1rem + 0.5vw, 1.4rem); line-height: 1.2; color: var(--navy-900); }
 .hm-art__d { margin: 0; color: var(--ink-soft); font-size: 0.98rem; line-height: 1.5; }
 .hm-art__go { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; color: var(--pine-700); font-weight: 700; }
+
+/* ───────── review marquee ─────────
+   A short list of real reviews, looped. The track holds two copies and travels exactly half its
+   width, so the seam is invisible and no review is ever cut off mid-card. */
+.rm { padding-block: clamp(48px, 7vw, 88px); background: var(--cream-100); overflow: hidden; }
+.rm__head { display: grid; gap: 6px; margin-bottom: clamp(20px, 3vw, 32px); }
+.rm__tag { display: inline-flex; align-items: center; gap: 8px; margin: 0; color: var(--pine-700); font-weight: 700; font-size: 0.95rem; }
+.rm__tag .ic, .rm__stars .ic, .rm__rating .ic { color: #e8a317; }
+.rm__tag .ic-fill, .rm__stars .ic-fill, .rm__rating .ic-fill { opacity: 1; }   /* a rating star is filled, not a hint */
+.rm h2 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.02; color: var(--navy-900); }
+.rm__sum { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 2px 0 0; color: var(--ink-soft); font-weight: 600; }
+.rm__sum strong { color: var(--navy-900); font-size: 1.15rem; }
+.rm__stars { display: inline-flex; gap: 1px; }
+.rm__all { justify-self: start; display: inline-flex; align-items: center; gap: 8px; margin-top: 8px; min-height: 44px; color: var(--pine-700); font-weight: 700; text-decoration: none; }
+.rm__all:hover { text-decoration: underline; }
+
+.rm__viewport { position: relative; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.rm__track { display: flex; gap: 16px; margin: 0; padding: 4px 0; list-style: none; width: max-content; }
+.rm__viewport.is-running .rm__track { animation: rm-slide var(--rm-dur, 36s) linear infinite; }
+.rm__viewport:hover .rm__track, .rm__viewport:focus-within .rm__track { animation-play-state: paused; }
+@keyframes rm-slide { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+
+.rm__item { flex: 0 0 auto; width: min(86vw, 390px); }
+.rm__card { display: grid; gap: 10px; height: 100%; margin: 0; padding: clamp(18px, 2.2vw, 24px); border: 1.5px solid var(--line); border-radius: var(--r-m); background: var(--cream-50); }
+.rm__rating { display: flex; gap: 2px; }
+.rm__card blockquote { margin: 0; }
+.rm__card blockquote p { margin: 0; color: var(--ink); font-size: 1rem; line-height: 1.55; }
+.rm__card figcaption { display: flex; align-items: baseline; gap: 10px; margin-top: auto; padding-top: 4px; }
+.rm__who { font-weight: 700; color: var(--navy-900); }
+.rm__when { color: var(--ink-soft); font-size: 0.9rem; }
+
+/* A moving wall is motion, so anyone who asked for less gets a plain scrollable row instead. */
+@media (prefers-reduced-motion: reduce) {
+  .rm__viewport.is-running .rm__track { animation: none; }
+  .rm__viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .rm__track { width: auto; }
+}
+.rm__card figcaption { flex-wrap: wrap; }
+.rm__src { display: inline-flex; align-items: center; gap: 5px; width: 100%; margin-top: 2px; color: var(--pine-700); font-size: 0.82rem; font-weight: 600; }
+.rm__src .ic { color: var(--pine-600); }

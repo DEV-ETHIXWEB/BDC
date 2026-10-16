@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Icon } from './Icon';
+import { MANUAL_REVIEWS } from '../../data/reviews';
 
 // Renders whatever /api/reviews returns. While the endpoint has no Google key configured it returns an
 // empty list, this renders nothing, and the page keeps its "send us a review" invitation. The moment the
@@ -20,7 +21,9 @@ export default function GoogleReviews({ inviteId = 'gb-invite' }: { inviteId?: s
     return () => { dead = true; };
   }, []);
 
-  const reviews = data?.reviews ?? [];
+  // de-duplicate against the reviews already rendered on the page, matched on reviewer name
+  const already = new Set(MANUAL_REVIEWS.map((r) => r.name.trim().toLowerCase()));
+  const reviews = (data?.reviews ?? []).filter((r) => !already.has((r.name || '').trim().toLowerCase()));
 
   // The invitation is server-rendered so it is there with JavaScript off; hide it only once real reviews load.
   useEffect(() => {

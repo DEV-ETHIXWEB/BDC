@@ -1,5 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
+import ReviewMarquee from '../components/ReviewMarquee.astro';
 import '../styles/pages.css';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
@@ -129,4 +130,5 @@ const drift = [
       <p class="pg-boats__more"><a class="btn btn--cream" href="/oregon-fishing-charter-rates">Choose your boat and trip<Icon name="arrowRight" size={18} /></a></p>
     </div>
   </section>
+  <ReviewMarquee title="What his guests say." tag="Guest reviews" />
 </Base>

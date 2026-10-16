@@ -1,0 +1,77 @@
+---
+import Icon from './Icon.astro';
+import { MANUAL_REVIEWS, REVIEW_SUMMARY } from '../data/reviews';
+
+interface Props {
+  /** Heading for the band. */
+  title?: string;
+  tag?: string;
+  /** Show the "all reviews" link. Off on the reviews page itself. */
+  link?: boolean;
+}
+const { title = 'What guests say.', tag = 'Guest reviews', link = true } = Astro.props;
+
+// The track is rendered twice and slid by exactly half its width, so the loop joins seamlessly.
+// With a handful of real reviews that reads as a continuous wall, which is the honest way to make
+// a short list feel generous: the same real words come round again, and nothing claims a count
+// that does not exist. The visible total below is the real one.
+const items = MANUAL_REVIEWS.filter((r) => r.text.trim());
+const loop = [...items, ...items];
+const stars = (n = 5) => Array.from({ length: n });
+---
+{items.length > 0 && (
+  <section class="rm" aria-labelledby="rm-h">
+    <div class="wrap rm__head">
+      <p class="rm__tag" data-reveal="fade"><Icon name="star" size={18} />{tag}</p>
+      <h2 id="rm-h" data-reveal="up">{title}</h2>
+      <p class="rm__sum" data-reveal="fade">
+        <span class="rm__stars" aria-hidden="true">{stars(5).map(() => <Icon name="star" size={18} />)}</span>
+        <strong>{REVIEW_SUMMARY.rating.toFixed(1)}</strong>
+        <span>from {REVIEW_SUMMARY.total} Google {REVIEW_SUMMARY.total === 1 ? 'review' : 'reviews'}</span>
+      </p>
+      {link && <a class="rm__all" href="/oregon-fishing-charter-reviews">Read the reviews<Icon name="arrowRight" size={18} /></a>}
+    </div>
+
+    <div class="rm__viewport" data-rm>
+      <ul class="rm__track" style={`--rm-n:${loop.length}`}>
+        {loop.map((r, i) => (
+          <li class="rm__item" aria-hidden={i >= items.length ? 'true' : undefined}>
+            <figure class="rm__card">
+              <div class="rm__rating" role={r.rating ? 'img' : undefined} aria-label={r.rating ? `${r.rating} out of 5` : undefined}>
+                {stars(r.rating ?? 5).map(() => <Icon name="star" size={16} />)}
+              </div>
+              <blockquote><p>{r.text}</p></blockquote>
+              <figcaption>
+                <span class="rm__who">{r.name}</span>
+                {r.when && <span class="rm__when">{r.when}</span>}
+                {r.source === 'Google' && (
+                  <span class="rm__src"><Icon name="checkCircle" size={14} />Verified on Google</span>
+                )}
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<script>
+  // Duration scales with the number of cards so the speed stays the same however many there are,
+  // and the animation only runs when the band is on screen.
+  function startMarquee() {
+    document.querySelectorAll<HTMLElement>('[data-rm]').forEach((vp) => {
+      const track = vp.querySelector<HTMLElement>('.rm__track');
+      if (!track || track.dataset.on) return;
+      track.dataset.on = '1';
+      const n = Number(track.style.getPropertyValue('--rm-n')) || track.children.length;
+      track.style.setProperty('--rm-dur', `${Math.max(18, n * 7)}s`);
+      const io = new IntersectionObserver((es) => {
+        es.forEach((e) => vp.classList.toggle('is-running', e.isIntersecting));
+      }, { rootMargin: '120px' });
+      io.observe(vp);
+    });
+  }
+  startMarquee();
+  document.addEventListener('astro:page-load', startMarquee);
+</script>
