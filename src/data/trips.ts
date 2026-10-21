@@ -6,7 +6,7 @@ export interface Trip {
   short: string;
   hours: number;
   price: number; // USD per person
-  boat: 'Willy Predator' | 'Alumaweld Guide Model';
+  boat: 'Willie Predator' | 'Alumaweld Guide Model';
   boatSpec: string;
   capacity: number;
   kind: 'river' | 'drift' | 'crab';
@@ -50,8 +50,8 @@ export const TRIPS: Trip[] = [
     short: 'Salmon, steelhead & more',
     hours: 8,
     price: 250,
-    boat: 'Willy Predator',
-    boatSpec: "22' Willy Predator",
+    boat: 'Willie Predator',
+    boatSpec: "22' Willie Predator",
     capacity: 6,
     kind: 'river',
     species: ['Chinook salmon', 'Steelhead', 'Seasonal species'],
@@ -59,7 +59,7 @@ export const TRIPS: Trip[] = [
     metaDescription: "Join BDC Guide Service for 8 hours targeting salmon and steelhead on Oregon's top rivers. Book today!",
     tagline: '8-hour guided trip for salmon, steelhead & more',
     description:
-      "Enjoy a full day on the water with BDC Guide Service aboard our Willy Predator sled, built for productive and comfortable Oregon fishing charters. This 8-hour trip is ideal for anglers looking to maximize their time targeting salmon, steelhead, or seasonal species across Oregon’s top rivers. With expert guidance from a professional Oregon fishing guide, you’ll fish proven locations using techniques tailored to current conditions, making this one of the most rewarding guided fishing trips in Oregon.",
+      "Enjoy a full day on the water with BDC Guide Service aboard our Willie Predator sled, built for productive and comfortable Oregon fishing charters. This 8-hour trip is ideal for anglers looking to maximize their time targeting salmon, steelhead, or seasonal species across Oregon’s top rivers. With expert guidance from a professional Oregon fishing guide, you’ll fish proven locations using techniques tailored to current conditions, making this one of the most rewarding guided fishing trips in Oregon.",
     photo: 'twoAnglersChinook',
     includes: fishIncludes,
   },
@@ -69,16 +69,16 @@ export const TRIPS: Trip[] = [
     short: 'Quick & productive action',
     hours: 4,
     price: 150,
-    boat: 'Willy Predator',
-    boatSpec: "22' Willy Predator",
+    boat: 'Willie Predator',
+    boatSpec: "22' Willie Predator",
     capacity: 6,
     kind: 'river',
     species: ['Chinook salmon', 'Steelhead', 'Seasonal species'],
     seoTitle: "Half Day Oregon River Fishing Charter",
-    metaDescription: "Join our 4 hour Oregon river fishing charter aboard Willy Predator. Book your guided trip today.",
+    metaDescription: "Join our 4 hour Oregon river fishing charter aboard Willie Predator. Book your guided trip today.",
     tagline: '4-hour guided trip for quick, productive action',
     description:
-      "Perfect for anglers short on time, this 4-hour trip aboard our Willy Predator offers a focused and efficient Oregon fishing charter experience. Ideal for targeting salmon, steelhead, or seasonal species, this trip delivers quality fishing with guidance from a professional Oregon fishing guide who knows where to find active fish. Whether you're new to fishing or looking for a quick outing, this is one of the most convenient guided fishing trips in Oregon.",
+      "Perfect for anglers short on time, this 4-hour trip aboard our Willie Predator offers a focused and efficient Oregon fishing charter experience. Ideal for targeting salmon, steelhead, or seasonal species, this trip delivers quality fishing with guidance from a professional Oregon fishing guide who knows where to find active fish. Whether you're new to fishing or looking for a quick outing, this is one of the most convenient guided fishing trips in Oregon.",
     photo: 'salmonOnBoat',
     includes: fishIncludes,
   },
@@ -103,12 +103,12 @@ export const TRIPS: Trip[] = [
   },
   {
     slug: 'oregon-crabbing-charter-bdc-guide-service',
-    name: 'Crabbing Charter (Willy Predator)',
+    name: 'Crabbing Charter (Willie Predator)',
     short: 'Dungeness crab & family fun',
     hours: 5,
     price: 150,
-    boat: 'Willy Predator',
-    boatSpec: "22' Willy Predator",
+    boat: 'Willie Predator',
+    boatSpec: "22' Willie Predator",
     capacity: 5, // the owner's booking rate for this trip caps at 5 (boat seats 6)
     kind: 'crab',
     species: ['Dungeness crab'],
@@ -117,7 +117,7 @@ export const TRIPS: Trip[] = [
     metaDescription: "Join BDC's Oregon crabbing charter. Harvest fresh Dungeness crab with expert guides. Book now!",
     tagline: '5-hour fall crabbing trip for fresh Dungeness crab',
     description:
-      "Join BDC Guide Service for a hands-on Oregon crabbing charter during peak season from October through December aboard our Willy Predator sled. This 5-hour trip is perfect for families, beginners, and anyone looking to enjoy a fun and rewarding day harvesting fresh Dungeness crab along the Oregon Coast. With guidance from an experienced Oregon fishing guide, you’ll learn proven crabbing techniques while enjoying one of the most popular seasonal guided fishing trips in Oregon.",
+      "Join BDC Guide Service for a hands-on Oregon crabbing charter during peak season from October through December aboard our Willie Predator sled. This 5-hour trip is perfect for families, beginners, and anyone looking to enjoy a fun and rewarding day harvesting fresh Dungeness crab along the Oregon Coast. With guidance from an experienced Oregon fishing guide, you’ll learn proven crabbing techniques while enjoying one of the most popular seasonal guided fishing trips in Oregon.",
     photo: 'dungenessCrab',
     includes: crabIncludes,
   },

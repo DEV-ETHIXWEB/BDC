@@ -6,7 +6,7 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
 import Crest from '../components/art/Crest.astro';
-import BoatWilly from '../components/art/BoatWilly.astro';
+import BoatWillie from '../components/art/BoatWillie.astro';
 import BoatDrift from '../components/art/BoatDrift.astro';
 import { PHOTOS } from '../data/photos';
 import { SITE, RIVERS } from '../data/site';
@@ -48,7 +48,7 @@ const drift = [
   ['Home water', 'Used for smaller rivers and winter steelhead trips.'],
 ];
 ---
-<Base title="Meet Captain Clinton McCulloch" description="Captain Clinton McCulloch has fished Oregon waters for 45+ years. Meet the guide behind BDC Guide Service and see the Willy Predator and Alumaweld drift boat." crumbs={crumbs} schema={[person]}>
+<Base title="Meet Captain Clinton McCulloch" description="Captain Clinton McCulloch has fished Oregon waters for 45+ years. Meet the guide behind BDC Guide Service and see the Willie Predator and Alumaweld drift boat." crumbs={crumbs} schema={[person]}>
   <PageHero title="Meet Captain Clinton" lede="Over 45 years fishing Oregon. US Coast Guard certified, fully licensed and insured." crumbs={crumbs} tag="Owner and guide" seed={7}>
     <Crest slot="art" />
   </PageHero>
@@ -113,8 +113,8 @@ const drift = [
       </div>
       <div class="pg-boats__grid">
         <figure class="pg-sheet">
-          <div class="pg-sheet__title"><h3>Willy Predator</h3><span>22 ft, twin outboard</span></div>
-          <BoatWilly />
+          <div class="pg-sheet__title"><h3>Willie Predator</h3><span>22 ft, twin outboard</span></div>
+          <BoatWillie />
           <figcaption>
             <ol class="pg-legend">{willy.map(([t, d]) => <li><strong>{t}</strong><span>{d}</span></li>)}</ol>
           </figcaption>

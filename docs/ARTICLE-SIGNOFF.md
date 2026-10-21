@@ -30,7 +30,7 @@ Read the three and answer the questions below. Then they can carry your name.
 
 /article/which-boat-will-you-be-on
 
-- [ ] Willy Predator: 22 foot, up to 6 anglers, often limited to 4 for comfort. Right?
+- [ ] Willie Predator: 22 foot, up to 6 anglers, often limited to 4 for comfort. Right?
 - [ ] Alumaweld: 16 foot, up to 3 guests, built for shallow water. Right?
 - [ ] Predator trips: full day 8 hours $250, half day 4 hours $150, crabbing 5 hours $150 for up
       to 5. Right?

@@ -68,7 +68,7 @@ export default function TripPlanner({ trips }: { trips: PlannerTrip[] }) {
       } else if (length !== 'any' && String(t.hours) !== length) {
         why = `Runs ${t.hours} hours, not ${length}`;
       } else if (t.capacity < guests) {
-        why = `The ${t.boat === 'Willy Predator' ? 'Willy Predator' : 'Alumaweld'} carries up to ${t.capacity} guests, and you have ${guests}`;
+        why = `The ${t.boat === 'Willie Predator' ? 'Willie Predator' : 'Alumaweld'} carries up to ${t.capacity} guests, and you have ${guests}`;
       }
       return { t, match: !why, why };
     });
@@ -100,8 +100,8 @@ export default function TripPlanner({ trips }: { trips: PlannerTrip[] }) {
           </div>
           <p className="tp-hint">
             {guests <= 3
-              ? 'Up to 3 guests fits either boat: the Willy Predator or the Alumaweld drift boat.'
-              : 'Four or more guests fish from the Willy Predator, which carries up to 6 (often 4).'}
+              ? 'Up to 3 guests fits either boat: the Willie Predator or the Alumaweld drift boat.'
+              : 'Four or more guests fish from the Willie Predator, which carries up to 6 (often 4).'}
           </p>
         </RadioGroup>
 
@@ -165,7 +165,7 @@ export default function TripPlanner({ trips }: { trips: PlannerTrip[] }) {
                   <h3><a href={`/oregon-fishing-charter-rates/${t.slug}`}>{t.name}</a></h3>
                   <p className="tp-ticket__meta">
                     <Icon name={t.kind === 'drift' ? 'driftBoat' : t.kind === 'crab' ? 'crab' : 'boat'} size={18} />
-                    {t.boat === 'Willy Predator' ? "22' Willy Predator" : "16' Alumaweld drift boat"}, up to {t.capacity} guests
+                    {t.boat === 'Willie Predator' ? "22' Willie Predator" : "16' Alumaweld drift boat"}, up to {t.capacity} guests
                   </p>
                   <p className="tp-ticket__species">{t.species.join(', ')}{t.season ? ` · ${t.season}` : ''}</p>
                   {!match && <p className="tp-ticket__why"><Icon name="close" size={16} />{why}</p>}

@@ -125,6 +125,6 @@ export const FAQS = [
   },
   {
     q: 'How many people can join a fishing trip?',
-    a: 'Group size depends on the boat used. The Willy Predator can take up to 6 anglers (often limited to 4 for comfort), while the Alumaweld drift boat accommodates up to 3 guests for a more personal experience.',
+    a: 'Group size depends on the boat used. The Willie Predator can take up to 6 anglers (often limited to 4 for comfort), while the Alumaweld drift boat accommodates up to 3 guests for a more personal experience.',
   },
 ] as const;

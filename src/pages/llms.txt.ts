@@ -32,7 +32,7 @@ export const GET: APIRoute = async () => {
     `- Phone: ${SITE.phone}`,
     `- Email: ${SITE.email}`,
     `- Service area: ${SITE.regionName}, ${SITE.country}. No public street address: the meeting point is given when you book, because it changes with the season and the river.`,
-    `- Boats: 22 foot Willy Predator (up to 6 anglers, often limited to 4) and a 16 foot Alumaweld drift boat (up to 3 guests)`,
+    `- Boats: 22 foot Willie Predator (up to 6 anglers, often limited to 4) and a 16 foot Alumaweld drift boat (up to 3 guests)`,
     `- Trips can start as early as 4:00 AM, most often for salmon`,
     `- An Oregon fishing license is required at age 12 and over, plus a Columbia River Basin Endorsement for salmon, steelhead and sturgeon in the Columbia basin`,
     '',

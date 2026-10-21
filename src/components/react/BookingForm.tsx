@@ -11,7 +11,7 @@ interface Props {
   defaultTrip?: string;
 }
 
-const CAPACITY_BY_NAME: Record<string, number> = { 'Willy Predator': 6, 'Alumaweld Guide Model': 3 };
+const CAPACITY_BY_NAME: Record<string, number> = { 'Willie Predator': 6, 'Alumaweld Guide Model': 3 };
 const money = (n: number) => `$${n.toLocaleString('en-US')}`;
 const todayIso = () => {
   const d = new Date();
@@ -48,7 +48,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
 
   const trip = trips.find((t) => t.name === tripName) ?? trips[0];
   const cap = trip.capacity ?? (trip.boat ? CAPACITY_BY_NAME[trip.boat] : undefined) ?? 6;
-  const capErr = guests > cap ? `${trip.name} carries up to ${cap} guests. Choose ${cap} or fewer, or pick a Willy Predator trip for larger groups.` : '';
+  const capErr = guests > cap ? `${trip.name} carries up to ${cap} guests. Choose ${cap} or fewer, or pick a Willie Predator trip for larger groups.` : '';
   const dateErr = date && today && date < today ? 'Pick today or a later date, or leave it blank if you are flexible.' : '';
   const errs = { name: validators.name(name), phone: validators.phone(phone), email: validators.email(mail) };
   const touch = (k: string) => setTouched((t) => ({ ...t, [k]: true }));

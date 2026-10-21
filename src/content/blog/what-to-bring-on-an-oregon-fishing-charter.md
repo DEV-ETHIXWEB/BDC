@@ -52,7 +52,7 @@ worth loading it into the car the night before rather than remembering it at 4am
 
 ## Know your group size
 
-Group size depends on the boat. The Willy Predator takes up to 6 anglers, though it is often
+Group size depends on the boat. The Willie Predator takes up to 6 anglers, though it is often
 limited to 4 for comfort, and the Alumaweld drift boat takes up to 3 guests for a more
 personal trip. Worth confirming the number in your party when you book.
 

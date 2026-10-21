@@ -32,7 +32,7 @@ export const COUPONS: Coupon[] = [
     icon: 'crab',
     eyebrow: 'Oct – Dec',
     title: 'Fall crab charters',
-    body: 'Five hours of Dungeness crab and family fun aboard the Willy Predator or Alumaweld.',
+    body: 'Five hours of Dungeness crab and family fun aboard the Willie Predator or Alumaweld.',
     big: `$${TRIPS.find((t) => t.kind === 'crab')!.price}`,
     bigLabel: 'per person',
     cta: 'Book crabbing',

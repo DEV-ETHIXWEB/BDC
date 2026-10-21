@@ -21,7 +21,7 @@ const { trip } = Astro.props as { trip: Trip };
 const url = `${SITE.url}/oregon-fishing-charter-rates/${trip.slug}`;
 const crumbs = [{ name: 'Trips & Rates', path: '/oregon-fishing-charter-rates' }, { name: trip.name, path: `/oregon-fishing-charter-rates/${trip.slug}` }];
 const related = TRIPS.filter((t) => t.slug !== trip.slug && t.kind === trip.kind).concat(TRIPS.filter((t) => t.slug !== trip.slug && t.kind !== trip.kind)).slice(0, 3);
-const isWilly = trip.boat === 'Willy Predator';
+const isWillie = trip.boat === 'Willie Predator';
 const isCrab = trip.kind === 'crab';
 const salmon = trip.species.some((s) => /salmon/i.test(s));
 const boatIcon = isCrab ? 'crab' : trip.kind === 'drift' ? 'driftBoat' : 'boat';
@@ -44,10 +44,10 @@ const flow = [
   { t: 'What to bring', icon: 'compass', d: `${BOOKING_TERMS.bring.join('. ')}.` },
   { t: 'Deposit and cancellation', icon: 'ticket', d: `${BOOKING_TERMS.deposit} Cancel 7 days before your trip date to receive a refund on your deposit; rescheduling is encouraged and depends on guide availability.` },
 ];
-const boatFacts = isWilly
+const boatFacts = isWillie
   ? [['Length', '22 feet'], ['Power', 'Twin Yamaha: 150 HP main, 9.9 HP kicker'], ['Capacity', 'Up to 6 guests, often 4'], ['Built for', 'Salmon fishing on larger rivers']]
   : [['Length', '16 feet'], ['Type', 'Alumaweld guide model drift boat'], ['Capacity', 'Up to 3 guests'], ['Built for', 'Shallow water and winter steelhead trips']];
-const hull = isWilly ? 340 : 247;
+const hull = isWillie ? 340 : 247;
 const schema = [{
   '@context': 'https://schema.org',
   '@type': 'TouristTrip',
@@ -66,7 +66,7 @@ const quickTrips = TRIPS.map(({ slug, name, price }) => ({ slug, name, price }))
     <div class="wrap tp-hero__grid">
       <div class="tp-hero__copy">
         <nav class="tp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true"> / </span><a href="/oregon-fishing-charter-rates">Trips &amp; rates</a><span aria-hidden="true"> / </span><span aria-current="page">{trip.name}</span></nav>
-        <p class="tp-chip"><Icon name={boatIcon} size={18} />{trip.boat === 'Willy Predator' ? 'Willy Predator' : 'Alumaweld drift boat'}</p>
+        <p class="tp-chip"><Icon name={boatIcon} size={18} />{trip.boat === 'Willie Predator' ? 'Willie Predator' : 'Alumaweld drift boat'}</p>
         <h1 data-split>{trip.name}</h1>
         <p class="tp-hero__lede" data-reveal="up">{trip.tagline}.</p>
         <div class="tp-hero__price" data-reveal="up"><span class="tp-hero__amt">${trip.price}</span><span>per person<small>Guide, boat and gear included</small></span></div>
@@ -126,22 +126,22 @@ const quickTrips = TRIPS.map(({ slug, name, price }) => ({ slug, name, price }))
   <section class="tp-boat" aria-labelledby="boat-h">
     <div class="wrap tp-boat__grid">
       <div class="tp-boat__draw" data-reveal="fade">
-        <svg viewBox="0 0 400 150" role="img" aria-label={`Side outline of the ${trip.boatSpec}, ${isWilly ? '22' : '16'} feet long`}>
+        <svg viewBox="0 0 400 150" role="img" aria-label={`Side outline of the ${trip.boatSpec}, ${isWillie ? '22' : '16'} feet long`}>
           <g transform={`translate(${(400 - hull) / 2} 20)`} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
-            <path d={`M0 24 Q${hull / 2} ${isWilly ? 40 : 52} ${hull} 24 L${hull - 24} ${isWilly ? 70 : 62} L${isWilly ? 22 : 30} ${isWilly ? 70 : 62} Z`} />
+            <path d={`M0 24 Q${hull / 2} ${isWillie ? 40 : 52} ${hull} 24 L${hull - 24} ${isWillie ? 70 : 62} L${isWillie ? 22 : 30} ${isWillie ? 70 : 62} Z`} />
             <path d={`M${hull * 0.3} 24 V6 H${hull * 0.55} V24`} />
-            {isWilly && <path d={`M${hull * 0.36} 6 V-8 H${hull * 0.48} V6`} />}
-            {isWilly && <path d={`M${hull - 6} 26 h20 v34 h-20 M${hull - 6} 64 h11 v14 h-11`} />}
+            {isWillie && <path d={`M${hull * 0.36} 6 V-8 H${hull * 0.48} V6`} />}
+            {isWillie && <path d={`M${hull - 6} 26 h20 v34 h-20 M${hull - 6} 64 h11 v14 h-11`} />}
             <path d={`M${hull * 0.62} 24 V14 M${hull * 0.7} 24 V14`} opacity="0.6" />
           </g>
           <g stroke="currentColor" stroke-width="1" opacity="0.8">
             <path d={`M${(400 - hull) / 2} 118 H${(400 + hull) / 2} M${(400 - hull) / 2} 111 V125 M${(400 + hull) / 2} 111 V125`} />
           </g>
-          <text x="200" y="142" text-anchor="middle" fill="currentColor" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="16" letter-spacing="1">{isWilly ? '22 FT' : '16 FT'}</text>
+          <text x="200" y="142" text-anchor="middle" fill="currentColor" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="16" letter-spacing="1">{isWillie ? '22 FT' : '16 FT'}</text>
         </svg>
       </div>
       <div class="tp-boat__spec" data-reveal="up">
-        <h2 id="boat-h">{isWilly ? 'The Willy Predator' : 'The Alumaweld drift boat'}</h2>
+        <h2 id="boat-h">{isWillie ? 'The Willie Predator' : 'The Alumaweld drift boat'}</h2>
         <dl>
           {boatFacts.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
         </dl>

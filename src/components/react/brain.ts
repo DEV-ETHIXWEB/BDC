@@ -74,7 +74,7 @@ const label = (e: Entity): string => {
   if (e.species === 'steelhead') return 'steelhead';
   if (e.species === 'salmon') return 'salmon';
   if (e.kind === 'drift') return 'drift boat';
-  if (e.boat === 'Willy Predator') return 'Willy Predator';
+  if (e.boat === 'Willie Predator') return 'Willie Predator';
   if (e.hours === 4) return 'half day';
   if (e.hours === 8) return 'full day';
   return '';
@@ -129,18 +129,18 @@ const INTENTS: Intent[] = [
     fn: ({ tokens }) => {
       const ts = TRIPS.filter((t) => t.kind === 'crab');
       if (SIZE_Q(tokens)) return { text: `${REGULATIONS.keeperSize} I don't have typical crab weights on file.` };
-      return { text: `Crabbing charters run ${ts[0].season}: ${ts[0].hours} hours, $${ts[0].price} per person, on the Willy Predator (up to ${ts[0].capacity} guests) or the Alumaweld (up to ${ts[1].capacity}). ${sp('dungeness-crab').tip}`, cards: ts.map(cardOf) };
+      return { text: `Crabbing charters run ${ts[0].season}: ${ts[0].hours} hours, $${ts[0].price} per person, on the Willie Predator (up to ${ts[0].capacity} guests) or the Alumaweld (up to ${ts[1].capacity}). ${sp('dungeness-crab').tip}`, cards: ts.map(cardOf) };
     },
   },
   {
     id: 'steelhead', kw: [['steelhead', 1.5], ['winter fish', 2]],
     follow: ['Which boat for steelhead?', 'How much is a drift boat trip?', 'Do I need a license?'],
-    fn: ({ tokens }) => SIZE_Q(tokens) ? { text: `Steelhead typically run ${sp('steelhead-trout').weight} and ${sp('steelhead-trout').length}.` } : ({ text: `${sp('steelhead-trout').season} ${sp('steelhead-trout').technique} You can fish steelhead from the low-profile [Alumaweld drift boat](/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip) or aboard the Willy Predator.`, cards: TRIPS.filter((t) => hasSp(t, /steelhead/i)).map(cardOf) }),
+    fn: ({ tokens }) => SIZE_Q(tokens) ? { text: `Steelhead typically run ${sp('steelhead-trout').weight} and ${sp('steelhead-trout').length}.` } : ({ text: `${sp('steelhead-trout').season} ${sp('steelhead-trout').technique} You can fish steelhead from the low-profile [Alumaweld drift boat](/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip) or aboard the Willie Predator.`, cards: TRIPS.filter((t) => hasSp(t, /steelhead/i)).map(cardOf) }),
   },
   {
     id: 'salmon', kw: [['salmon', 1.5], ['chinook', 1.5], ['king', 1]],
     follow: ['How early do trips start?', 'How much is a full day?', 'Do I need a license?'],
-    fn: ({ tokens }) => SIZE_Q(tokens) ? { text: `Chinook salmon typically run ${sp('chinook-salmon').weight} and ${sp('chinook-salmon').length}.` } : ({ text: `${sp('chinook-salmon').season} ${sp('chinook-salmon').technique} Most salmon trips run on the Willy Predator.`, cards: TRIPS.filter((t) => t.boat === 'Willy Predator' && t.kind === 'river').map(cardOf) }),
+    fn: ({ tokens }) => SIZE_Q(tokens) ? { text: `Chinook salmon typically run ${sp('chinook-salmon').weight} and ${sp('chinook-salmon').length}.` } : ({ text: `${sp('chinook-salmon').season} ${sp('chinook-salmon').technique} Most salmon trips run on the Willie Predator.`, cards: TRIPS.filter((t) => t.boat === 'Willie Predator' && t.kind === 'river').map(cardOf) }),
   },
   {
     id: 'shad', kw: [['shad', 2], ['american shad', 2.5]],
@@ -212,12 +212,12 @@ const INTENTS: Intent[] = [
   {
     id: 'kids', kw: ['kid', 'child', 'children', 'family', 'families', 'son', 'daughter', 'teen', 'young', 'youth', 'beginner', 'first time', 'first-time', 'novice', 'inexperienced', 'never fished', 'age', ['old', 0.5], 'toddler', 'baby', 'grandkid', 'grandpa', 'senior'],
     follow: ['Which trip is best for kids?', 'Do I need a license?', 'Trip prices'],
-    fn: () => ({ text: `Yes, we are a family-friendly service. The half day drift boat trip is described for beginners, families, or anglers with limited time, and the Willy Predator crabbing charter for families, beginners, and anyone who wants a fun day harvesting crab. Captain Clinton connects easily with anglers of all experience levels. A fishing license is required for anglers 12 and older. I don't have a minimum age on file, so call to check for very young children.`, actions: ['call'], cards: TRIPS.filter((t) => (t.kind === 'drift' && t.hours === 4) || (t.kind === 'crab' && t.boat === 'Willy Predator')).map(cardOf) }),
+    fn: () => ({ text: `Yes, we are a family-friendly service. The half day drift boat trip is described for beginners, families, or anglers with limited time, and the Willie Predator crabbing charter for families, beginners, and anyone who wants a fun day harvesting crab. Captain Clinton connects easily with anglers of all experience levels. A fishing license is required for anglers 12 and older. I don't have a minimum age on file, so call to check for very young children.`, actions: ['call'], cards: TRIPS.filter((t) => (t.kind === 'drift' && t.hours === 4) || (t.kind === 'crab' && t.boat === 'Willie Predator')).map(cardOf) }),
   },
   {
-    id: 'boat', kw: ['boat', 'drift', 'willy', 'alumaweld', 'predator', 'vessel', 'yamaha', 'motor', 'engine'],
+    id: 'boat', kw: ['boat', 'drift', 'willie', 'willy', 'alumaweld', 'predator', 'vessel', 'yamaha', 'motor', 'engine'],
     follow: ['Trip prices', 'How many people fit?', 'Which trip is best for steelhead?'],
-    fn: () => ({ text: `Two boats. The 22' Willy Predator (twin Yamaha power, 150 HP main and 9.9 HP kicker) takes up to 6 guests and is built for salmon on larger rivers like the Columbia and Willamette. The 16' Alumaweld drift boat takes up to 3 guests and reaches shallow water for steelhead.` }),
+    fn: () => ({ text: `Two boats. The 22' Willie Predator (twin Yamaha power, 150 HP main and 9.9 HP kicker) takes up to 6 guests and is built for salmon on larger rivers like the Columbia and Willamette. The 16' Alumaweld drift boat takes up to 3 guests and reaches shallow water for steelhead.` }),
   },
   {
     id: 'captain', kw: ['captain', 'clinton', 'guide', 'mcculloch', 'owner', 'experience', 'who', 'bdc'],
@@ -279,7 +279,7 @@ const COMPILED: Compiled[] = INTENTS.map((intent) => {
 });
 const VOCAB = new Set<string>();
 COMPILED.forEach((c) => c.words.forEach((_, w) => VOCAB.add(w)));
-['crab', 'drift', 'willy', 'steelhead', 'salmon', 'alumaweld', 'predator', 'half', 'full', 'clinton', 'kid', 'family', 'price', 'license', 'season'].forEach((w) => VOCAB.add(w));
+['crab', 'drift', 'willie', 'willy', 'steelhead', 'salmon', 'alumaweld', 'predator', 'half', 'full', 'clinton', 'kid', 'family', 'price', 'license', 'season'].forEach((w) => VOCAB.add(w));
 const VOCAB_LONG = [...VOCAB].filter((w) => w.length >= 4);
 
 function tokenize(input: string): { tokens: string[]; joined: string } {
@@ -304,7 +304,7 @@ function entityOf(tokens: string[], joined: string): Entity {
   else if (has('drift', 'alumaweld') || joined.includes(' drift boat ')) e.kind = 'drift';
   else if (has('steelhead')) e.species = 'steelhead';
   else if (has('salmon', 'chinook', 'king')) e.species = 'salmon';
-  if (has('willy', 'predator')) e.boat = 'Willy Predator';
+  if (has('willie', 'willy', 'predator')) e.boat = 'Willie Predator';
   if (has('half') || /\b4 hour|\b4 hr/.test(joined)) e.hours = 4;
   if (has('full') || /\b8 hour|\b8 hr/.test(joined)) e.hours = 8;
   return e;
