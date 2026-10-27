@@ -28,6 +28,10 @@ const perHalf = Math.max(items.length, Math.ceil(2600 / PER_CARD));
 const half = Array.from({ length: perHalf }, (_, i) => items[i % items.length]);
 const loop = [...half, ...half];
 const stars = (n = 5) => Array.from({ length: n });
+
+// Cards in the band share a height and the text is clamped, so a review long enough to be cut needs
+// somewhere to go. About nine lines fit in a card at this width.
+const LONG = 420;
 ---
 {items.length > 0 && (
   <section class="rm" aria-labelledby="rm-h">
@@ -51,6 +55,9 @@ const stars = (n = 5) => Array.from({ length: n });
                 {stars(r.rating ?? 5).map(() => <Icon name="star" size={16} />)}
               </div>
               <blockquote><p>{r.text}</p></blockquote>
+              {r.text.length > LONG && (
+                <a class="rm__more" href="/oregon-fishing-charter-reviews#all-reviews" tabindex={i >= items.length ? -1 : undefined}>Read the full review</a>
+              )}
               <figcaption>
                 <span class="rm__who">{r.name}</span>
                 {r.when && <span class="rm__when">{r.when}</span>}
