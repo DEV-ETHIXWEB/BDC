@@ -281,6 +281,9 @@
 .rm__rating { display: flex; gap: 2px; }
 .rm__card blockquote { margin: 0; }
 .rm__card blockquote p { margin: 0; color: var(--ink); font-size: 1rem; line-height: 1.55; }
+/* A long review would stretch every card in the band, since they share a height. The band is a
+   taster: it clamps, and the reviews page shows the review in full. */
+.rm__card blockquote p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 9; overflow: hidden; }
 .rm__card figcaption { display: flex; align-items: baseline; gap: 10px; margin-top: auto; padding-top: 4px; }
 .rm__who { font-weight: 700; color: var(--navy-900); }
 .rm__when { color: var(--ink-soft); font-size: 0.9rem; }

@@ -29,11 +29,21 @@ export interface ManualReview {
   trip?: string;
 }
 
-// Transcribed from the Google Business Profile dashboard on 16 October 2026, which showed 5.0 from
-// 3 reviews. These are here so they appear immediately; once GOOGLE_PLACES_API_KEY and
+// Transcribed from the Google Business Profile dashboard on 27 October 2026, which showed 5.0 from
+// 4 reviews. These are here so they appear immediately; once GOOGLE_PLACES_API_KEY and
 // GOOGLE_PLACE_ID are set, /api/reviews becomes the live source and these are de-duplicated away by
 // reviewer name, so nothing shows twice and new reviews arrive without anyone editing this file.
 export const MANUAL_REVIEWS: ManualReview[] = [
+  {
+    name: 'Troy Lovell',
+    text:
+      'I can’t say enough good things about Captain Clint. His knowledge of ocean salmon fishing and local river runs is truly top-notch. Safety was a major priority throughout the trip. From the moment we started, he provided clear, practical instruction on selecting the right gear, setting up our tackle, reading the water, and adjusting our technique to the conditions. He explained why each decision mattered, making the experience both productive and educational.'
+      + '\n\n'
+      + 'Captain Clint knew exactly where to look for fish and how to adapt as the tide, current, and weather changed, while always keeping safety at the forefront. His patience, attention to detail, and careful guidance made us feel confident and secure throughout the trip. His enthusiasm for salmon fishing was contagious. Whether you’re a first-time angler or an experienced fisherman, you’ll learn something new and enjoy every minute on the water. I can’t wait to fish with him again!',
+    rating: 5,
+    when: 'October 2026',
+    source: 'Google',
+  },
   {
     name: 'Bruce Charter',
     text: 'I went fishing with Captain Clint in early August. I was early but he was already in the boat and ready. Clint is very organized and I found him very knowledgeable. He put us on the fish when most boat\u2019s weren\u2019t doing well. Clint made sure I was comfortable and having a good time! I would recommend him to anyone who wants to go catch some fish!',
@@ -55,5 +65,5 @@ export const MANUAL_REVIEWS: ManualReview[] = [
   // the rating and the total below, but there is no quote to show, so it gets no card.
 ];
 
-/** What the Google Business Profile showed on 16 October 2026. Used for the rating markup. */
-export const REVIEW_SUMMARY = { rating: 5.0, total: 3, checked: '2026-10-16' };
+/** What the Google Business Profile showed on 27 October 2026. Used for the rating markup. */
+export const REVIEW_SUMMARY = { rating: 5.0, total: 4, checked: '2026-10-27' };
