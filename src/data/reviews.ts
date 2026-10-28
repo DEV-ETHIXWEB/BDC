@@ -30,7 +30,7 @@ export interface ManualReview {
 }
 
 // Transcribed from the Google Business Profile dashboard on 28 October 2026, which showed 5.0 from
-// 5 reviews. These are here so they appear immediately; once GOOGLE_PLACES_API_KEY and
+// 5 reviews. Ryan Taylor's was completed from the full review on 28 October 2026. These are here so they appear immediately; once GOOGLE_PLACES_API_KEY and
 // GOOGLE_PLACE_ID are set, /api/reviews becomes the live source and these are de-duplicated away by
 // reviewer name, so nothing shows twice and new reviews arrive without anyone editing this file.
 export const MANUAL_REVIEWS: ManualReview[] = [
@@ -59,11 +59,8 @@ export const MANUAL_REVIEWS: ManualReview[] = [
     source: 'Google',
   },
   {
-    // The dashboard truncated this one at "as it was...". Only the part actually visible is used,
-    // with an ellipsis, because the rest of a guest's sentence is not ours to write. Paste the full
-    // text over this when someone opens the review on Google.
     name: 'Ryan Taylor',
-    text: 'My wife & I had a blast fishing with Clinton in Astoria. Thanks for being so professional & patient with her as it was\u2026',
+    text: 'My wife & I had a blast fishing with Clinton in Astoria. Thanks for being so professional & patient with her as it was her first time. Sorry about all of the tangles, but we had a great time & will be eating on these tasty salmon for the next couple months. Can\u2019t wait to book our 2027 fishing trip!',
     rating: 5,
     when: 'October 2026',
     source: 'Google',
