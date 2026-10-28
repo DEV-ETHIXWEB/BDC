@@ -29,11 +29,18 @@ export interface ManualReview {
   trip?: string;
 }
 
-// Transcribed from the Google Business Profile dashboard on 27 October 2026, which showed 5.0 from
-// 4 reviews. These are here so they appear immediately; once GOOGLE_PLACES_API_KEY and
+// Transcribed from the Google Business Profile dashboard on 28 October 2026, which showed 5.0 from
+// 5 reviews. These are here so they appear immediately; once GOOGLE_PLACES_API_KEY and
 // GOOGLE_PLACE_ID are set, /api/reviews becomes the live source and these are de-duplicated away by
 // reviewer name, so nothing shows twice and new reviews arrive without anyone editing this file.
 export const MANUAL_REVIEWS: ManualReview[] = [
+  {
+    name: 'John doe',
+    text: 'I had a great time learning about salmon fishing with Clinton. He really explained it well and put us on the fish. It was a great day and I will definitely be back.',
+    rating: 5,
+    when: 'October 2026',
+    source: 'Google',
+  },
   {
     name: 'Troy Lovell',
     text:
@@ -65,5 +72,5 @@ export const MANUAL_REVIEWS: ManualReview[] = [
   // the rating and the total below, but there is no quote to show, so it gets no card.
 ];
 
-/** What the Google Business Profile showed on 27 October 2026. Used for the rating markup. */
-export const REVIEW_SUMMARY = { rating: 5.0, total: 4, checked: '2026-10-27' };
+/** What the Google Business Profile showed on 28 October 2026. Used for the rating markup. */
+export const REVIEW_SUMMARY = { rating: 5.0, total: 5, checked: '2026-10-28' };
