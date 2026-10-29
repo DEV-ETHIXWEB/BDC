@@ -17,11 +17,63 @@
 // The image node is wrapped, never moved: Astro resolves markdown images through its own hast
 // plugins, and lifting the <img> out of its paragraph risks invalidating that.
 import { defineHastPlugin } from 'satteri';
+import { openSync, readSync, closeSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 const REVEAL = { h2: 'up', h3: 'up', ul: 'fade', ol: 'fade', blockquote: 'fade', table: 'fade' };
 const FILTER = ['p', ...Object.keys(REVEAL)];
 
 const isBlank = (n) => n?.type === 'text' && !n.value.trim();
+
+// A tall photo is floated so the text runs alongside it instead of leaving the column half empty,
+// and that needs its shape. Astro resolves markdown images after this plugin runs, so the <img>
+// here carries only src and alt: the size has to come off the file. Only the first 32 bytes are
+// read, and only the three WebP variants, which is every photo in src/assets.
+function webpSize(path) {
+  let fd;
+  try {
+    fd = openSync(path, 'r');
+    const b = Buffer.alloc(32);
+    if (readSync(fd, b, 0, 32, 0) < 30) return null;
+    if (b.toString('ascii', 0, 4) !== 'RIFF' || b.toString('ascii', 8, 12) !== 'WEBP') return null;
+    const kind = b.toString('ascii', 12, 16);
+    if (kind === 'VP8X') return { w: (b.readUIntLE(24, 3) & 0xffffff) + 1, h: (b.readUIntLE(27, 3) & 0xffffff) + 1 };
+    if (kind === 'VP8 ') return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff };
+    if (kind === 'VP8L') {
+      const n = b.readUInt32LE(21);
+      return { w: (n & 0x3fff) + 1, h: ((n >> 14) & 0x3fff) + 1 };
+    }
+    return null;
+  } catch {
+    return null;
+  } finally {
+    if (fd !== undefined) closeSync(fd);
+  }
+}
+
+/** The next element after this one in the document, ignoring whitespace. */
+function nextElement(node, ctx) {
+  const siblings = ctx.parent(node)?.children || [];
+  const i = ctx.indexOf(node);
+  if (i === undefined) return null;
+  for (let k = i + 1; k < siblings.length; k++) {
+    if (isBlank(siblings[k])) continue;
+    return siblings[k];
+  }
+  return null;
+}
+
+/** True when the photo is clearly taller than it is wide, so it is worth running text beside it. */
+function isTall(src, fileURL) {
+  if (!fileURL || typeof src !== 'string' || !src.toLowerCase().endsWith('.webp')) return false;
+  let size = null;
+  try {
+    size = webpSize(fileURLToPath(new URL(src, fileURL)));
+  } catch {
+    return false;
+  }
+  return !!size && size.h > size.w * 1.05;
+}
 
 /** The one image inside a paragraph, or null when the paragraph holds anything else. */
 function loneImage(node) {
@@ -46,7 +98,15 @@ export const articleFurniture = defineHastPlugin({
         ctx.wrapNode(node, {
           type: 'element',
           tagName: 'figure',
-          properties: { className: ['pg-shot'], 'data-reveal': 'scale' },
+          properties: {
+            // Floated only when prose follows it. A heading clears the float, so a tall photo
+            // placed immediately before one would gain nothing and keep its caption alongside.
+            className:
+              isTall(img.properties?.src, ctx.fileURL) && nextElement(node, ctx)?.tagName === 'p'
+                ? ['pg-shot', 'pg-shot--tall']
+                : ['pg-shot'],
+            'data-reveal': 'scale',
+          },
           // Declared children are kept after the wrapped node, giving figure > [frame, caption].
           children: alt
             ? [{

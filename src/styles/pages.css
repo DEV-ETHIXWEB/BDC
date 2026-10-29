@@ -428,6 +428,19 @@
   font: 700 0.86rem/1.6 var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--pine-700);
 }
 .pg-prose--md { counter-reset: pg-shot; }
+
+/* A tall photo is only about a third of the column wide, which left the rest of the line empty.
+   Floating it lets the article run alongside, so that space carries text instead of nothing.
+   Below 900px the column is too narrow to share and the photo goes back to sitting on its own.
+   Headings and the closing callout clear the float, so nothing begins halfway down a photo. */
+@media (min-width: 900px) {
+  .pg-shot--tall {
+    float: left; display: block; width: auto; max-width: 46%;
+    margin: 6px clamp(22px, 2.6vw, 34px) 14px 0;
+  }
+  .pg-shot--tall figcaption { max-width: none; min-width: 0; margin-top: 10px; padding-bottom: 0; }
+  .pg-prose--md > h2, .pg-prose--md > h3, .pg-prose--md > .pg-callout { clear: both; }
+}
 .pg-prose--md > hr { margin-block: clamp(32px, 4vw, 48px); border: 0; border-top: 1px solid var(--line); }
 /* A post with no table of contents gets the full measure instead of the 250px sidebar column. */
 @media (min-width: 900px) { .pg-article--solo { grid-template-columns: minmax(0, 1fr); justify-content: center; } }
