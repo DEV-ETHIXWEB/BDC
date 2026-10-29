@@ -10,7 +10,7 @@ const crumbs = [{ name: 'Sitemap', path: '/sitemap' }];
 const groups = [
   { title: 'Main', links: [{ label: 'Home', href: '/' }, ...NAV] },
   { title: 'Trips', links: TRIPS.map((t) => ({ label: t.name, href: `/oregon-fishing-charter-rates/${t.slug}` })) },
-  { title: 'Articles', links: [{ label: 'All articles', href: '/article' }, ...ARTICLES.map((a) => ({ label: a.title, href: `/article/${a.slug}` })), { label: 'Clinton McCulloch', href: '/profile/clinton-mcculloch' }] },
+  { title: 'Blogs', links: [{ label: 'All blogs', href: '/article' }, ...ARTICLES.map((a) => ({ label: a.title, href: `/article/${a.slug}` })), { label: 'Clinton McCulloch', href: '/profile/clinton-mcculloch' }] },
   { title: 'Photos', links: PHOTO_PAGES.map((p) => ({ label: p.title, href: `/oregon-fishing-charter-photos/${p.slug}` })) },
   { title: 'Info', links: [...LEGAL_LINKS] },
 ];

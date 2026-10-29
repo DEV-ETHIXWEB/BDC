@@ -42,7 +42,7 @@ export const NAV = [
   { label: 'Gallery', href: '/oregon-fishing-charter-photos' },
   { label: 'Reviews', href: '/oregon-fishing-charter-reviews' },
   { label: 'Reports', href: '/oregon-fishing-reports' },
-  { label: 'Articles', href: '/article' },
+  { label: 'Blogs', href: '/article' },
   { label: 'Meet the Captain', href: '/captain-clinton-mcculloch-of-oregon' },
 ] as const;
 
@@ -55,7 +55,7 @@ export const FOOTER_LINKS = [
   { label: 'Willie Half Day', href: '/oregon-fishing-charter-rates/oregon-fishing-charter-half-day-trip' },
   { label: 'Willie Full Day', href: '/oregon-fishing-charter-rates/full-day-oregon-river-fishing-charter' },
   { label: 'Full Day Drift', href: '/oregon-fishing-charter-rates/oregon-fishing-charter-full-day-drift-trip' },
-  { label: 'All Articles', href: '/article' },
+  { label: 'All Blogs', href: '/article' },
 ] as const;
 
 export const LEGAL_LINKS = [

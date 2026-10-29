@@ -44,7 +44,7 @@ export const GET: APIRoute = async () => {
     '',
     ...TRIPS.map((t) => `- [${t.name}](${SITE.url}/oregon-fishing-charter-rates/${t.slug}): ${t.hours} hours, ${money(t.price)} per person, up to ${t.capacity} guests, ${t.boatSpec}`),
     '',
-    '## Articles',
+    '## Blogs',
     '',
     ...posts.map((p) => `- [${p.title}](${SITE.url}/article/${p.slug}): ${p.description}`),
     ...ARTICLES.map((a) => `- [${a.title}](${SITE.url}/article/${a.slug}): ${a.description}`),

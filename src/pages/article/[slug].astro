@@ -28,7 +28,7 @@ const { Content, headings } = await render(post);
 const { title, description, published, updated, tag, draft } = post.data;
 
 const crumbs = [
-  { name: 'Articles', path: '/article' },
+  { name: 'Blogs', path: '/article' },
   { name: title, path: `/article/${post.id}` },
 ];
 const schema = {
