@@ -1,0 +1,57 @@
+---
+// The survey plate that sits in the article hero. The hero's right-hand column was empty on every
+// markdown post, which is what made the page feel unfinished at desktop widths.
+//
+// It reads like a field note clipped to the top of the piece: a drawn compass and river, then the
+// three facts a reader actually wants before committing to a long read. The lines draw themselves
+// on scroll through the shared [data-pg-draw] behaviour, so it matches the blueprint boats and the
+// map card rather than introducing a new kind of motion.
+interface Props {
+  /** Estimated reading time in whole minutes. */
+  minutes: number;
+  /** How many h2 sections the post has. */
+  sections: number;
+  /** Already-formatted publication date. */
+  date: string;
+  /** The post's own tag, e.g. "Trip prep". */
+  tag?: string;
+}
+const { minutes, sections, date, tag } = Astro.props;
+const rows: [string, string][] = [
+  ['Read', `${minutes} min`],
+  ['Sections', String(sections)],
+  ['Filed', date],
+];
+---
+<figure class="pg-plateart" data-pg-draw>
+  <svg viewBox="0 0 300 150" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <!-- river, drawn left to right -->
+    <path class="pg-d pg-plateart__river" pathLength="1" d="M-6 104C54 78 92 126 150 100S246 54 306 78" />
+    <path class="pg-d pg-plateart__river" pathLength="1" style="--d:.25s" d="M-6 120C54 94 92 142 150 116S246 70 306 94" opacity=".5" />
+    <!-- depth soundings along the reach -->
+    <g class="pg-marks pg-plateart__marks">
+      <circle cx="78" cy="96" r="2.5" /><circle cx="150" cy="104" r="2.5" /><circle cx="226" cy="76" r="2.5" />
+    </g>
+    <!-- compass rose -->
+    <g transform="translate(232 44)">
+      <circle class="pg-d" pathLength="1" style="--d:.5s" r="22" />
+      <path class="pg-d pg-plateart__needle" pathLength="1" style="--d:.9s" d="M0 -16L7 7L0 2.5L-7 7Z" />
+      <text class="pg-marks pg-plateart__n" y="-28" text-anchor="middle">N</text>
+    </g>
+    <!-- scale bar -->
+    <g class="pg-marks pg-plateart__scale" transform="translate(22 132)">
+      <path d="M0 0h56M0 -4v8M28 -3v6M56 -4v8" />
+    </g>
+  </svg>
+  <figcaption>
+    {tag && <p class="pg-plateart__tag">{tag}</p>}
+    <dl>
+      {rows.map(([k, v]) => (
+        <div><dt>{k}</dt><dd>{v}</dd></div>
+      ))}
+    </dl>
+  </figcaption>
+</figure>
+<script>
+  import './draw';
+</script>

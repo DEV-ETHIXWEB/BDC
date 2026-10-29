@@ -4,6 +4,8 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { REDIRECTS } from './config/redirects.mjs';
 import { pageDates, dateFor } from './scripts/page-dates.mjs';
+import { satteri } from '@astrojs/markdown-satteri';
+import { articleFurniture } from './scripts/article-furniture.mjs';
 
 /** custom hydration strategy `client:late` (see src/scripts/late-directive.js) */
 /** @type {import('astro').AstroIntegration} */
@@ -42,6 +44,9 @@ export default defineConfig({
   ],
   // Scripts must be external files: inline module scripts make Astro's ClientRouter inject a data: script, which a strict CSP blocks.
   vite: { build: { assetsInlineLimit: 0 } },
+  // Markdown posts get figures, captions and scroll reveals from one plugin, so an author writes
+  // plain markdown and still gets the furniture the hand-built pages have.
+  markdown: { processor: satteri({ hastPlugins: [articleFurniture] }) },
   image: { layout: 'constrained' },
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
 });

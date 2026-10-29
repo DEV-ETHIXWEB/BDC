@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Icon from '../../components/Icon.astro';
 import TocSpy from '../../components/pg/TocSpy.astro';
+import ArticlePlate from '../../components/art/ArticlePlate.astro';
 import { SITE } from '../../data/site';
 import { longDate } from '../../data/articles';
 import { fileGitDate } from '../../../scripts/page-dates.mjs';
@@ -42,18 +43,27 @@ const schema = {
   publisher: { '@id': `${SITE.url}/#business` },
   mainEntityOfPage: `${SITE.url}/article/${post.id}`,
 };
-// Only h2s get an "on this page" entry, and only when there are enough of them to be worth the space.
-const toc = headings.filter((h) => h.depth === 2 && h.slug);
+// "On this page" is built from h2s. A post that carries its structure in h3s under one or two h2s
+// (a numbered list of questions, say) would otherwise get no contents at all, which is exactly the
+// post that needs one, so those fall back to h3s. Capped, because a 20-entry list is not a summary.
+const h2s = headings.filter((h) => h.depth === 2 && h.slug);
+const toc = (h2s.length >= 3 ? h2s : headings.filter((h) => (h.depth === 2 || h.depth === 3) && h.slug)).slice(0, 12);
+// 220 wpm is the usual reading-speed figure for web prose. Rounded up, because nobody finishes a
+// post in 0 minutes, and shown so a reader can judge the length before starting.
+const minutes = Math.max(1, Math.round((post.body ?? '').trim().split(/\s+/).filter(Boolean).length / 220));
+const sections = Math.max(h2s.length, toc.length);
 ---
 <Base title={title} description={description} crumbs={crumbs} schema={[schema]} type="article" noindex={draft}>
-  <PageHero title={title} lede={description} crumbs={crumbs} tag={tag} seed={11} />
+  <PageHero title={title} lede={description} crumbs={crumbs} tag={tag} seed={11}>
+    <ArticlePlate slot="art" minutes={minutes} sections={sections} date={longDate(published)} tag={tag} />
+  </PageHero>
   <div class:list={['wrap', 'pg-article', toc.length > 2 ? 'pg-article--toc' : 'pg-article--solo']}>
     {toc.length > 2 && (
       <aside class="pg-toc" aria-label="On this page">
         <details class="pg-toc__d" open>
           <summary>On this page</summary>
           <nav data-pg-spy>
-            <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+            <ol>{toc.map((h) => <li class:list={[h.depth === 3 && 'is-sub']}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
           </nav>
         </details>
       </aside>
