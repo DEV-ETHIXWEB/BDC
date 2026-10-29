@@ -5,7 +5,6 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Icon from '../../components/Icon.astro';
 import TocSpy from '../../components/pg/TocSpy.astro';
-import ArticlePlate from '../../components/art/ArticlePlate.astro';
 import { SITE } from '../../data/site';
 import { longDate } from '../../data/articles';
 import { fileGitDate } from '../../../scripts/page-dates.mjs';
@@ -51,12 +50,9 @@ const toc = (h2s.length >= 3 ? h2s : headings.filter((h) => (h.depth === 2 || h.
 // 220 wpm is the usual reading-speed figure for web prose. Rounded up, because nobody finishes a
 // post in 0 minutes, and shown so a reader can judge the length before starting.
 const minutes = Math.max(1, Math.round((post.body ?? '').trim().split(/\s+/).filter(Boolean).length / 220));
-const sections = Math.max(h2s.length, toc.length);
 ---
 <Base title={title} description={description} crumbs={crumbs} schema={[schema]} type="article" noindex={draft}>
-  <PageHero title={title} lede={description} crumbs={crumbs} tag={tag} seed={11}>
-    <ArticlePlate slot="art" minutes={minutes} sections={sections} date={longDate(published)} tag={tag} />
-  </PageHero>
+  <PageHero title={title} lede={description} crumbs={crumbs} tag={tag} seed={11} />
   <div class:list={['wrap', 'pg-article', toc.length > 2 ? 'pg-article--toc' : 'pg-article--solo']}>
     {toc.length > 2 && (
       <aside class="pg-toc" aria-label="On this page">
@@ -72,6 +68,7 @@ const sections = Math.max(h2s.length, toc.length);
       <p class="pg-byline">
         <span class="pg-byline__by">By <a href="/captain-clinton-mcculloch-of-oregon">{SITE.name}</a></span>
         <time datetime={published}>{longDate(published)}</time>
+        <span class="pg-byline__read">{minutes} min read</span>
         {updated && <span class="pg-byline__upd">Updated <time datetime={updated}>{longDate(updated)}</time></span>}
       </p>
       {draft && <p class="pg-draft" role="status">Draft. This post is not listed or indexed yet.</p>}
