@@ -66,12 +66,12 @@ front of a paying guest:
 
 If you want any of these covered, say what the answer is and it goes in.
 
-## River guides (drafts, added 2 Nov 2026)
+## River guides (published 2 Nov 2026)
 
 Seven pages, one per river: /article/columbia-river-fishing-guide, willamette-, clackamas-, sandy-, wilson-,
 trask- and nestucca-river-fishing-guide. Each uses only your one-line description of the river, the season months,
-trips and prices already on the site, public geography, and the ODFW endorsement rule. They stay as drafts
-(not on the site, not in Google) until you answer these for each river:
+trips and prices already on the site, public geography, and the ODFW endorsement rule. They were published on
+2 Nov 2026 at Ethixweb's request. Answering these for each river will make them proper river guides:
 
 - [ ] Where do you launch or meet guests on this river?
 - [ ] Your best months on this river specifically (not the statewide season).
@@ -80,4 +80,4 @@ trips and prices already on the site, public geography, and the ODFW endorsement
       Clackamas: steelhead and salmon; Sandy, Wilson, Trask, Nestucca: steelhead)?
 - [ ] One thing a first-timer should know about this river.
 
-With those answers each page becomes a proper river guide and the `draft: true` line comes off.
+With those answers each page gets a launch spot, your months and your methods.

@@ -4,7 +4,6 @@ description: "Fishing the Willamette River for spring Chinook with BDC Guide Ser
 published: 2026-11-02
 icon: salmon
 tag: River guide
-draft: true
 ---
 
 <!--
@@ -12,7 +11,7 @@ Provenance: the one-line description of this river is Captain Clinton's own (RIV
 species shown for it match the home page river chart (src/components/home/Rivers.astro). Season months are from
 src/data/seasons.ts. Trips, boats, prices and inclusions are from src/data/trips.ts. Where the river runs is public
 geography. The licence line follows ODFW, "Who needs a Columbia River Basin Endorsement", read 2 Nov 2026.
-NEED FROM CLIENT before draft: true is removed: where he launches on this river, his best months on it, how he
+Published 2 Nov 2026 at Ethixweb's request, before the captain's input. To enrich later (NEED FROM CLIENT): where he launches on this river, his best months on it, how he
 fishes it (drift, plunk, troll, side drift), and anything a first-timer should know. Do not fill these in by guessing.
 -->
 
