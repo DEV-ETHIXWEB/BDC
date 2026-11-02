@@ -10,13 +10,14 @@ import { REGULATIONS } from '../../data/policies';
 // Article text is the owner's own, from the previous site (article/get-your-valid-oregon-fishing-license, published
 // Jul 10, 2026). The box "Rules that apply to BDC trips" quotes the owner's FAQ and the ODFW shellfish summary, with sources.
 const crumbs = [{ name: 'Fishing License', path: '/article/get-your-valid-oregon-fishing-license' }];
-const article = { '@context': 'https://schema.org', '@type': 'Article', headline: 'Get Your Valid Oregon Fishing License', datePublished: '2026-07-10', author: { '@type': 'Person', name: 'Clinton McCulloch' }, publisher: { '@id': `${SITE.url}/#business` } };
+const article = { '@context': 'https://schema.org', '@type': 'Article', headline: 'Get Your Valid Oregon Fishing License', datePublished: '2026-07-10', dateModified: '2026-11-02', author: { '@type': 'Person', name: 'Clinton McCulloch' }, publisher: { '@id': `${SITE.url}/#business` } };
 const toc = [
   ['who', 'Who needs a license'],
   ['get', 'How to get one'],
   ['cost', 'Cost'],
   ['rules', 'Freshwater and saltwater rules'],
   ['notes', 'Exemptions and notes'],
+  ['rivers', 'What you need on each river'],
   ['bdc', 'Rules that apply to BDC trips'],
 ];
 ---
@@ -68,6 +69,21 @@ const toc = [
         <p>BDC Guide Service strongly recommends that all guests secure their license before arrival to ensure a smooth and stress-free experience. If you have questions about what you need, we're happy to help guide you in the right direction.</p>
       </section>
 
+      {/* Added 2 Nov 2026 from ODFW sources (linked below), not the owner's original text: which endorsement applies on
+          each of the seven rivers, the 2026 Ocean Endorsement, and crabbing. No prices: ODFW's 2026 fee schedule could not be
+          confirmed, so the page links to ODFW's live licence shop instead. */}
+      <section id="rivers" data-reveal="up">
+        <h2>What you need on each river we fish</h2>
+        <p>For salmon and steelhead, every angler needs the license, a Combined Angling Tag to record what you keep, and on some rivers a Columbia River Basin Endorsement. ODFW requires the endorsement on the mainstem Columbia and on every river and tributary that flows into it.</p>
+        <ul>
+          <li><strong>Columbia, Willamette, Clackamas and Sandy rivers:</strong> all part of the Columbia basin, so bring the Columbia River Basin Endorsement for salmon, steelhead and sturgeon.</li>
+          <li><strong>Wilson, Trask and Nestucca rivers:</strong> these coastal rivers run to Tillamook Bay and Nestucca Bay, not into the Columbia, so the endorsement rule does not cover them. You still need your license and Combined Angling Tag.</li>
+        </ul>
+        <p><strong>Do I need the new Ocean Endorsement?</strong> Not for our trips. Since January 1, 2026, Oregon requires an Ocean Endorsement for fishing in the ocean itself, past the ends of the jetties, or past Buoy 10 on the Columbia. Rivers and bays do not count as ocean, and ODFW says the endorsement is not needed if you are only keeping salmon, steelhead or shellfish.</p>
+        <p><strong>Going crabbing?</strong> Everyone 12 and older needs a shellfish license. It is separate from a fishing license, and on a crab-only trip it is the only one you need. Our <a href="/article/oregon-crabbing-rules">Oregon crabbing rules guide</a> covers limits and how to measure a keeper.</p>
+        <p>License, tag and endorsement prices change, so check the current cost when you buy on <a href={SITE.licenseUrl} rel="noopener" target="_blank">ODFW's licensing page</a>.</p>
+        <p class="pg-fine">Sources: ODFW, <a href="https://myodfw.com/articles/who-needs-columbia-river-basin-endorsement" rel="noopener" target="_blank">Who needs a Columbia River Basin Endorsement</a>; ODFW Marine Resources Program, Ocean Endorsement FAQ (November 5, 2025); ODFW, <a href="https://myodfw.com/articles/oregon-shellfish-regulations" rel="noopener" target="_blank">Oregon shellfish regulations</a>. Read November 2, 2026. If you are unsure, check the current ODFW Sport Fishing Regulations or call Captain Clinton.</p>
+      </section>
       <section id="bdc" data-reveal="up">
         <h2>Rules that apply to BDC trips</h2>
         <ul>

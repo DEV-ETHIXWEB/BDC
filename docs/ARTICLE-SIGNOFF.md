@@ -65,3 +65,19 @@ front of a paying guest:
 - Which boat goes out for a given group size. The article says to confirm it with you.
 
 If you want any of these covered, say what the answer is and it goes in.
+
+## River guides (drafts, added 2 Nov 2026)
+
+Seven pages, one per river: /article/columbia-river-fishing-guide, willamette-, clackamas-, sandy-, wilson-,
+trask- and nestucca-river-fishing-guide. Each uses only your one-line description of the river, the season months,
+trips and prices already on the site, public geography, and the ODFW endorsement rule. They stay as drafts
+(not on the site, not in Google) until you answer these for each river:
+
+- [ ] Where do you launch or meet guests on this river?
+- [ ] Your best months on this river specifically (not the statewide season).
+- [ ] How you fish it: drift, side drift, plunk, troll, bobber and jig?
+- [ ] Which boat you use on it, and is the species listed for it right (Columbia and Willamette: Chinook;
+      Clackamas: steelhead and salmon; Sandy, Wilson, Trask, Nestucca: steelhead)?
+- [ ] One thing a first-timer should know about this river.
+
+With those answers each page becomes a proper river guide and the `draft: true` line comes off.
