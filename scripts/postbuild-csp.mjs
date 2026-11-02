@@ -5,7 +5,8 @@
 // Scripts: 'self' plus a SHA-256 hash of every inline <script> across ALL pages. The union is required because Astro's
 // ClientRouter swaps pages without reloading, so scripts of the next page run under the first page's policy.
 // Styles allow 'unsafe-inline' (inline style="" attributes and a style injected at runtime by react-aria): the script policy
-// is what stops XSS. Nothing external is allowed, except the form endpoint origin when PUBLIC_FORM_ENDPOINT is set.
+// is what stops XSS. Nothing external is allowed, except the form endpoint origin when PUBLIC_FORM_ENDPOINT is set,
+// Turnstile when its site key is set, and Google Analytics when the pages carry the GA4 tag.
 import { readdirSync, readFileSync, writeFileSync, statSync, existsSync, unlinkSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
@@ -33,7 +34,15 @@ if (endpoint) { try { connect += ` ${new URL(endpoint).origin}`; } catch { /* va
 // set, so an unconfigured build keeps the tight default policy. Without this the widget is blocked silently.
 const TURNSTILE_ORIGIN = 'https://challenges.cloudflare.com';
 const turnstile = Boolean(process.env.PUBLIC_TURNSTILE_SITE_KEY?.trim());
-const script = `'self' ${[...hashes].sort().join(' ')}${turnstile ? ` ${TURNSTILE_ORIGIN}` : ''}`;
+// Google Analytics 4: gtag.js loads from googletagmanager.com and sends hits to the google-analytics.com hosts
+// (Google's documented GA4 CSP set). Opened ONLY when the built pages actually carry the tag (see Base.astro).
+const ga = pages.some((file) => readFileSync(file, 'utf8').includes('https://www.googletagmanager.com/gtag/js'));
+const GA_SCRIPT = 'https://*.googletagmanager.com';
+const GA_CONNECT = 'https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com';
+const GA_IMG = 'https://*.google-analytics.com https://*.googletagmanager.com';
+if (ga) connect += ` ${GA_CONNECT}`;
+
+const script = `'self' ${[...hashes].sort().join(' ')}${turnstile ? ` ${TURNSTILE_ORIGIN}` : ''}${ga ? ` ${GA_SCRIPT}` : ''}`;
 const frame = turnstile ? `frame-src ${TURNSTILE_ORIGIN}` : "frame-src 'none'";
 
 const base = [
@@ -41,7 +50,7 @@ const base = [
   `script-src ${script}`,
   frame,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
+  `img-src 'self' data:${ga ? ` ${GA_IMG}` : ''}`,
   "font-src 'self'",
   `connect-src ${connect}`,
   "manifest-src 'self'",

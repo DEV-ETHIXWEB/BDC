@@ -100,6 +100,13 @@ const breadcrumb = crumbs.length
     }
   : null;
 const graph = [path === '/' ? business : null, path === '/' ? website : null, breadcrumb, ...schema].filter(Boolean);
+
+// GA4 (property bestdayscatching.com, owned by bestdayscatching@gmail.com). Production builds only, so dev,
+// staging and Vercel Preview traffic never lands in the reports. Override with PUBLIC_GA_ID; set it to "off" to disable.
+// Page changes made by the ClientRouter are counted by GA4's enhanced measurement (browser history events).
+const gaEnv = (import.meta.env.PUBLIC_GA_ID as string | undefined)?.trim();
+const gaId = gaEnv === 'off' ? '' : gaEnv || 'G-WQ1P3J99WJ';
+const analytics = Boolean(gaId) && import.meta.env.PROD && import.meta.env.PUBLIC_NOINDEX !== '1' && process.env.VERCEL_ENV !== 'preview';
 ---
 <!doctype html>
 <html lang="en-US">
@@ -132,6 +139,13 @@ const graph = [path === '/' ? business : null, path === '/' ? website : null, br
     <meta name="geo.region" content="US-OR" />
     <meta name="geo.placename" content="Oregon" />
     {graph.map((g) => <script type="application/ld+json" set:html={JSON.stringify(g).replace(/</g, '\\u003c')} />)}
+    {analytics && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>}
+    {analytics && (
+      <script
+        is:inline
+        set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config',${JSON.stringify(gaId)});`}
+      />
+    )}
     <ClientRouter />
     <script is:inline>
       // a11y prefs + motion gate. Re-run after every view-transition swap because Astro
