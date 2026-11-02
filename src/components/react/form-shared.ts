@@ -38,6 +38,16 @@ async function postOnce(body: unknown, timeout = 12000): Promise<Response | null
   }
 }
 
+/**
+ * Reports a delivered lead to GA4 as `generate_lead` (marked as a key event in the GA4 property). Only called after
+ * the endpoint confirmed delivery, and never with the visitor's name, phone or email: GA4 must not receive PII.
+ * A no-op where the tag is absent (dev, staging, previews, or PUBLIC_GA_ID=off).
+ */
+export function trackLead(form: string, trip = '') {
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+  gtag?.('event', 'generate_lead', { form_name: form, trip: trip || undefined, page_path: window.location.pathname });
+}
+
 export async function postLead(data: Record<string, string>, token = ''): Promise<boolean> {
   // `cf-turnstile-response` is the field name Cloudflare's siteverify expects; the endpoint forwards it.
   const body = token ? { ...data, 'cf-turnstile-response': token } : data;

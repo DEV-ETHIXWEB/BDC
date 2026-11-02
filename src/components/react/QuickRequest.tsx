@@ -1,7 +1,7 @@
 import { useId, useRef, useState, type FormEvent } from 'react';
 import { Icon } from './Icon';
 import { SITE } from '../../data/site';
-import { ENDPOINT, mailtoHref, postLead, turnstileRequired, validators } from './form-shared';
+import { ENDPOINT, mailtoHref, postLead, trackLead, turnstileRequired, validators } from './form-shared';
 import Turnstile from './Turnstile';
 
 interface Props {
@@ -60,6 +60,7 @@ export default function QuickRequest({ trips, email }: Props) {
     const ok = await postLead(data, token);
     // keep the typed details in a mailto so a failure is a detour, not a dead end
     if (!ok) setDraftHref(mailtoHref(email, subject, body));
+    else trackLead('Quick request bar', trip);
     setStatus(ok ? 'sent' : 'error');
     submitting.current = false;
     if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way

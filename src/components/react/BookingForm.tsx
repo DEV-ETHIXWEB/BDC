@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button, FieldError, Form, Input, Label, Radio, RadioGroup, TextArea, TextField } from 'react-aria-components';
 import { Icon } from './Icon';
 import { SITE } from '../../data/site';
-import { ENDPOINT, postLead, turnstileRequired, validators } from './form-shared';
+import { ENDPOINT, postLead, trackLead, turnstileRequired, validators } from './form-shared';
 import Turnstile from './Turnstile';
 
 interface Props {
@@ -104,6 +104,7 @@ export default function BookingForm({ trips, email, defaultTrip }: Props) {
     submitting.current = true;
     setStatus('sending');
     const ok = await postLead(data, token);
+    if (ok) trackLead('Booking form', data.trip);
     setStatus(ok ? 'sent' : 'error');
     submitting.current = false;
     if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way

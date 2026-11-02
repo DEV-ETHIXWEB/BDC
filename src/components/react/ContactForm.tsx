@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Button, FieldError, Form, Input, Label, TextArea, TextField, ToggleButton, ToggleButtonGroup } from 'react-aria-components';
 import { Icon } from './Icon';
 import { SITE } from '../../data/site';
-import { ENDPOINT, mailtoHref, postLead, turnstileRequired, validators } from './form-shared';
+import { ENDPOINT, mailtoHref, postLead, trackLead, turnstileRequired, validators } from './form-shared';
 import Turnstile from './Turnstile';
 
 interface Props {
@@ -81,7 +81,9 @@ export default function ContactForm({ email, defaultTrip }: Props) {
     if (submitting.current) return; // ignore double submits fired in the same tick
     submitting.current = true;
     setStatus('sending');
-    setStatus((await postLead(data, token)) ? 'sent' : 'error');
+    const ok = await postLead(data, token);
+    if (ok) trackLead('Contact form');
+    setStatus(ok ? 'sent' : 'error');
     submitting.current = false;
     if (turnstileRequired()) setTsReset((n) => n + 1);   // the token is spent either way
   }

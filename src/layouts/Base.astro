@@ -146,6 +146,18 @@ const analytics = Boolean(gaId) && import.meta.env.PROD && import.meta.env.PUBLI
         set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config',${JSON.stringify(gaId)});`}
       />
     )}
+    {analytics && (
+      <script is:inline>
+        // Phone and email taps are how most charters get booked, and GA4 does not count them on its own.
+        // Delegated on document, so it survives ClientRouter swaps. Sends the link type and page only, never the number.
+        document.addEventListener('click', function (e) {
+          var a = e.target instanceof Element && e.target.closest('a[href^="tel:"], a[href^="mailto:"]');
+          if (!a || typeof gtag !== 'function') return;
+          var tel = a.getAttribute('href').indexOf('tel:') === 0;
+          gtag('event', tel ? 'phone_call_click' : 'email_click', { link_location: a.closest('header, footer, main, aside, nav') ? a.closest('header, footer, main, aside, nav').tagName.toLowerCase() : 'page' });
+        });
+      </script>
+    )}
     <ClientRouter />
     <script is:inline>
       // a11y prefs + motion gate. Re-run after every view-transition swap because Astro
