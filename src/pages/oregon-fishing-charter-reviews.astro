@@ -6,7 +6,6 @@ import Icon from '../components/Icon.astro';
 import ReviewWall, { type Review } from '../components/ReviewWall.astro';
 import GoogleReviews from '../components/react/GoogleReviews';
 import { SITE } from '../data/site';
-import ReviewMarquee from '../components/ReviewMarquee.astro';
 import { MANUAL_REVIEWS, REVIEW_SUMMARY } from '../data/reviews';
 const crumbs = [{ name: 'Reviews', path: '/oregon-fishing-charter-reviews' }];
 // Reviews reach this page two ways. Anything added to this array is published by hand, with the guest's
@@ -44,8 +43,7 @@ const body = encodeURIComponent('Hi Captain Clinton,\n\nTrip I took (salmon, ste
 ---
 <Base title="Oregon Fishing Charter Reviews" description="Guest reviews for BDC Guide Service fishing and crabbing charters in Oregon, rated 5.0 on Google. Been on a trip? Send us a few lines." crumbs={crumbs} schema={ratingSchema}>
   <PageHero title="Guest reviews" lede="Rated 5.0 on Google. Here is what guests say after a day on the water with Captain Clinton." crumbs={crumbs} />
-  <ReviewMarquee title="Straight from the boat." link={false} />
-  <section class="section gb-reviews" style="padding-top:0">
+  <section class="section gb-reviews">
     <div class="wrap">
       <div id="all-reviews">
         <ReviewWall reviews={reviews} />
