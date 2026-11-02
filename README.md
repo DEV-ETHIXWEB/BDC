@@ -15,6 +15,7 @@ interactive parts only. Design system: [docs/design-system.md](docs/design-syste
 | `npm run preview` | Serve the production build locally |
 | `npm run check` | Type-check (`astro check`) |
 | `npm run lint` | ESLint |
+| `npm run indexnow` | After a production deploy is live: tells Bing and other IndexNow engines to recrawl every sitemap URL (or `-- /path` for specific pages) |
 
 ## Deploy (static, any host)
 Publish `dist/`: build command `npm run build`, output directory `dist`.

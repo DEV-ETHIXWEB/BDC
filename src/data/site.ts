@@ -34,6 +34,7 @@ export const SITE = {
 // whoever copied it and does not belong in public markup, so only the canonical profile URL is stored.
 export const SOCIAL = [
   { label: 'Instagram', handle: '@bdc_guide_service', href: 'https://www.instagram.com/bdc_guide_service', icon: 'instagram' },
+  { label: 'Facebook', handle: 'BDC Guide Service', href: 'https://www.facebook.com/p/BDC-Guide-Service-61595249505464/', icon: 'facebook' },
 ] as const;
 
 export const NAV = [
