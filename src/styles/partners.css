@@ -6,21 +6,25 @@
 .pt__lede { margin: 6px 0 0; color: var(--ink-soft); }
 
 .pt__belt {
-  --pt-gap: clamp(12px, 1.6vw, 20px);
+  /* Slots are a full belt wide, so the spacing comes from the slot itself, not a gap. */
+  --pt-gap: 0px;
+  container-type: inline-size;
   position: relative; overflow: hidden; padding-block: 6px;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 .pt__track {
   list-style: none; margin: 0; padding: 0; display: flex; gap: var(--pt-gap); width: max-content;
-  animation: pt-belt 36s linear infinite;
+  /* Four logos, about 4 seconds each to cross the screen, at any screen width. */
+  animation: pt-belt 16s linear infinite;
 }
 .pt__belt:hover .pt__track, .pt__belt:focus-within .pt__track { animation-play-state: paused; }
 /* Moves left to right: start shifted left by half the track plus half a gap (where the second copy
    sits) and slide back to 0, so the loop is seamless. */
 @keyframes pt-belt { from { transform: translateX(calc(-50% - var(--pt-gap) / 2)); } to { transform: translateX(0); } }
 
-.pt__track > li { flex: none; display: flex; }
+/* One slot per screen width, logo card centred in it: only one logo is in view at a time. */
+.pt__track > li { flex: none; display: flex; justify-content: center; width: 100cqw; }
 .pt__card {
   display: grid; place-items: center; width: clamp(170px, 22vw, 250px); height: clamp(96px, 11vw, 130px); padding: clamp(16px, 2vw, 24px);
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-m);
@@ -33,7 +37,8 @@
 /* No motion: show one set as a still, wrapping row and drop the copies. */
 @media (prefers-reduced-motion: reduce) {
   .pt__belt { mask-image: none; -webkit-mask-image: none; padding-inline: var(--pad); }
-  .pt__track { animation: none; width: auto; flex-wrap: wrap; justify-content: center; }
+  .pt__track { animation: none; width: auto; flex-wrap: wrap; justify-content: center; gap: clamp(12px, 1.6vw, 20px); }
+  .pt__track > li { width: auto; }
   .pt__track > li[aria-hidden='true'] { display: none; }
   .pt__card, .pt__card:hover { transition: none; transform: none; }
 }
