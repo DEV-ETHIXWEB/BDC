@@ -11,31 +11,29 @@ const {
   lede = 'Over the years Captain Clinton has worked with some of the best-known names in Northwest fishing.',
 } = Astro.props;
 
-// A moving belt of logos. Each logo sits in a slot as wide as the belt, so only one is on screen at a
-// time (Amar's request, on phone and desktop). The track holds the logos twice over and slides right
-// by exactly half its width, so the loop is seamless. Only the first set is exposed to screen readers.
-const track = [...PARTNERS, ...PARTNERS];
+// A cube that turns left to right, bringing each logo to the same spot in turn, on phone and desktop.
+// One face per brand (four brands, four faces). With reduced motion the faces lie flat in a row.
+const label = (name: string) => `${name} (opens in a new tab)`;
 ---
-<section class="pt" aria-labelledby="pt-h">
-  <div class="wrap">
+<section class="pt" aria-labelledby="pt-h" style={`--pt-faces: ${PARTNERS.length}`}>
+  <div class="wrap pt__grid">
     <div class="pt__head" data-reveal="up">
       <p class="pt__tag">Past collaborators</p>
       <h2 id="pt-h">{title}</h2>
       <p class="pt__lede">{lede}</p>
     </div>
-  </div>
-  <div class="pt__belt">
-    <ul class="pt__track">
-      {track.map((p, i) => {
-        const dup = i >= PARTNERS.length;
-        return (
-          <li aria-hidden={dup ? 'true' : undefined}>
-            <a class="pt__card" href={p.url} target="_blank" rel="noopener noreferrer" tabindex={dup ? -1 : undefined} aria-label={`${p.name} (opens in a new tab)`}>
-              <img src={p.logo} alt={dup ? '' : p.name} width={p.width} height={p.height} loading="lazy" decoding="async" />
+
+    <div class="pt__stage">
+      <ul class="pt__cube">
+        {PARTNERS.map((p, i) => (
+          <li class="pt__face" style={`--i: ${i}`}>
+            <a class="pt__card" href={p.url} target="_blank" rel="noopener noreferrer" aria-label={label(p.name)}>
+              <img src={p.logo} alt={p.name} width={p.width} height={p.height} loading="lazy" decoding="async" />
             </a>
           </li>
-        );
-      })}
-    </ul>
+        ))}
+      </ul>
+      <span class="pt__floor" aria-hidden="true"></span>
+    </div>
   </div>
 </section>
