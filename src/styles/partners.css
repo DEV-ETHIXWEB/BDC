@@ -12,11 +12,19 @@
   .pt__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(32px, 5vw, 72px); }
 }
 
+/* Timing, shared by the cube, the face shading and the dots so they stay in step.
+   One slot per brand: the logo holds for 2.8s, then a 1.2s quarter turn brings in the next. */
+.pt {
+  --pt-slot: 4s;
+  --pt-cycle: calc(var(--pt-slot) * var(--pt-faces));
+  --pt-ease: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
 .pt__stage {
   --face-w: clamp(240px, 70vw, 380px);
   --face-h: calc(var(--face-w) * 0.46);
-  display: grid; place-items: center; position: relative;
-  height: calc(var(--face-h) + 90px);
+  display: grid; justify-items: center; align-content: center; position: relative;
+  padding-block: 28px 8px;
   perspective: 1000px;
 }
 @media (min-width: 900px) { .pt__stage { --face-w: clamp(300px, 30vw, 380px); } }
@@ -27,10 +35,9 @@
   transform-style: preserve-3d;
   /* Push the cube back by half a face so its front face sits on the stage plane. */
   transform: translateZ(calc(var(--face-w) / -2)) rotateY(0deg);
-  animation: pt-cube 14s infinite;
-  animation-timing-function: var(--ease-in-out);
+  will-change: transform;
+  animation: pt-cube var(--pt-cycle) var(--pt-ease) infinite;
 }
-.pt__stage:hover .pt__cube, .pt__stage:focus-within .pt__cube { animation-play-state: paused; }
 
 .pt__face {
   position: absolute; inset: 0; display: flex;
@@ -39,35 +46,76 @@
   backface-visibility: hidden; -webkit-backface-visibility: hidden;
 }
 .pt__card {
+  position: relative; overflow: hidden;
   display: grid; place-items: center; width: 100%; height: 100%; padding: clamp(20px, 3vw, 40px);
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-l);
+  /* A transparent outline keeps the rounded edges smooth while the face is turned. */
+  outline: 1px solid transparent;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 1px 0 rgba(12, 44, 82, 0.04);
 }
 .pt__card img { display: block; width: auto; height: auto; max-width: 100%; max-height: calc(var(--face-h) * 0.48); object-fit: contain; }
-.pt__card:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+/* A round badge logo uses nearly the full height of the face. */
+.pt__card--badge { padding-block: clamp(10px, 1.4vw, 16px); }
+.pt__card--badge img { max-height: calc(var(--face-h) * 0.84); }
+.pt__card:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+
+/* Light: a face darkens as it turns away from the front, so the cube reads as solid.
+   Each face runs the same cycle, one slot behind the face before it. The delay is negative so every
+   face starts already in step on the first lap (face i reaches the front at i slots). */
+.pt__card::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(7, 27, 51, 0.2), rgba(7, 27, 51, 0.07));
+  animation: pt-shade var(--pt-cycle) var(--pt-ease) infinite;
+  animation-delay: calc(var(--i) * var(--pt-slot) - var(--pt-cycle));
+}
 
 /* A soft shadow on the floor under the cube. */
 .pt__floor {
-  position: absolute; left: 50%; bottom: 10px; width: calc(var(--face-w) * 0.9); height: 22px; transform: translateX(-50%);
+  display: block; width: calc(var(--face-w) * 0.9); height: 22px; margin-top: 18px;
   background: radial-gradient(closest-side, rgba(7, 27, 51, 0.22), transparent); filter: blur(2px); pointer-events: none;
 }
 
-/* Hold each logo for about 2.5s, then a quarter turn of about 1s. Written for four faces; with a
-   different number of brands the steps here need changing to match. */
+/* Dots: the one for the brand in front grows into a bar. */
+.pt__dots { list-style: none; margin: 14px 0 0; padding: 0; display: flex; gap: 8px; }
+.pt__dots li {
+  width: 8px; height: 8px; border-radius: var(--r-pill); background: var(--line-strong);
+  animation: pt-dot var(--pt-cycle) var(--pt-ease) infinite;
+  animation-delay: calc(var(--i) * var(--pt-slot) - var(--pt-cycle));
+}
+
+/* Keyboard users can stop it by tabbing onto a logo. Mouse hover, clicks and taps never stop it. */
+.pt__stage:has(:focus-visible) .pt__cube,
+.pt__stage:has(:focus-visible) .pt__dots li,
+.pt__stage:has(:focus-visible) .pt__card::after { animation-play-state: paused; }
+
+/* Hold 70% of each slot, turn for 30%. Written for four faces (25% a slot). */
 @keyframes pt-cube {
-  0%, 18%   { transform: translateZ(calc(var(--face-w) / -2)) rotateY(0deg); }
-  25%, 43%  { transform: translateZ(calc(var(--face-w) / -2)) rotateY(90deg); }
-  50%, 68%  { transform: translateZ(calc(var(--face-w) / -2)) rotateY(180deg); }
-  75%, 93%  { transform: translateZ(calc(var(--face-w) / -2)) rotateY(270deg); }
-  100%      { transform: translateZ(calc(var(--face-w) / -2)) rotateY(360deg); }
+  0%, 17.5%   { transform: translateZ(calc(var(--face-w) / -2)) rotateY(0deg); }
+  25%, 42.5%  { transform: translateZ(calc(var(--face-w) / -2)) rotateY(90deg); }
+  50%, 67.5%  { transform: translateZ(calc(var(--face-w) / -2)) rotateY(180deg); }
+  75%, 92.5%  { transform: translateZ(calc(var(--face-w) / -2)) rotateY(270deg); }
+  100%        { transform: translateZ(calc(var(--face-w) / -2)) rotateY(360deg); }
+}
+/* From the moment this face reaches the front: clear while it holds, darkening as it turns away,
+   dark round the back, clearing again as it turns in. */
+@keyframes pt-shade {
+  0%, 17.5%  { opacity: 0; }
+  25%, 92.5% { opacity: 1; }
+  100%       { opacity: 0; }
+}
+@keyframes pt-dot {
+  0%, 17.5%  { width: 26px; background: var(--navy-700); }
+  25%, 92.5% { width: 8px; background: var(--line-strong); }
+  100%       { width: 26px; background: var(--navy-700); }
 }
 
 /* No motion: lay the faces flat in one still row. */
 @media (prefers-reduced-motion: reduce) {
   .pt__grid { grid-template-columns: 1fr; }
-  .pt__stage { height: auto; perspective: none; }
-  .pt__floor { display: none; }
+  .pt__stage { perspective: none; padding-block: 0; }
+  .pt__floor, .pt__dots { display: none; }
   .pt__cube { animation: none; transform: none; width: 100%; height: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(12px, 1.6vw, 20px); }
   .pt__face { position: static; transform: none; width: clamp(170px, 22vw, 250px); height: clamp(96px, 11vw, 130px); }
+  .pt__card::after { display: none; }
   .pt__card img { max-height: 60px; }
 }

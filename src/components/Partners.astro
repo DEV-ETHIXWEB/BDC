@@ -12,7 +12,8 @@ const {
 } = Astro.props;
 
 // A cube that turns left to right, bringing each logo to the same spot in turn, on phone and desktop.
-// One face per brand (four brands, four faces). With reduced motion the faces lie flat in a row.
+// One face per brand (four brands, four faces). Dots under the cube show which brand is in front.
+// With reduced motion the faces lie flat in a row.
 const label = (name: string) => `${name} (opens in a new tab)`;
 ---
 <section class="pt" aria-labelledby="pt-h" style={`--pt-faces: ${PARTNERS.length}`}>
@@ -27,13 +28,16 @@ const label = (name: string) => `${name} (opens in a new tab)`;
       <ul class="pt__cube">
         {PARTNERS.map((p, i) => (
           <li class="pt__face" style={`--i: ${i}`}>
-            <a class="pt__card" href={p.url} target="_blank" rel="noopener noreferrer" aria-label={label(p.name)}>
+            <a class:list={['pt__card', { 'pt__card--badge': p.badge }]} href={p.url} target="_blank" rel="noopener noreferrer" aria-label={label(p.name)}>
               <img src={p.logo} alt={p.name} width={p.width} height={p.height} loading="lazy" decoding="async" />
             </a>
           </li>
         ))}
       </ul>
       <span class="pt__floor" aria-hidden="true"></span>
+      <ol class="pt__dots" aria-hidden="true">
+        {PARTNERS.map((_, i) => <li style={`--i: ${i}`}></li>)}
+      </ol>
     </div>
   </div>
 </section>
