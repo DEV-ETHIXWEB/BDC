@@ -1,0 +1,31 @@
+---
+import '../styles/partners.css';
+import { PARTNERS } from '../data/partners';
+
+interface Props {
+  title?: string;
+  lede?: string;
+}
+const {
+  title = 'Brands Captain Clinton has worked with',
+  lede = 'Over the years Captain Clinton has worked with some of the best-known names in Northwest fishing.',
+} = Astro.props;
+---
+<section class="pt" aria-labelledby="pt-h">
+  <div class="wrap">
+    <div class="pt__head" data-reveal="up">
+      <p class="pt__tag">Past collaborators</p>
+      <h2 id="pt-h">{title}</h2>
+      <p class="pt__lede">{lede}</p>
+    </div>
+    <ul class="pt__row" data-stagger>
+      {PARTNERS.map((p) => (
+        <li data-reveal="up">
+          <a class="pt__card" href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`${p.name} (opens in a new tab)`}>
+            <img src={p.logo} alt={p.name} width={p.width} height={p.height} loading="lazy" decoding="async" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
