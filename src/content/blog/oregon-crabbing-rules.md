@@ -34,6 +34,8 @@ You also do not need Oregon's new Ocean Endorsement for crab. ODFW says it is no
 
 The daily limit is per person, so a group of four can keep up to 48 Dungeness between them, as long as every crab is a legal male.
 
+You can also use no more than 3 crab pots, rings or baited lines in total per person. On a guided trip the gear is handled for you.
+
 ## How to tell a keeper Dungeness
 
 A legal Dungeness crab is a male that measures at least 5¾ inches across the shell.
