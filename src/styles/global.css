@@ -489,8 +489,15 @@ button { font-family: inherit; }
 .footer__mark { display: block; font: 800 clamp(8rem, 30vw, 30rem)/0.8 var(--font-display); letter-spacing: -0.01em; color: transparent; -webkit-text-stroke: 1.5px rgba(243, 247, 251, 0.3); margin: 0 0 -0.02em -0.03em; user-select: none; white-space: nowrap; pointer-events: none; transition: -webkit-text-stroke-color var(--dur-4); }
 .footer__markrow { position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s-5); overflow: hidden; }
 .footer__crest { position: absolute; right: 0; bottom: 14%; width: clamp(86px, 14.9vw, 204px); height: auto; opacity: 0.95; filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.5)); } /* +35% so the new circular crest is legible as a standalone watermark */
-.footer__bottom { position: relative; background: var(--navy-950); border-top: 1px solid var(--on-deep-line); padding-block: var(--s-4) calc(var(--s-4) + 76px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px var(--s-5); font-size: var(--fs-xs); }
+.footer__bottom { position: relative; background: var(--navy-950); border-top: 1px solid var(--on-deep-line); padding-block: var(--s-4); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px var(--s-5); font-size: var(--fs-xs); }
 .footer__bottom ul { display: flex; flex-wrap: wrap; gap: 0 var(--s-4); }
+/* "Powered by Ethixweb" studio signature: quiet by default, full strength on hover. Keeps the 76px reserve for the floating dock. */
+.footer__sig { position: relative; background: var(--navy-950); border-top: 1px solid rgba(243, 247, 251, 0.06); display: flex; justify-content: center; padding-block: var(--s-4) calc(var(--s-4) + 76px); }
+.footer__sig a { display: inline-flex; align-items: center; gap: 10px; color: #fff; opacity: 0.6; text-decoration: none; transition: opacity 0.3s; font: 700 10px/1 var(--font-body); letter-spacing: 0.18em; text-transform: uppercase; }
+.footer__sig a:hover, .footer__sig a:focus-visible { opacity: 1; }
+.footer__sig a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; border-radius: 2px; }
+.footer__sig img { display: block; width: 79px; height: 11px; transform: translateY(0.5px); }
+html[data-motion='reduce'] .footer__sig a { transition: none; }
 .footer__top { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; cursor: pointer; background: none; border: 0; color: var(--cream-50); font-size: var(--fs-xs); }
 /* Phone: the crest is a centred lockup sitting above the outlined BDC wordmark, not a small
    watermark pinned to the right edge. Desktop keeps the pinned watermark. */
